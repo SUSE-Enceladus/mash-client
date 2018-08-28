@@ -1,0 +1,45 @@
+.TH "MASH" "1" "27-Aug-2018" "" "mash Manual"
+.SH NAME
+mash \- mash client provides a command line interface...
+.SH SYNOPSIS
+.B mash
+[OPTIONS] COMMAND [ARGS]...
+.SH DESCRIPTION
+mash client provides a command line interface to access mash servers.
+.SH OPTIONS
+.TP
+\fB\-\-version\fP
+Show the version and exit.
+.TP
+\fB\-\-license\fP
+Show license information and exit.
+.TP
+\fB\-C,\fP \-\-config PATH
+mash client config file location. Default: ~/.config/mash/config
+.TP
+\fB\-\-no\-color\fP
+Remove ANSI color and styling from output.
+.TP
+\fB\-\-host\fP TEXT
+Host for the MASH server instance.
+.TP
+\fB\-\-port\fP TEXT
+Port for the MASH host.
+.TP
+\fB\-\-debug\fP
+Display debug level logging to console.
+.TP
+\fB\-\-verbose\fP
+(Default) Display logging info to console.
+.TP
+\fB\-\-quiet\fP
+Silence logging information on test run.
+.SH COMMANDS
+.PP
+\fBjob\fP
+  Handle mash job requests.
+  See \fBmash-job(1)\fP for full documentation on the \fBjob\fP command.
+.PP
+\fBaccount\fP
+  Handle mash account requests.
+  See \fBmash-account(1)\fP for full documentation on the \fBaccount\fP command.

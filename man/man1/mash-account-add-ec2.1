@@ -1,0 +1,15 @@
+.TH "MASH ACCOUNT ADD EC2" "1" "27-Aug-2018" "" "mash account add ec2 Manual"
+.SH NAME
+mash\-account\-add\-ec2 \- Add EC2 account given the provided args.
+.SH SYNOPSIS
+.B mash account add ec2
+[OPTIONS] ACCOUNT_NAME PARTITION REQUESTING_USER ACCESS_KEY_ID SECRET_ACCESS_KEY
+.SH DESCRIPTION
+Add EC2 account given the provided args.
+.SH OPTIONS
+.TP
+\fB\-\-additional\-region\fP <TEXT TEXT>...
+Additional region name and helper image. Example: `--additional-region us-east-1 ami-123`
+.TP
+\fB\-\-group\fP TEXT
+Group name to place account in.
