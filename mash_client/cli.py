@@ -205,12 +205,9 @@ def add_account():
 
 @click.command(name='ec2')
 @click.option(
-    '--additional-region',
-    'additional_regions',
-    type=(str, str),
-    multiple=True,
-    help='Additional region name and helper image. '
-         'Example: `--additional-region us-east-1 ami-123`'
+    '--additional-regions',
+    is_flag=True,
+    help='Add additional regions for account.'
 )
 @click.option(
     '--group',
@@ -261,13 +258,22 @@ def add_ec2_account(
 
         if additional_regions:
             regions = []
-            for region in additional_regions:
-                regions.append(
-                    {
-                        'name': region[0],
-                        'helper_image': region[1]
-                    }
-                )
+
+            while True:
+                if click.confirm('Add an additional region?'):
+                    name = click.prompt('Enter the region name', type=str)
+                    helper_image = click.prompt(
+                        'Enter the helper image id',
+                        type=str
+                    )
+
+                    regions.append({
+                        'name': name,
+                        'helper_image': helper_image
+                    })
+                else:
+                    break
+
             data['additional_regions'] = regions
 
         if group:
