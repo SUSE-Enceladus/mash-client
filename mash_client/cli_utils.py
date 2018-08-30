@@ -36,9 +36,9 @@ default_config = os.path.expanduser('~/.config/mash/config.yaml')
 defaults = {
     'config': default_config,
     'host': 'http://127.0.0.1',
-    'port': None,
     'log_level': logging.INFO,
-    'no_color': False
+    'no_color': False,
+    'verify': True
 }
 
 
@@ -142,13 +142,15 @@ def handle_request(config_data, endpoint, job_data=None):
     response = requests.post(
         ''.join([config_data['url'], endpoint]),
         data=None if not job_data else json.dumps(job_data),
-        verify=False
+        verify=config_data['verify']
     )
 
     if response.status_code == 200:
         echo_dict(response.json(), config_data['no_color'])
-    else:
+    elif response.status_code == 400:
         raise Exception(response.json()['error'])
+    else:
+        response.raise_for_status()
 
 
 def style_string(message, no_color, fg='yellow'):
