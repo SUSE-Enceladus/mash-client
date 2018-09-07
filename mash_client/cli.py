@@ -183,7 +183,7 @@ def account():
 @click.pass_context
 def delete_account(context, account_name, provider, requesting_user):
     """
-    Delete account given input.
+    Delete account given the provided args.
     """
     config_data = get_config(context.obj)
 

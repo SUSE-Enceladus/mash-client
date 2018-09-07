@@ -5,7 +5,8 @@
 overview
 ========
 
-**mash-client** 
+**mash-client** provides a command line utilty to interface with the
+MASH server REST API.
 
 Installation
 ============
@@ -24,6 +25,33 @@ Requirements
 -   Click
 -   requests
 -   PyYaml
+
+Usage
+=====
+
+The client has the following endpoints:
+
+`mash job add [OPTIONS] DOCUMENT`
+
+Send add job request to mash server based on provided json document.
+
+`mash job delete [OPTIONS] JOB_ID`
+
+Delete a job given the UUID.
+
+`mash account add ec2 [OPTIONS] ACCOUNT_NAME PARTITION REQUESTING_USER
+ACCESS_KEY_ID SECRET_ACCESS_KEY`
+
+Add EC2 account given the provided args.
+
+`mash account add azure [OPTIONS] ACCOUNT_NAME CONTAINER_NAME REGION
+REQUESTING_USER RESOURCE_GROUP STORAGE_ACCOUNT CREDENTIALS_PATH`
+
+Add Azure account given the provided args.
+
+`mash account delete [OPTIONS] ACCOUNT_NAME PROVIDER REQUESTING_USER`
+
+Delete account given the provided args.
 
 Issues/Enhancements
 ===================
