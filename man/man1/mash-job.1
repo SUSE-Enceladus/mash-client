@@ -1,17 +1,21 @@
+.\" Process this file with
+.\" groff -man -Tascii mash-job.1
+.\"
 .TH "MASH JOB" "1" "27-Aug-2018" "" "mash job Manual"
 .SH NAME
-mash\-job \- Handle mash job requests.
+mash\-job \- Submit mash job requests.
 .SH SYNOPSIS
 .B mash job
 [OPTIONS] COMMAND [ARGS]...
 .SH DESCRIPTION
-Handle mash job requests.
+Submit job requests, addition or deletion, to the \fImash\fP server
+pipeline
 .SH COMMANDS
 .PP
 \fBadd\fP
-  Send add job request to mash server based on...
-  See \fBmash job-add(1)\fP for full documentation on the \fBadd\fP command.
+  Add a new job to the \fImash\fP server pipeline
+  See \fBmash job-add(1)\fP for details.
 .PP
 \fBdelete\fP
-  Delete a job given the UUID.
-  See \fBmash job-delete(1)\fP for full documentation on the \fBdelete\fP command.
+  Delete a job from the \fImash\fP server pipeline
+  See \fBmash job-delete(1)\fP for details.

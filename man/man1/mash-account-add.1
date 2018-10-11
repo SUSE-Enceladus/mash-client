@@ -1,3 +1,6 @@
+.\" Process this file with
+.\" groff -man -Tascii mash-account-add.1
+.\"
 .TH "MASH ACCOUNT ADD" "1" "27-Aug-2018" "" "mash account add Manual"
 .SH NAME
 mash\-account\-add \- Handle mash account add requests.
@@ -5,13 +8,16 @@ mash\-account\-add \- Handle mash account add requests.
 .B mash account add
 [OPTIONS] COMMAND [ARGS]...
 .SH DESCRIPTION
-Handle mash account add requests.
+Add an account to the \fImash\fP server. The account is added in a
+user name-space. The user name-space is based on the user name of
+the user running mash on the system from which the user is submitting
+the request. 
 .SH COMMANDS
 .PP
-\fBec2\fP
-  Add EC2 account given the provided args.
-  See \fBmash account add-ec2(1)\fP for full documentation on the \fBec2\fP command.
-.PP
 \fBazure\fP
-  Add Azure account given the provided args.
-  See \fBmash account add-azure(1)\fP for full documentation on the \fBazure\fP command.
+  Add an Azure account. See \fBmash-account-add-azure(1)\fP for details.
+.PP
+\fBec2\fP
+  Add an EC2 account. See \fBmash-account-add-ec2(1)\fP for details.
+.SH AUTHOR
+SUSE Public Cloud Team (public-cloud-dev@susecloud.net)

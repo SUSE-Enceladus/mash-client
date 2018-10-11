@@ -1,15 +1,51 @@
+.\" Process this file with
+.\" groff -man -Tascii mash-account-add-ec2.1
+.\"
 .TH "MASH ACCOUNT ADD EC2" "1" "27-Aug-2018" "" "mash account add ec2 Manual"
 .SH NAME
-mash\-account\-add\-ec2 \- Add EC2 account given the provided args.
+mash\-account\-add\-ec2 \- Add EC2 account.
 .SH SYNOPSIS
 .B mash account add ec2
-[OPTIONS] ACCOUNT_NAME PARTITION REQUESTING_USER ACCESS_KEY_ID SECRET_ACCESS_KEY
+[OPTIONS]
 .SH DESCRIPTION
-Add EC2 account given the provided args.
+Add EC2 account in the user name space on the \fImash\fP server. See
+\fBmash-account-add(1)\fP for details about user name-spaces. Unless
+otherwise noted options are required.
 .SH OPTIONS
 .TP
-\fB\-\-additional\-region\fP <TEXT TEXT>...
-Additional region name and helper image. Example: `--additional-region us-east-1 ami-123`
+\fB--access-id\fP ACCESS_KEY_ID
+The AWS API \fIACCESS_KEY\fP.
 .TP
-\fB\-\-group\fP TEXT
-Group name to place account in.
+\fB--name\fP ACCOUNT_NAME
+A name for the account to create. This name must be unique within the 
+user name-space on the \fImash\fP server.
+.TP
+\fB--partition\fP PARTITION_NAME
+The partition in which the EC2 account exists. Supported values
+are \fIaws\fP, \fIaws-cn\fP, and \fIaws-us-gov\fP. An image for
+testing or release may, by default, be uploaded to any region in the
+partition associated with the account. This behavior can be modified during
+job submission, see \fBmash-job-add(1)\fP for details. The default behavior
+requires that the same ssh key-pair, associated with the account being created,
+is available in all regions in the given \fIPARTITION\fP.
+.TP
+\fB--secret-key\fP SECRET_ACCESS_KEY
+The AWS API \fISECRET_KEY\fP
+.TP
+\fB--ssh-key-pair\fP AWS_KEY_PAIR_NAME
+The key-pair name as it exists in AWS.
+.TP
+\fB--ssh-private-key\fP SSH_PRIVATE_KEY
+The path of the private ssh key file for the given key-pair. The key will be
+stored as an encrypted blob on the mash server.
+.TP
+\fB\--additional-region\fP <EC2_REGION_NAME HELPER_AMI_ID>...
+Add an additional region in the given \fIPARTITION\fP that this account has
+access to. The option may be used multiple times.
+Example: `--additional-region us-east-1 ami-123`
+.TP
+\fB\--group\fP GROUP_NAME
+Optionally associate the account with a group. A group can be used to
+facilitate testing or release of an image in multiple accounts.
+.SH AUTHOR
+SUSE Public Cloud Team (public-cloud-dev@susecloud.net)

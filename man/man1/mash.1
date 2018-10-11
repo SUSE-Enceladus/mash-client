@@ -1,45 +1,55 @@
+.\" Process this file with
+.\" groff -man -Tascii mash.1
+.\"
 .TH "MASH" "1" "27-Aug-2018" "" "mash Manual"
 .SH NAME
-mash \- mash client provides a command line interface...
+mash \- mash a command line interface to access mash servers
 .SH SYNOPSIS
 .B mash
 [OPTIONS] COMMAND [ARGS]...
 .SH DESCRIPTION
-mash client provides a command line interface to access mash servers.
+The command line interface allows you to interact with a given \fImash\fP
+server to submit jobs to the \fImash\fP server pipeline or add/delete a
+user account
 .SH OPTIONS
 .TP
 \fB\-\-version\fP
-Show the version and exit.
+Show the version of the command line client.
 .TP
 \fB\-\-license\fP
-Show license information and exit.
+Show license information.
 .TP
 \fB\-C,\fP \-\-config PATH
-mash client config file location. Default: ~/.config/mash/config
+mash client config file to use. \fBDefault:\fP ~/.config/mash/config
+For configuration details see \fBmash-client-config(1)\fP.
 .TP
 \fB\-\-no\-color\fP
 Remove ANSI color and styling from output.
 .TP
-\fB\-\-host\fP TEXT
-Host for the MASH server instance.
+\fB\-\-host\fP HOST
+A resolvable hostname for the
+.I mash
+server instance to use.
 .TP
-\fB\-\-port\fP TEXT
-Port for the MASH host.
+\fB\-\-port\fP PORT
+Port number for port on which the \fImash\fP server is listening.
 .TP
 \fB\-\-debug\fP
 Display debug level logging to console.
 .TP
 \fB\-\-verbose\fP
-(Default) Display logging info to console.
+Display logging info to console \fB(Default)\fP.
 .TP
 \fB\-\-quiet\fP
-Silence logging information on test run.
+Disable console output.
 .SH COMMANDS
 .PP
 \fBjob\fP
-  Handle mash job requests.
-  See \fBmash-job(1)\fP for full documentation on the \fBjob\fP command.
+  Handle \fImash\fP job requests. See \fBmash-job(1)\fP for full
+  documentation on the \fBjob\fP command.
 .PP
 \fBaccount\fP
-  Handle mash account requests.
-  See \fBmash-account(1)\fP for full documentation on the \fBaccount\fP command.
+  Handle \fImash\fP account requests. See \fBmash-account(1)\fP for full
+  documentation on the \fBaccount\fP command.
+.SH AUTHOR
+SUSE Public Cloud Team (public-cloud-dev@susecloud.net)

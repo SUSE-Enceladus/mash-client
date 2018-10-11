@@ -1,8 +1,92 @@
+.\" Process this file with
+.\" groff -man -Tascii mash-job-add.1
+.\"
 .TH "MASH JOB ADD" "1" "27-Aug-2018" "" "mash job add Manual"
 .SH NAME
-mash\-job\-add \- Send add job request to mash server based on...
+mash\-job\-add \- Add a job to the mash server pipeline
 .SH SYNOPSIS
 .B mash job add
-[OPTIONS] DOCUMENT
+[OPTIONS]
 .SH DESCRIPTION
-Send add job request to mash server based on provided json document.
+Create a job on the \fImash\fP server for execution in the pipeline.
+.SH OPTIONS
+.TP
+\fB--account\fP
+The name of the account to be used for image testing or release. See
+\fBmash-account-add(1)\fP for details. The value may also specify a
+group name.
+.TP
+\fB--allow-copy\fP ALLOW_COPY
+Flag to enable the account(s) with which the image is shared to copy the image
+by allowing copy access to the underly The option only applies
+when the \fIFRAMEWORK\fP is set to \fiec2\fP.
+.TP
+\fB--distro\fP DISTRO
+A short name for the distribution. Supported values
+\fIopensuse\P and \fIsles\fP
+.TP
+\fB--framework\fP FRAMEWORK
+Specify the target cloud framework for this job. Supported values are
+\fIazure\fP, \fIec2\fP, \fIgce\fP.
+.TP
+\fB--image\fP KIWI_IMAGE_NAME
+The name for the image as set in the KIWI image config file,
+\fIconfig.xml\fP or \fIconfig.kiwi\fP
+.TP
+\fB--image-description\fP IMAGE_DESCRIPTION
+A description for the image, this will be added in the cloud framework.
+.TP
+\fB--image-name\fP IMAGE_NAME
+The name of the image as it is to be named in the cloud framework.
+.TP
+\fB--image-url\fP IMAGE_URL
+The full url from where the image can be downloaded.
+.TP
+\fB--job-doc\fP JOB_DOCUMENT
+Path to a completed job document. The job document describes the job the
+\fImash\fP server is supposed to add to it's pipeline for execution.
+.TP
+\fB--no-delete\fP NO_DELETE
+When a job is submitted for testing purposes the default is to delete
+the image form the framework if the tests pass. This option preserves
+the image in the framework.
+.TP
+\fB--old-image-name\fP OLD_IMAGE_NAME
+The name of the image in the cloud framework being replaced by this new
+image.
+.TP
+\fB--partition\fP PARTITION_NAME
+The name of the partition in which this image will be uploaded for testing
+or release. The image will be replicated to all regions in a partition.
+.TP
+\fB--regions\fP REGION_NAMES
+A comma separated list of regions in the target framework. This argument
+is mutually exclusive with the \fIPARTITION\fP argument.
+.TP
+\fB--release\fP RELEASE
+Release the image. Mutually exclusive with the \fITEST\fP option
+.TP
+\fB--test\fP TEST
+Run the job through the testing stage of the pipeline. Mutually exclusive
+with the \fIRELEASE\fP option
+.TP
+\fB--tests-to-run\fP TESTS_TO_RUN
+The names of the tests to run during the test phase of the pipeline. The
+tests must be known to \fIIPA\fP.
+.TP
+\fB--schedule\fB TIME_AS_YYYYMMDD:HH:MM:SS
+Schedule the job for execution at the given time. Time value is treated in
+UTC time. The job will be executed as closely as possible to the given time
+when the specified \fIIMAGE\fP is available. The default is "now", meaning
+the job will be scheduled into the pipeline immediately.
+.TP
+\fB--share-with\fP SHARE
+Specify the scope of the image publishing/sharing. The option supports the
+keyword \fIall\fP to set the image to public, the keyword \fInone\fP
+to set the image private, or expects an AWS account number to share the image
+with a specific account. Use a comma separated list with no white space to
+specify multiple account numbers. By default the selected image will be
+published, i.e. \fIall\fP is the default value. The option only applies
+when the \fIFRAMEWORK\fP is set to \fiec2\fP.
+.SH AUTHOR
+SUSE Public Cloud Team (public-cloud-dev@susecloud.net)

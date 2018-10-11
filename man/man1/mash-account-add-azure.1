@@ -1,12 +1,47 @@
+.\" Process this file with
+.\" groff -man -Tascii mash-account-add-azure.1
+.\"
 .TH "MASH ACCOUNT ADD AZURE" "1" "27-Aug-2018" "" "mash account add azure Manual"
 .SH NAME
-mash\-account\-add\-azure \- Add Azure account given the provided args.
+mash\-account\-add\-azure \- Add Azure account.
 .SH SYNOPSIS
 .B mash account add azure
-[OPTIONS] ACCOUNT_NAME CONTAINER_NAME REGION REQUESTING_USER RESOURCE_GROUP STORAGE_ACCOUNT CREDENTIALS_PATH
+[OPTIONS]
 .SH DESCRIPTION
-Add Azure account given the provided args.
+Add an Azure account in the user name space on the \fImash\fP server. See
+\fBmash-account-add(1)\fP for details about user name-spaces. Unless
+otherwise noted options are required.
 .SH OPTIONS
 .TP
-\fB\-\-group\fP TEXT
-Group name to place account in.
+\fB--name\fP ACCOUNT_NAME
+A name for the account to create. This name must be unique within the 
+user name-space on the \fImash\fP server.
+.TP
+\fB--container\fP CONTAINER_NAME
+The name of the storage container in which to store the image to be uploaded
+for testing or release. The container must exist in the given
+\fIRESOURCE_GROUP\fP, \fISTORAGE_ACCOUNT\fP, and \fIREGION\fP.
+.TP
+\fB--region\fP REGION_NAME
+The name of the region in which the image is going to be uploaded for
+testing or release. The \fIREGION_NAME\fP must be one of the Azure regions,
+\fIuseast\fP for example.
+.TP
+\fB--resource-group\fP RESOURCE_GROUP_NAME
+The name of the resource group in the given \fIREGION\fP that holds the
+\fISTORAGE_ACCOUNT\fP that contains the given \fICONTAINER\fP.
+.TP
+\fB--storage-account\fP STORAGE_ACCOUNT_NAME
+The name of the storage account that contains the given
+\fICONTAINER\fP to which the image to be tested or released is to be
+uploaded.
+.TP
+\fB--credentials\fP CREDENTIALS_PATH
+??? Shouldn't we take the account key instead, or do we need the publish
+settings file to run azcopy on the backend to put the image into ASM ???
+.TP
+\fB\--group\fP GROUP_NAME
+Optionally associate the account with a group. A group can be used to
+facilitate testing or release of an image in multiple accounts.
+.SH AUTHOR
+SUSE Public Cloud Team (public-cloud-dev@susecloud.net)

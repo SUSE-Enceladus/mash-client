@@ -1,12 +1,22 @@
+.\" Process this file with
+.\" groff -man -Tascii mash-account-delete.1
+.\"
 .TH "MASH ACCOUNT DELETE" "1" "27-Aug-2018" "" "mash account delete Manual"
 .SH NAME
-mash\-account\-delete \- Delete account given input.
+mash\-account\-delete \- Delete account
 .SH SYNOPSIS
 .B mash account delete
-[OPTIONS] ACCOUNT_NAME PROVIDER REQUESTING_USER
+[OPTIONS] PROVIDER
 .SH DESCRIPTION
-Delete account given input.
+Delete an account in in the user name space on the \fImash\fP server. See
+\fBmash-account-add(1)\fP for details about user name-spaces.
 .SH OPTIONS
 .TP
-\fB\-\-delete\fP
-.PP
+\fB--framework\fP FRAMEWORK
+Specify the target cloud framework for this job. Supported values are
+\fIazure\fP, \fIec2\fP, \fIgce\fP.
+.TP
+\fB--name\fP ACCOUNT_NAME
+A name for the account to delete.
+.SH AUTHOR
+SUSE Public Cloud Team (public-cloud-dev@susecloud.net)
