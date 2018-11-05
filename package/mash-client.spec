@@ -26,6 +26,9 @@ URL:            https://github.com/SUSE-enceladus/mash-client
 Source:         https://files.pythonhosted.org/packages/source/p/mash-client/%{name}-%{version}.tar.gz
 BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
+BuildRequires:  python3-click
+BuildRequires:  python3-requests
+BuildRequires:  python3-PyYAML
 Requires:       python3-click
 Requires:       python3-requests
 Requires:       python3-PyYAML
@@ -45,6 +48,7 @@ python3 setup.py build
 python3 setup.py install --prefix=%{_prefix} --root=%{buildroot}
 install -d -m 755 %{buildroot}/%{_mandir}/man1
 install -m 644 man/man1/*.1 %{buildroot}/%{_mandir}/man1
+gzip %{buildroot}/%{_mandir}/man1/*
 
 %files
 %defattr(-,root,root)
