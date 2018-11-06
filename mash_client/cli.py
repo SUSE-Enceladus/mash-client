@@ -293,10 +293,6 @@ def add_ec2_account(
     type=click.STRING
 )
 @click.argument(
-    'container_name',
-    type=click.STRING
-)
-@click.argument(
     'region',
     type=click.STRING
 )
@@ -305,11 +301,27 @@ def add_ec2_account(
     type=click.STRING
 )
 @click.argument(
-    'resource_group',
+    'source_container',
     type=click.STRING
 )
 @click.argument(
-    'storage_account',
+    'source_resource_group',
+    type=click.STRING
+)
+@click.argument(
+    'source_storage_account',
+    type=click.STRING
+)
+@click.argument(
+    'destination_container',
+    type=click.STRING
+)
+@click.argument(
+    'destination_resource_group',
+    type=click.STRING
+)
+@click.argument(
+    'destination_storage_account',
     type=click.STRING
 )
 @click.argument(
@@ -318,8 +330,10 @@ def add_ec2_account(
 )
 @click.pass_context
 def add_azure_account(
-    context, group, account_name, container_name, region,
-    requesting_user, resource_group, storage_account, credentials_path
+    context, group, account_name, region, requesting_user,
+    source_resource_group, source_container, source_storage_account,
+    destination_resource_group, destination_container,
+    destination_storage_account, credentials_path
 ):
     """
     Add Azure account given the provided args.
@@ -332,13 +346,16 @@ def add_azure_account(
 
         data = {
             'account_name': account_name,
-            'container_name': container_name,
             'credentials': credentials,
             'provider': 'azure',
             'region': region,
             'requesting_user': requesting_user,
-            'resource_group': resource_group,
-            'storage_account': storage_account
+            'source_container': source_container,
+            'source_resource_group': source_resource_group,
+            'source_storage_account': source_storage_account,
+            'destination_container': destination_container,
+            'destination_resource_group': destination_resource_group,
+            'destination_storage_account': destination_storage_account
         }
 
         if group:
