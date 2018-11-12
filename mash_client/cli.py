@@ -297,74 +297,102 @@ def add_ec2_account(
         handle_request(config_data, '/add_account', data)
 
 
-@click.command(name='azure')
+@click.command(
+    name='azure', context_settings=dict(token_normalize_func=str.lower)
+)
 @click.option(
     '--group',
     type=click.STRING,
-    help='Group name to place account in.'
+    help='Group name to associate the account with.'
 )
-@click.argument(
-    'account_name',
-    type=click.STRING
+@click.option(
+    '--name',
+    type=click.STRING,
+    required=True,
+    help='Name for the account to create.'
 )
-@click.argument(
-    'region',
-    type=click.STRING
+@click.option(
+    '--region',
+    type=click.STRING,
+    required=True,
+    help='The region where the test instance will be launched.'
 )
-@click.argument(
-    'requesting_user',
-    type=click.STRING
+@click.option(
+    '--mash-user',
+    type=click.STRING,
+    required=True,
+    help='The user in MASH user space to add the account for.'
 )
-@click.argument(
-    'source_container',
-    type=click.STRING
+@click.option(
+    '--source-container',
+    type=click.STRING,
+    required=True,
+    help='The name of the container that contains the image to '
+         'be uploaded and tested.'
 )
-@click.argument(
-    'source_resource_group',
-    type=click.STRING
+@click.option(
+    '--source-resource-group',
+    type=click.STRING,
+    required=True,
+    help='The name of the resource group that holds '
+         'the source storage account.'
 )
-@click.argument(
-    'source_storage_account',
-    type=click.STRING
+@click.option(
+    '--source-storage-account',
+    type=click.STRING,
+    required=True,
+    help='The name of the ARM based storage account '
+         'that holds the source container.'
 )
-@click.argument(
-    'destination_container',
-    type=click.STRING
+@click.option(
+    '--destination-container',
+    type=click.STRING,
+    required=True,
+    help='The name of the container that will hold the '
+         'published image.'
 )
-@click.argument(
-    'destination_resource_group',
-    type=click.STRING
+@click.option(
+    '--destination-resource-group',
+    type=click.STRING,
+    required=True,
+    help='The name of the resource group that holds the '
+         'destination storage account.'
 )
-@click.argument(
-    'destination_storage_account',
-    type=click.STRING
+@click.option(
+    '--destination-storage-account',
+    type=click.STRING,
+    required=True,
+    help='The name of the ASM based storage account that '
+         'holds the destination container.'
 )
-@click.argument(
-    'credentials_path',
-    type=click.Path(exists=True)
+@click.option(
+    '--credentials',
+    type=click.Path(exists=True),
+    required=True,
+    help='The JSON service account credentials file.'
 )
 @click.pass_context
 def add_azure_account(
-    context, group, account_name, region, requesting_user,
-    source_resource_group, source_container, source_storage_account,
-    destination_resource_group, destination_container,
-    destination_storage_account, credentials_path
+    context, group, name, region, mash_user, source_container,
+    source_resource_group, source_storage_account,
+    destination_container, destination_resource_group,
+    destination_storage_account, credentials
 ):
     """
-    Add Azure account given the provided args.
+    Add an Azure account in the user name space on the MASH server.
     """
     config_data = get_config(context.obj)
 
     with handle_errors(config_data['log_level'], config_data['no_color']):
-        with open(credentials_path) as credentials_file:
-            credentials = json.load(credentials_file)
+        with open(credentials) as credentials_file:
+            creds = json.load(credentials_file)
 
         data = {
-            'account_name': account_name,
-            'credentials': credentials,
+            'account_name': name,
+            'credentials': creds,
             'provider': 'azure',
             'region': region,
-            'requesting_user': requesting_user,
+            'requesting_user': mash_user,
             'source_container': source_container,
             'source_resource_group': source_resource_group,
             'source_storage_account': source_storage_account,
