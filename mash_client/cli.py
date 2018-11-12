@@ -364,11 +364,78 @@ def add_azure_account(
         handle_request(config_data, '/add_account', data)
 
 
+@click.command(
+    name='gce', context_settings=dict(token_normalize_func=str.lower)
+)
+@click.option(
+    '--group',
+    type=click.STRING,
+    help='Group name to associate account with.'
+)
+@click.option(
+    '--name',
+    type=click.STRING,
+    required=True,
+    help='Name for the account to add.'
+)
+@click.option(
+    '--bucket',
+    type=click.STRING,
+    required=True,
+    help='The storage bucket where the image will be uploaded.'
+)
+@click.option(
+    '--zone',
+    type=click.STRING,
+    required=True,
+    help='The zone where the test instance will be launched.'
+)
+@click.option(
+    '--mash-user',
+    type=click.STRING,
+    required=True,
+    help='The user in MASH user space to add the account for.'
+)
+@click.option(
+    '--credentials',
+    type=click.Path(exists=True),
+    required=True,
+    help='The JSON service account credentials file.'
+)
+@click.pass_context
+def add_gce_account(
+    context, group, name, bucket, zone, mash_user, credentials
+):
+    """
+    Add a GCE account in the user name space on the MASH server.
+    """
+    config_data = get_config(context.obj)
+
+    with handle_errors(config_data['log_level'], config_data['no_color']):
+        with open(credentials) as credentials_file:
+            creds = json.load(credentials_file)
+
+        data = {
+            'account_name': name,
+            'bucket': bucket,
+            'credentials': creds,
+            'provider': 'gce',
+            'region': zone,
+            'requesting_user': mash_user
+        }
+
+        if group:
+            data['group'] = group
+
+        handle_request(config_data, '/add_account', data)
+
+
 job.add_command(add)
 job.add_command(delete)
 main.add_command(job)
 account.add_command(delete_account)
 add_account.add_command(add_ec2_account)
 add_account.add_command(add_azure_account)
+add_account.add_command(add_gce_account)
 account.add_command(add_account)
 main.add_command(account)
