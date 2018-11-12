@@ -25,7 +25,10 @@ import json
 import logging
 
 from mash_client.cli_utils import (
-    get_config, handle_errors, handle_request
+    EC2_PARTITIONS,
+    get_config,
+    handle_errors,
+    handle_request
 )
 
 
@@ -203,57 +206,69 @@ def add_account():
     """
 
 
-@click.command(name='ec2')
+@click.command(
+    name='ec2', context_settings=dict(token_normalize_func=str.lower)
+)
 @click.option(
     '--additional-regions',
     is_flag=True,
-    help='Add additional regions for account.'
+    help='Add additional regions that this account has access to.'
 )
 @click.option(
     '--group',
     type=click.STRING,
-    help='Group name to place account in.'
+    help='Group name to associate the account with.'
 )
-@click.argument(
-    'account_name',
-    type=click.STRING
+@click.option(
+    '--name',
+    type=click.STRING,
+    required=True,
+    help='Name for the account to create.'
 )
-@click.argument(
-    'partition',
-    type=click.STRING
+@click.option(
+    '--partition',
+    type=click.Choice(EC2_PARTITIONS),
+    required=True,
+    help='The location of the EC2 account.'
 )
-@click.argument(
-    'requesting_user',
-    type=click.STRING
+@click.option(
+    '--mash-user',
+    type=click.STRING,
+    required=True,
+    help='The user in MASH user space to add the account for.'
 )
-@click.argument(
-    'access_key_id',
-    type=click.STRING
+@click.option(
+    '--access-key-id',
+    type=click.STRING,
+    required=True,
+    help='AWS access key.'
 )
-@click.argument(
-    'secret_access_key',
-    type=click.STRING
+@click.option(
+    '--secret-access-key',
+    type=click.STRING,
+    required=True,
+    help='AWS secret access key.'
 )
 @click.pass_context
 def add_ec2_account(
-    context, additional_regions, group, account_name, partition,
-    requesting_user, access_key_id, secret_access_key
+    context, additional_regions, group, name, partition,
+    mash_user, access_key_id, secret_access_key
 ):
     """
-    Add EC2 account given the provided args.
+    Add an EC2 account in the user name space on the MASH server.
     """
     config_data = get_config(context.obj)
 
     with handle_errors(config_data['log_level'], config_data['no_color']):
         data = {
-            'account_name': account_name,
+            'account_name': name,
             'credentials': {
                 'access_key_id': access_key_id,
                 'secret_access_key': secret_access_key
             },
             'partition': partition,
             'provider': 'ec2',
-            'requesting_user': requesting_user
+            'requesting_user': mash_user
         }
 
         if additional_regions:
