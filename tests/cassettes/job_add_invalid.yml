@@ -1,0 +1,81 @@
+interactions:
+- request:
+    body: '{"provider": "ec2", "provider_accounts": [{"name": "test-aws-gov", "target_regions":
+      ["us-gov-west-1"]}], "provider_groups": ["test"], "requesting_user": "user1",
+      "last_service": "pint", "image": "test_image_oem", "cloud_image_name": "new_image_123",
+      "old_cloud_image_name": "old_new_image_123", "conditions": [{"package": ["name",
+      "and", "constraints"]}, {"image": "version"}], "download_url": "http://download.opensuse.org/repositories/Cloud:Tools/images",
+      "image_description": "New Image #123", "distro": "sles", "instance_type": "t2.micro",
+      "tests": ["test_stuff"]}'
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['569']
+      User-Agent: [python-requests/2.19.1]
+    method: POST
+    uri: http://127.0.0.1:5000/add_job
+  response:
+    body: {string: '{"error":"''utctime'' is a required property\n\nFailed validating
+        ''required'' in schema:\n    {''additionalProperties'': False,\n     ''definitions'':
+        {''account'': {''additionalProperties'': False,\n                                 ''properties'':
+        {''name'': {''$ref'': ''#/definitions/non_empty_string''},\n                                                ''target_regions'':
+        {''items'': {''$ref'': ''#/definitions/non_empty_string''},\n                                                                   ''type'':
+        ''array'',\n                                                                   ''uniqueItems'':
+        True}},\n                                 ''required'': [''name'', ''target_regions''],\n                                 ''type'':
+        ''object''},\n                     ''image_conditions'': {''additionalProperties'':
+        False,\n                                          ''properties'': {''image'':
+        {''$ref'': ''#/definitions/non_empty_string''}},\n                                          ''required'':
+        [''image'']},\n                     ''non_empty_string'': {''minLength'':
+        1, ''type'': ''string''},\n                     ''package_conditions'': {''additionalProperties'':
+        False,\n                                            ''properties'': {''package'':
+        {''items'': {''$ref'': ''#/definitions/non_empty_string''},\n                                                                       ''minItems'':
+        2,\n                                                                       ''type'':
+        ''array''}},\n                                            ''required'': [''package'']}},\n     ''properties'':
+        {''allow_copy'': {''type'': ''boolean''},\n                    ''cloud_image_name'':
+        {''$ref'': ''#/definitions/non_empty_string''},\n                    ''conditions'':
+        {''items'': {''anyOf'': [{''$ref'': ''#definitions/image_conditions''},\n                                                       {''$ref'':
+        ''#definitions/package_conditions''}]},\n                                   ''minItems'':
+        1,\n                                   ''type'': ''array''},\n                    ''distro'':
+        {''$ref'': ''#/definitions/non_empty_string''},\n                    ''download_url'':
+        {''$ref'': ''#/definitions/non_empty_string''},\n                    ''image'':
+        {''$ref'': ''#/definitions/non_empty_string''},\n                    ''image_description'':
+        {''$ref'': ''#/definitions/non_empty_string''},\n                    ''instance_type'':
+        {''$ref'': ''#/definitions/non_empty_string''},\n                    ''last_service'':
+        {''enum'': [''uploader'',\n                                              ''testing'',\n                                              ''replication'',\n                                              ''publisher'',\n                                              ''deprecation'',\n                                              ''pint'']},\n                    ''old_cloud_image_name'':
+        {''$ref'': ''#/definitions/non_empty_string''},\n                    ''provider'':
+        {''enum'': [''ec2'']},\n                    ''provider_accounts'': {''items'':
+        {''$ref'': ''#definitions/account''},\n                                          ''type'':
+        ''array''},\n                    ''provider_groups'': {''items'': {''$ref'':
+        ''#/definitions/non_empty_string''},\n                                        ''type'':
+        ''array'',\n                                        ''uniqueItems'': True},\n                    ''requesting_user'':
+        {''$ref'': ''#/definitions/non_empty_string''},\n                    ''share_with'':
+        {''anyOf'': [{''enum'': [''all'', ''none'']},\n                                             {''$ref'':
+        ''#/definitions/non_empty_string'',\n                                              ''format'':
+        ''regex'',\n                                              ''pattern'': ''^[0-9]{12}(,[0-9]{12})*$''}]},\n                    ''tests'':
+        {''items'': {''$ref'': ''#/definitions/non_empty_string''},\n                              ''minItems'':
+        1,\n                              ''type'': ''array''},\n                    ''utctime'':
+        {''anyOf'': [{''enum'': [''always'', ''now'']},\n                                          {''$ref'':
+        ''#/definitions/non_empty_string'',\n                                           ''description'':
+        ''An RFC3339 ''\n                                                          ''date-time
+        ''\n                                                          ''string(2019-04-28T06:44:50.142Z)'',\n                                           ''format'':
+        ''regex'',\n                                           ''pattern'': ''^([0-9]+)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])[Tt]([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9]|60)(\\\\.[0-9]+)?(([Zz])|([\\\\+|\\\\-]([01][0-9]|2[0-3]):[0-5][0-9]))$''}]}},\n     ''required'':
+        [''provider'',\n                  ''provider_accounts'',\n                  ''provider_groups'',\n                  ''requesting_user'',\n                  ''last_service'',\n                  ''utctime'',\n                  ''image'',\n                  ''cloud_image_name'',\n                  ''old_cloud_image_name'',\n                  ''image_description'',\n                  ''download_url'',\n                  ''tests''],\n     ''type'':
+        ''object''}\n\nOn instance:\n    {''cloud_image_name'': ''new_image_123'',\n     ''conditions'':
+        [{''package'': [''name'', ''and'', ''constraints'']},\n                    {''image'':
+        ''version''}],\n     ''distro'': ''sles'',\n     ''download_url'': ''http://download.opensuse.org/repositories/Cloud:Tools/images'',\n     ''image'':
+        ''test_image_oem'',\n     ''image_description'': ''New Image #123'',\n     ''instance_type'':
+        ''t2.micro'',\n     ''last_service'': ''pint'',\n     ''old_cloud_image_name'':
+        ''old_new_image_123'',\n     ''provider'': ''ec2'',\n     ''provider_accounts'':
+        [{''name'': ''test-aws-gov'',\n                            ''target_regions'':
+        [''us-gov-west-1'']}],\n     ''provider_groups'': [''test''],\n     ''requesting_user'':
+        ''user1'',\n     ''tests'': [''test_stuff'']}"}
+
+        '}
+    headers:
+      Content-Length: ['5646']
+      Content-Type: [application/json]
+      Date: ['Fri, 16 Nov 2018 23:29:52 GMT']
+      Server: [Werkzeug/0.14.1 Python/3.6.5]
+    status: {code: 400, message: BAD REQUEST}
+version: 1
