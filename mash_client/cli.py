@@ -29,7 +29,7 @@ from mash_client.cli_utils import (
     get_config,
     handle_errors,
     handle_request,
-    SUPPORTED_PROVIDERS
+    SUPPORTED_CLOUDS
 )
 
 
@@ -136,7 +136,7 @@ def add(context, document):
 
 @click.command()
 @click.option(
-    '--delete',
+    '--force',
     is_flag=True,
     callback=abort_if_false,
     expose_value=False,
@@ -168,7 +168,7 @@ def account():
     name='delete', context_settings=dict(token_normalize_func=str.lower)
 )
 @click.option(
-    '--delete',
+    '--force',
     is_flag=True,
     callback=abort_if_false,
     expose_value=False,
@@ -179,22 +179,22 @@ def account():
     '--name',
     type=click.STRING,
     required=True,
-    help='Name for the account to delete.'
+    help='Name of the account to be deleted.'
 )
 @click.option(
-    '--provider',
-    type=click.Choice(SUPPORTED_PROVIDERS),
+    '--cloud',
+    type=click.Choice(SUPPORTED_CLOUDS),
     required=True,
     help='The target cloud provider for this job.'
 )
 @click.option(
-    '--user',
+    '--mash-user',
     type=click.STRING,
     required=True,
     help='The user in MASH user space to delete the account from.'
 )
 @click.pass_context
-def delete_account(context, name, provider, user):
+def delete_account(context, name, cloud, mash_user):
     """
     Delete an account in the user name space on the MASH server.
     """
@@ -203,8 +203,8 @@ def delete_account(context, name, provider, user):
     with handle_errors(config_data['log_level'], config_data['no_color']):
         job_data = {
             'account_name': name,
-            'provider': provider,
-            'requesting_user': user
+            'provider': cloud,
+            'requesting_user': mash_user
         }
         handle_request(config_data, '/delete_account', job_data)
 
