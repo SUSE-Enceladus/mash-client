@@ -32,6 +32,8 @@ from collections import ChainMap
 from contextlib import contextmanager, suppress
 from textwrap import TextWrapper
 
+from mash_client.mash_client_exceptions import MashClientException
+
 default_config = os.path.expanduser('~/.config/mash/config.yaml')
 defaults = {
     'config': default_config,
@@ -149,7 +151,7 @@ def handle_request(config_data, endpoint, job_data=None):
     if response.status_code == 200:
         echo_dict(response.json(), config_data['no_color'])
     elif response.status_code == 400:
-        raise Exception(response.json()['error'])
+        raise MashClientException(response.json()['error'])
     else:
         response.raise_for_status()
 
