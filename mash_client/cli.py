@@ -52,13 +52,13 @@ def abort_if_false(ctx, param, value):
     callback=print_license,
     expose_value=False,
     is_eager=True,
-    help='Show license information and exit.'
+    help='Show license information.'
 )
 @click.option(
     '-C',
     '--config',
     type=click.Path(exists=True),
-    help='mash client config file location. Default: ~/.config/mash/config'
+    help='MASH client config file to use. Default: ~/.config/mash/config'
 )
 @click.option(
     '--no-color',
@@ -67,11 +67,11 @@ def abort_if_false(ctx, param, value):
 )
 @click.option(
     '--host',
-    help='Host for the MASH server instance.'
+    help='Resolvable hostname for the MASH server instance.'
 )
 @click.option(
     '--port',
-    help='Port for the MASH host.'
+    help='The port number the MASH server is listening on.'
 )
 @click.option(
     '--debug',
@@ -84,18 +84,21 @@ def abort_if_false(ctx, param, value):
     'log_level',
     flag_value=logging.INFO,
     default=True,
-    help='(Default) Display logging info to console.'
+    help='Display logging info to console. (Default)'
 )
 @click.option(
     '--quiet',
     'log_level',
     flag_value=logging.WARNING,
-    help='Silence logging information on test run.'
+    help='Disable console output.'
 )
 @click.pass_context
 def main(context, config, no_color, host, port, log_level):
     """
-    mash client provides a command line interface to access mash servers.
+    The command line interface allows you to interact with a MASH server.
+
+    It provides commands to submit jobs to the MASH server pipeline or
+    add/delete a user account.
     """
     if context.obj is None:
         context.obj = {}
@@ -110,7 +113,7 @@ def main(context, config, no_color, host, port, log_level):
 @click.group()
 def job():
     """
-    Handle mash job requests.
+    Submit job requests, addition or deletion, to the MASH server pipeline.
     """
 
 
@@ -139,16 +142,20 @@ def add(context, document):
     is_flag=True,
     callback=abort_if_false,
     expose_value=False,
+    help='Force deletion without prompt.',
     prompt='Are you sure you want to delete job?'
 )
-@click.argument(
-    'job_id',
-    type=click.UUID
+@click.option(
+    '--job-id',
+    type=click.UUID,
+    required=True,
+    help='The UUID of the job to be removed '
+         'from the MASH server pipeline.'
 )
 @click.pass_context
 def delete(context, job_id):
     """
-    Delete a job given the UUID.
+    Delete the job with the given ID from the MASH server pipeline.
     """
     config_data = get_config(context.obj)
 
