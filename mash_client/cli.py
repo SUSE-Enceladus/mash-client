@@ -28,7 +28,8 @@ from mash_client.cli_utils import (
     EC2_PARTITIONS,
     get_config,
     handle_errors,
-    handle_request
+    handle_request,
+    SUPPORTED_CLOUDS
 )
 
 
@@ -138,7 +139,7 @@ def add(context, document):
 
 @click.command()
 @click.option(
-    '--delete',
+    '--force',
     is_flag=True,
     callback=abort_if_false,
     expose_value=False,
@@ -166,42 +167,51 @@ def delete(context, job_id):
 @click.group()
 def account():
     """
-    Handle mash account requests.
+    Submit account requests to the MASH server.
     """
 
 
-@click.command(name='delete')
+@click.command(
+    name='delete', context_settings=dict(token_normalize_func=str.lower)
+)
 @click.option(
-    '--delete',
+    '--force',
     is_flag=True,
     callback=abort_if_false,
     expose_value=False,
+    help='Force deletion without prompt.',
     prompt='Are you sure you want to delete account?'
 )
-@click.argument(
-    'account_name',
-    type=click.STRING
+@click.option(
+    '--name',
+    type=click.STRING,
+    required=True,
+    help='Name of the account to be deleted.'
 )
-@click.argument(
-    'provider',
-    type=click.STRING
+@click.option(
+    '--cloud',
+    type=click.Choice(SUPPORTED_CLOUDS),
+    required=True,
+    help='The target cloud provider for this job.'
 )
-@click.argument(
-    'requesting_user',
-    type=click.STRING
+@click.option(
+    '--mash-user',
+    type=click.STRING,
+    required=True,
+    help='The user in MASH user space to delete the account from.'
 )
 @click.pass_context
-def delete_account(context, account_name, provider, requesting_user):
+def delete_account(context, name, cloud, mash_user):
     """
-    Delete account given the provided args.
+    Delete an account in the user name space on the MASH server.
     """
     config_data = get_config(context.obj)
 
     with handle_errors(config_data['log_level'], config_data['no_color']):
         job_data = {
-            'account_name': account_name,
-            'provider': provider,
-            'requesting_user': requesting_user
+            'account_name': name,
+            'provider': cloud,
+            'requesting_user': mash_user
         }
         handle_request(config_data, '/delete_account', job_data)
 

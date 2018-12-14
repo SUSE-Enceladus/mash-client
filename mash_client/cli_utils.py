@@ -41,6 +41,7 @@ defaults = {
     'verify': True
 }
 EC2_PARTITIONS = ('aws', 'aws-cn', 'aws-us-gov')
+SUPPORTED_CLOUDS = ('azure', 'ec2', 'gce')
 
 
 def echo_dict(
