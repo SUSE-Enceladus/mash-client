@@ -1,5 +1,9 @@
--r requirements-test.txt
+-r requirements.txt
 
 bumpversion
-pip>=7.0.0
 click-man
+coverage
+pytest
+pytest-cov
+flake8
+vcrpy
