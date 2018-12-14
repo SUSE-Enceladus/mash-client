@@ -10,3 +10,10 @@ install:
 script:
   - pytest
   - flake8
+deploy:
+  provider: pypi
+  user: "suse-pub-cloud-dev"
+  password: $PYPI_PASS
+  on:
+    tags: true
+  skip_existing: true
