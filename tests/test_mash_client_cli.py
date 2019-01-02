@@ -79,7 +79,7 @@ def test_job_delete():
         main,
         [
             '-C', 'tests/data/.config', 'job', 'delete', '--job-id',
-            '12345678-1234-1234-1234-123456789012', '--delete'
+            '12345678-1234-1234-1234-123456789012', '--force'
         ]
     )
     assert result.exit_code == 0
@@ -93,8 +93,8 @@ def test_account_delete():
     result = runner.invoke(
         main,
         [
-            '-C', 'tests/data/.config', 'account', 'delete', 'acnt1',
-            'ec2', 'user1', '--delete'
+            '-C', 'tests/data/.config', 'account', 'delete', '--cloud', 'ec2',
+            '--name', 'acnt1', '--mash-user', 'user1', '--force'
         ]
     )
     assert result.exit_code == 0
