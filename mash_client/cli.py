@@ -192,7 +192,7 @@ def account():
     '--cloud',
     type=click.Choice(SUPPORTED_CLOUDS),
     required=True,
-    help='The target cloud provider for this job.'
+    help='The target cloud framework for this job.'
 )
 @click.option(
     '--mash-user',
@@ -210,7 +210,7 @@ def delete_account(context, name, cloud, mash_user):
     with handle_errors(config_data['log_level'], config_data['no_color']):
         job_data = {
             'account_name': name,
-            'provider': cloud,
+            'cloud': cloud,
             'requesting_user': mash_user
         }
         handle_request(config_data, '/delete_account', job_data)
@@ -284,7 +284,7 @@ def add_ec2_account(
                 'secret_access_key': secret_access_key
             },
             'partition': partition,
-            'provider': 'ec2',
+            'cloud': 'ec2',
             'requesting_user': mash_user
         }
 
@@ -407,7 +407,7 @@ def add_azure_account(
         data = {
             'account_name': name,
             'credentials': creds,
-            'provider': 'azure',
+            'cloud': 'azure',
             'region': region,
             'requesting_user': mash_user,
             'source_container': source_container,
@@ -479,7 +479,7 @@ def add_gce_account(
             'account_name': name,
             'bucket': bucket,
             'credentials': creds,
-            'provider': 'gce',
+            'cloud': 'gce',
             'region': zone,
             'requesting_user': mash_user
         }

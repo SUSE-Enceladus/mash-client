@@ -1,6 +1,6 @@
 interactions:
 - request:
-    body: '{"account_name": "acnt1", "provider": "ec2", "requesting_user": "user1"}'
+    body: '{"account_name": "acnt1", "cloud": "ec2", "requesting_user": "user1"}'
     headers:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']

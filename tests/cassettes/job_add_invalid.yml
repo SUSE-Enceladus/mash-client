@@ -1,7 +1,7 @@
 interactions:
 - request:
-    body: '{"provider": "ec2", "provider_accounts": [{"name": "test-aws-gov", "target_regions":
-      ["us-gov-west-1"]}], "provider_groups": ["test"], "requesting_user": "user1",
+    body: '{"cloud": "ec2", "cloud_accounts": [{"name": "test-aws-gov", "target_regions":
+      ["us-gov-west-1"]}], "cloud_groups": ["test"], "requesting_user": "user1",
       "last_service": "pint", "image": "test_image_oem", "cloud_image_name": "new_image_123",
       "old_cloud_image_name": "old_new_image_123", "conditions": [{"package": ["name",
       "and", "constraints"]}, {"image": "version"}], "download_url": "http://download.opensuse.org/repositories/Cloud:Tools/images",
@@ -43,10 +43,10 @@ interactions:
         {''$ref'': ''#/definitions/non_empty_string''},\n                    ''instance_type'':
         {''$ref'': ''#/definitions/non_empty_string''},\n                    ''last_service'':
         {''enum'': [''uploader'',\n                                              ''testing'',\n                                              ''replication'',\n                                              ''publisher'',\n                                              ''deprecation'',\n                                              ''pint'']},\n                    ''old_cloud_image_name'':
-        {''$ref'': ''#/definitions/non_empty_string''},\n                    ''provider'':
-        {''enum'': [''ec2'']},\n                    ''provider_accounts'': {''items'':
+        {''$ref'': ''#/definitions/non_empty_string''},\n                    ''cloud'':
+        {''enum'': [''ec2'']},\n                    ''cloud_accounts'': {''items'':
         {''$ref'': ''#definitions/account''},\n                                          ''type'':
-        ''array''},\n                    ''provider_groups'': {''items'': {''$ref'':
+        ''array''},\n                    ''cloud_groups'': {''items'': {''$ref'':
         ''#/definitions/non_empty_string''},\n                                        ''type'':
         ''array'',\n                                        ''uniqueItems'': True},\n                    ''requesting_user'':
         {''$ref'': ''#/definitions/non_empty_string''},\n                    ''share_with'':
@@ -60,15 +60,15 @@ interactions:
         ''An RFC3339 ''\n                                                          ''date-time
         ''\n                                                          ''string(2019-04-28T06:44:50.142Z)'',\n                                           ''format'':
         ''regex'',\n                                           ''pattern'': ''^([0-9]+)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])[Tt]([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9]|60)(\\\\.[0-9]+)?(([Zz])|([\\\\+|\\\\-]([01][0-9]|2[0-3]):[0-5][0-9]))$''}]}},\n     ''required'':
-        [''provider'',\n                  ''provider_accounts'',\n                  ''provider_groups'',\n                  ''requesting_user'',\n                  ''last_service'',\n                  ''utctime'',\n                  ''image'',\n                  ''cloud_image_name'',\n                  ''old_cloud_image_name'',\n                  ''image_description'',\n                  ''download_url'',\n                  ''tests''],\n     ''type'':
+        [''cloud'',\n                  ''cloud_accounts'',\n                  ''cloud_groups'',\n                  ''requesting_user'',\n                  ''last_service'',\n                  ''utctime'',\n                  ''image'',\n                  ''cloud_image_name'',\n                  ''old_cloud_image_name'',\n                  ''image_description'',\n                  ''download_url'',\n                  ''tests''],\n     ''type'':
         ''object''}\n\nOn instance:\n    {''cloud_image_name'': ''new_image_123'',\n     ''conditions'':
         [{''package'': [''name'', ''and'', ''constraints'']},\n                    {''image'':
         ''version''}],\n     ''distro'': ''sles'',\n     ''download_url'': ''http://download.opensuse.org/repositories/Cloud:Tools/images'',\n     ''image'':
         ''test_image_oem'',\n     ''image_description'': ''New Image #123'',\n     ''instance_type'':
         ''t2.micro'',\n     ''last_service'': ''pint'',\n     ''old_cloud_image_name'':
-        ''old_new_image_123'',\n     ''provider'': ''ec2'',\n     ''provider_accounts'':
+        ''old_new_image_123'',\n     ''cloud'': ''ec2'',\n     ''cloud_accounts'':
         [{''name'': ''test-aws-gov'',\n                            ''target_regions'':
-        [''us-gov-west-1'']}],\n     ''provider_groups'': [''test''],\n     ''requesting_user'':
+        [''us-gov-west-1'']}],\n     ''cloud_groups'': [''test''],\n     ''requesting_user'':
         ''user1'',\n     ''tests'': [''test_stuff'']}"}
 
         '}
