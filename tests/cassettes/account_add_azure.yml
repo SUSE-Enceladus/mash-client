@@ -5,7 +5,7 @@ interactions:
       "https://login.microsoftonline.com", "resourceManagerEndpointUrl": "https://management.azure.com/",
       "activeDirectoryGraphResourceId": "https://graph.windows.net/", "sqlManagementEndpointUrl":
       "https://management.core.windows.net:8443/", "galleryEndpointUrl": "https://gallery.azure.com/",
-      "managementEndpointUrl": "https://management.core.windows.net/"}, "provider":
+      "managementEndpointUrl": "https://management.core.windows.net/"}, "cloud":
       "azure", "region": "westus", "requesting_user": "user1", "source_container":
       "sc1", "source_resource_group": "srg1", "source_storage_account": "ssa", "destination_container":
       "dc1", "destination_resource_group": "drg1", "destination_storage_account":
