@@ -1,4 +1,7 @@
 [![Build Status](https://travis-ci.com/SUSE-Enceladus/mash-client.svg?branch=master)](https://travis-ci.com/SUSE-Enceladus/mash-client)
+[![Documentation Status](https://readthedocs.org/projects/mash-client/badge/?version=latest)](https://mash-client.readthedocs.io/en/latest/?badge=latest)
+[![Py Versions](https://img.shields.io/pypi/pyversions/mash-client.svg)](https://pypi.org/project/mash-client/)
+[![License](https://img.shields.io/pypi/l/mash-client.svg)](https://pypi.org/project/mash-client/)
 
 **mash-client**
 
@@ -31,27 +34,27 @@ Usage
 
 The client has the following endpoints:
 
-`mash job add [OPTIONS] DOCUMENT`
+`mash job add`
 
 Send add job request to mash server based on provided json document.
 
-`mash job delete [OPTIONS] JOB_ID`
+`mash job delete`
 
 Delete a job given the UUID.
 
-`mash account add ec2 [OPTIONS] ACCOUNT_NAME PARTITION REQUESTING_USER
-ACCESS_KEY_ID SECRET_ACCESS_KEY`
+`mash account add azure`
+`mash account add ec2`
+`mash account add gce`
 
-Add EC2 account given the provided args.
+Add account based on cloud framework.
 
-`mash account add azure [OPTIONS] ACCOUNT_NAME CONTAINER_NAME REGION
-REQUESTING_USER RESOURCE_GROUP STORAGE_ACCOUNT CREDENTIALS_PATH`
+`mash account delete`
 
-Add Azure account given the provided args.
+Delete mash account.
 
-`mash account delete [OPTIONS] ACCOUNT_NAME PROVIDER REQUESTING_USER`
+To get more info on an endpoint use the `--help` option:
 
-Delete account given the provided args.
+`mash account add azure --help`
 
 Issues/Enhancements
 ===================
@@ -69,7 +72,7 @@ for info on getting started.
 License
 =======
 
-Copyright (c) 2018 SUSE LLC.
+Copyright (c) 2019 SUSE LLC.
 
 Distributed under the terms of GPL-3.0+ license, see
 [LICENSE](https://github.com/SUSE-Enceladus/mash-client/blob/master/LICENSE)
