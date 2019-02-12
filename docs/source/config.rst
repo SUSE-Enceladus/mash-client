@@ -2,7 +2,7 @@ Configuration
 =============
 
 MASH Client uses a YAML config file. By default the client will look
-for a config file at *~/.config/mash/config.yaml*.
+for a config file at *~/.config/mash_client/config.yaml*.
 
 This location can be configured with each command using the *-C/--config*
 option. For example::
