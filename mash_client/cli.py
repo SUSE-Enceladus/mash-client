@@ -59,7 +59,8 @@ def abort_if_false(ctx, param, value):
     '-C',
     '--config',
     type=click.Path(exists=True),
-    help='MASH client config file to use. Default: ~/.config/mash/config'
+    help='MASH client config file to use. Default: '
+         '~/.config/mash_client/config'
 )
 @click.option(
     '--no-color',
