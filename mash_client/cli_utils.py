@@ -34,7 +34,7 @@ from textwrap import TextWrapper
 
 from mash_client.mash_client_exceptions import MashClientException
 
-default_config = os.path.expanduser('~/.config/mash/config.yaml')
+default_config = os.path.expanduser('~/.config/mash_client/config.yaml')
 defaults = {
     'config': default_config,
     'host': 'http://127.0.0.1',
