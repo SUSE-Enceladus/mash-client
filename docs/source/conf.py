@@ -21,7 +21,7 @@
 
 project = 'MASH Client'
 copyright = '2019, SUSE LLC. All rights reserved'
-author = 'SUSE'
+author = 'SUSE Public Cloud Team'
 
 # The short X.Y version
 version = ''

@@ -6,7 +6,7 @@ $ git clone https://github.com/SUSE-enceladus/mash-client.git
 $ cd mash-client
 
 # Activate virtual Environment then install
-# mash client and dev dependences in editable mode
+# mash client and dev dependencies in editable mode
 $ pip install -e .[dev]
 ```
 

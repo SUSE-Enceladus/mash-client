@@ -1,8 +1,8 @@
 Configuration
 =============
 
-MASH Client uses a YAML config file. By default the client will look
-for a config file at *~/.config/mash_client/config.yaml*.
+MASH Client uses a YAML configuration file. The expected path for the
+configuration file is *~/.config/mash_client/config.yaml*.
 
 This location can be configured with each command using the *-C/--config*
 option. For example::
@@ -12,7 +12,7 @@ option. For example::
 Options
 -------
 
-The following options are currently available in the config file:
+The following options are currently available in the configuration file:
 
 *host*
   Hostname of the MASH Server API. Example *http://127.0.0.1*
