@@ -256,6 +256,12 @@ def add_account():
     help='The user in MASH user space to add the account for.'
 )
 @click.option(
+    '--region',
+    type=click.STRING,
+    required=True,
+    help='The target region for image upload and testing.'
+)
+@click.option(
     '--access-key-id',
     type=click.STRING,
     required=True,
@@ -270,7 +276,7 @@ def add_account():
 @click.pass_context
 def add_ec2_account(
     context, additional_regions, group, name, partition,
-    mash_user, access_key_id, secret_access_key
+    mash_user, region, access_key_id, secret_access_key
 ):
     """
     Add an EC2 account in the user name space on the MASH server.
@@ -286,7 +292,8 @@ def add_ec2_account(
             },
             'partition': partition,
             'cloud': 'ec2',
-            'requesting_user': mash_user
+            'requesting_user': mash_user,
+            'region': region
         }
 
         if additional_regions:
