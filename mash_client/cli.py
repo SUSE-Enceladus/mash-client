@@ -247,7 +247,7 @@ def add_account():
     '--partition',
     type=click.Choice(EC2_PARTITIONS),
     required=True,
-    help='The location of the EC2 account.'
+    help='The location of the EC2 account. ["aws", "aws-cn", "aws-us-gov"]'
 )
 @click.option(
     '--mash-user',
@@ -352,43 +352,43 @@ def add_ec2_account(
     '--source-container',
     type=click.STRING,
     required=True,
-    help='The name of the container that contains the image to '
-         'be uploaded and tested.'
+    help='The name of the container that images will be'
+         ' uploaded to and tested.'
 )
 @click.option(
     '--source-resource-group',
     type=click.STRING,
     required=True,
-    help='The name of the resource group that holds '
-         'the source storage account.'
+    help='The name of the resource group where '
+         'the source storage account exists.'
 )
 @click.option(
     '--source-storage-account',
     type=click.STRING,
     required=True,
     help='The name of the ARM based storage account '
-         'that holds the source container.'
+         'where the source container exists.'
 )
 @click.option(
     '--destination-container',
     type=click.STRING,
     required=True,
-    help='The name of the container that will hold the '
-         'published image.'
+    help='The name of the container that images will be'
+         ' copied to and published from.'
 )
 @click.option(
     '--destination-resource-group',
     type=click.STRING,
     required=True,
-    help='The name of the resource group that holds the '
-         'destination storage account.'
+    help='The name of the resource group where '
+         'the destination storage account exists.'
 )
 @click.option(
     '--destination-storage-account',
     type=click.STRING,
     required=True,
-    help='The name of the ASM based storage account that '
-         'holds the destination container.'
+    help='The name of the ASM based storage account where '
+         'the destination container exists.'
 )
 @click.option(
     '--credentials',
@@ -450,13 +450,13 @@ def add_azure_account(
     '--bucket',
     type=click.STRING,
     required=True,
-    help='The storage bucket where the image will be uploaded.'
+    help='The storage bucket where images will be uploaded.'
 )
 @click.option(
     '--zone',
     type=click.STRING,
     required=True,
-    help='The zone where the test instance will be launched.'
+    help='The zone where the test instances will be launched.'
 )
 @click.option(
     '--mash-user',
