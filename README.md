@@ -29,6 +29,8 @@ Requirements
 -   requests
 -   PyYaml
 
+# [Docs](https://mash-client.readthedocs.io/en/latest/)
+
 Usage
 =====
 
