@@ -2,6 +2,7 @@ interactions:
 - request:
     body: '{"account_name": "acnt1", "credentials": {"access_key_id": "123456", "secret_access_key":
       "654321"}, "partition": "aws", "cloud": "ec2", "requesting_user": "user1",
+      "region": "us-east-1",
       "additional_regions": [{"name": "us-east-5", "helper_image": "ami-12345"}]}'
     headers:
       Accept: ['*/*']
