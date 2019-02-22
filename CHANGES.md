@@ -1,3 +1,15 @@
+v0.2.0 (2019-02-22)
+===================
+
+- Add readthedocs documentation.
+  [\11](https://github.com/SUSE-Enceladus/mash/pull/11)
+- Move default mash client config file.
+  [\12](https://github.com/SUSE-Enceladus/mash/pull/12)
+- Add ec2 account has a single target region.
+  [\13](https://github.com/SUSE-Enceladus/mash/pull/13)
+- Re-word cli option help messages.
+  [\14](https://github.com/SUSE-Enceladus/mash/pull/14)
+
 v0.1.0 (2019-02-04)
 ===================
 
