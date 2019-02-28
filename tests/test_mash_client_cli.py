@@ -152,7 +152,7 @@ def test_account_add_gce():
             '-C', 'tests/data/.config', 'account', 'add', 'gce',
             '--name', 'acnt1', '--bucket', 'storage_bucket',
             '--zone', 'us-west1-a', '--mash-user', 'user1', '--credentials',
-            'tests/data/gce_creds.json'
+            'tests/data/gce_creds.json', '--testing-account', 'testacnt'
         ]
     )
     assert result.exit_code == 0
