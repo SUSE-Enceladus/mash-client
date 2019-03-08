@@ -1,3 +1,9 @@
+v0.3.0 (2019-03-08)
+===================
+
+- Add testing account option for gce account add.
+  [\15](https://github.com/SUSE-Enceladus/mash/pull/15)
+
 v0.2.0 (2019-02-22)
 ===================
 
