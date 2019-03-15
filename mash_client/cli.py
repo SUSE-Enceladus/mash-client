@@ -230,8 +230,8 @@ def add_account():
 @click.option(
     '--additional-regions',
     is_flag=True,
-    help=('Invoke region addition process to specify information '
-          'for additional regions')
+    help='Invoke region addition process to specify information '
+         'for additional regions'
 )
 @click.option(
     '--group',
