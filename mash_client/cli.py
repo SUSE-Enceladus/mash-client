@@ -472,6 +472,11 @@ def add_azure_account(
          'will be used for launching test instances.'
 )
 @click.option(
+    '--is-publishing-account',
+    is_flag=True,
+    help='The new account is a publishing account.'
+)
+@click.option(
     '--credentials',
     type=click.Path(exists=True),
     required=True,
@@ -480,7 +485,7 @@ def add_azure_account(
 @click.pass_context
 def add_gce_account(
     context, group, name, bucket, zone, mash_user, testing_account,
-    credentials
+    is_publishing_account, credentials
 ):
     """
     Add a GCE account in the user name space on the MASH server.
@@ -505,6 +510,9 @@ def add_gce_account(
 
         if testing_account:
             data['testing_account'] = testing_account
+
+        if is_publishing_account:
+            data['is_publishing_account'] = True
 
         handle_request(config_data, '/add_account', data)
 
