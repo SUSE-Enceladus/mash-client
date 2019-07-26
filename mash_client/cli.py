@@ -263,6 +263,11 @@ def add_account():
     help='The target region for image upload and testing.'
 )
 @click.option(
+    '--subnet',
+    type=click.STRING,
+    help='An optional subnet id for image upload and testing.'
+)
+@click.option(
     '--access-key-id',
     type=click.STRING,
     required=True,
@@ -277,7 +282,7 @@ def add_account():
 @click.pass_context
 def add_ec2_account(
     context, additional_regions, group, name, partition,
-    mash_user, region, access_key_id, secret_access_key
+    mash_user, region, subnet, access_key_id, secret_access_key
 ):
     """
     Add an EC2 account in the user name space on the MASH server.
@@ -319,6 +324,9 @@ def add_ec2_account(
 
         if group:
             data['group'] = group
+
+        if subnet:
+            data['subnet'] = subnet
 
         handle_request(config_data, '/add_account', data)
 
