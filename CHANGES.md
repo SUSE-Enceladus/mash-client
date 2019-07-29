@@ -1,3 +1,9 @@
+v0.5.0 (2019-07-29)
+===================
+
+- Add subnet option to ec2 add account.
+  [\20](https://github.com/suse-enceladus/mash-client/pull/20)
+
 v0.4.0 (2019-06-08)
 ===================
 
