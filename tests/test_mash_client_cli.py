@@ -110,8 +110,9 @@ def test_account_add_ec2():
         [
             '-C', 'tests/data/.config', 'account', 'add', 'ec2',
             '--additional-regions', '--name', 'acnt1', '--partition', 'aws',
-            '--mash-user', 'user1', '--region', 'us-east-1', '--access-key-id',
-            '123456', '--secret-access-key', '654321'
+            '--mash-user', 'user1', '--region', 'us-east-1', '--subnet',
+            'subnet-123456789', '--access-key-id', '123456',
+            '--secret-access-key', '654321'
         ],
         input='y\n'
               'us-east-5\n'
