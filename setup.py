@@ -35,7 +35,7 @@ with open('requirements-dev.txt') as req_file:
 
 setup(
     name='mash-client',
-    version='0.4.0',
+    version='0.5.0',
     description="CLI client for interfacing with a MASH server.",
     long_description=readme,
     long_description_content_type="text/markdown",
