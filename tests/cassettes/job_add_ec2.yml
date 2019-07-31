@@ -2,9 +2,9 @@ interactions:
 - request:
     body: '{"cloud_accounts": [{"name": "test-aws-gov", "region": "us-gov-west-1"}],
       "cloud_groups": ["test"], "requesting_user": "user1", "last_service": "deprecation",
-      "image": "test_image_oem", "cloud_image_name": "new_image_123", "old_cloud_image_name":
-      "old_new_image_123", "conditions": [{"package_name": "name", "version": "4.13.1"},
-      {"image": "version"}], "download_url": "http://download.opensuse.org/repositories/Cloud:Tools/images",
+      "utctime": "now", "image": "test_image_oem", "cloud_image_name": "new_image_123",
+      "old_cloud_image_name": "old_new_image_123", "conditions": [{"package_name":
+      "name", "version": "4.13.1"}, {"image": "version"}], "download_url": "http://download.opensuse.org/repositories/Cloud:Tools/images",
       "image_description": "New Image #123", "distro": "sles", "instance_type": "t2.micro",
       "tests": ["test_stuff"]}'
     headers:
@@ -15,7 +15,7 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '543'
+      - '561'
       User-Agent:
       - python-requests/2.22.0
       content-type:
@@ -24,20 +24,19 @@ interactions:
     uri: http://127.0.0.1:5000/jobs/ec2/
   response:
     body:
-      string: '{"errors": {"utctime": "''utctime'' is a required property"}, "message":
-        "Input payload validation failed"}
-
-        '
+      string: '{"job_id": "91b218d9-37c7-4638-9959-3259d77e3325"}'
     headers:
       Content-Length:
-      - '106'
+      - '50'
       Content-Type:
-      - application/json
+      - application/json; charset=utf-8
       Date:
-      - Wed, 31 Jul 2019 23:46:14 GMT
+      - Wed, 31 Jul 2019 23:46:15 GMT
       Server:
       - Werkzeug/0.14.1 Python/3.7.3
+      mimetype:
+      - application/json
     status:
-      code: 400
-      message: BAD REQUEST
+      code: 201
+      message: CREATED
 version: 1

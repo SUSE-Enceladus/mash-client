@@ -1,0 +1,42 @@
+interactions:
+- request:
+    body: '{"cloud_groups": ["test"], "requesting_user": "user1", "last_service":
+      "deprecation", "utctime": "now", "image": "test_image_oem", "cloud_image_name":
+      "new_image_123", "old_cloud_image_name": "old_new_image_123", "conditions":
+      [{"package_name": "name", "version": "4.13.1"}, {"image": "version"}], "download_url":
+      "http://download.opensuse.org/repositories/Cloud:Tools/images", "image_description":
+      "New Image #123", "tests": ["test_stuff"], "emails": "test@test.com", "label":
+      "image label", "offer_id": "sles", "publisher_id": "suse", "sku": "12"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '549'
+      User-Agent:
+      - python-requests/2.22.0
+      content-type:
+      - application/json
+    method: POST
+    uri: http://127.0.0.1:5000/jobs/azure/
+  response:
+    body:
+      string: '{"job_id": "23fc826b-f6f5-4fbe-947d-52dcd097f0bc"}'
+    headers:
+      Content-Length:
+      - '50'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Wed, 31 Jul 2019 23:51:34 GMT
+      Server:
+      - Werkzeug/0.14.1 Python/3.7.3
+      mimetype:
+      - application/json
+    status:
+      code: 201
+      message: CREATED
+version: 1

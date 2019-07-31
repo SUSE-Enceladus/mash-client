@@ -2,7 +2,7 @@
 
 """mash client CLI endpoints using click library."""
 
-# Copyright (c) 2018 SUSE LLC
+# Copyright (c) 2019 SUSE LLC. All rights reserved.
 #
 # This file is part of mash_client. mash_client provides a command line
 # utility for interfacing with a MASH server.
@@ -28,8 +28,7 @@ from mash_client.cli_utils import (
     EC2_PARTITIONS,
     get_config,
     handle_errors,
-    handle_request,
-    SUPPORTED_CLOUDS
+    handle_request
 )
 
 
@@ -119,15 +118,22 @@ def job():
     """
 
 
-@click.command()
+@click.group(name='add')
+def add_job():
+    """
+    Handle mash job add requests.
+    """
+
+
+@click.command(name='ec2')
 @click.argument(
     'document',
     type=click.Path(exists=True)
 )
 @click.pass_context
-def add(context, document):
+def add_ec2_job(context, document):
     """
-    Send add job request to mash server based on provided json document.
+    Send add ec2 job request to mash server based on provided json document.
     """
     config_data = get_config(context.obj)
 
@@ -135,7 +141,45 @@ def add(context, document):
         with open(document) as job_file:
             job_data = json.load(job_file)
 
-        handle_request(config_data, '/add_job', job_data)
+        handle_request(config_data, '/jobs/ec2/', job_data)
+
+
+@click.command(name='gce')
+@click.argument(
+    'document',
+    type=click.Path(exists=True)
+)
+@click.pass_context
+def add_gce_job(context, document):
+    """
+    Send add gce job request to mash server based on provided json document.
+    """
+    config_data = get_config(context.obj)
+
+    with handle_errors(config_data['log_level'], config_data['no_color']):
+        with open(document) as job_file:
+            job_data = json.load(job_file)
+
+        handle_request(config_data, '/jobs/gce/', job_data)
+
+
+@click.command(name='azure')
+@click.argument(
+    'document',
+    type=click.Path(exists=True)
+)
+@click.pass_context
+def add_azure_job(context, document):
+    """
+    Send add azure job request to mash server based on provided json document.
+    """
+    config_data = get_config(context.obj)
+
+    with handle_errors(config_data['log_level'], config_data['no_color']):
+        with open(document) as job_file:
+            job_data = json.load(job_file)
+
+        handle_request(config_data, '/jobs/azure/', job_data)
 
 
 @click.command()
@@ -162,7 +206,11 @@ def delete(context, job_id):
     config_data = get_config(context.obj)
 
     with handle_errors(config_data['log_level'], config_data['no_color']):
-        handle_request(config_data, '/delete_job/{0}'.format(job_id))
+        handle_request(
+            config_data,
+            '/jobs/{0}'.format(job_id),
+            action='delete'
+        )
 
 
 @click.group()
@@ -170,51 +218,6 @@ def account():
     """
     Submit account requests to the MASH server.
     """
-
-
-@click.command(
-    name='delete', context_settings=dict(token_normalize_func=str.lower)
-)
-@click.option(
-    '--force',
-    is_flag=True,
-    callback=abort_if_false,
-    expose_value=False,
-    help='Force deletion without prompt.',
-    prompt='Are you sure you want to delete account?'
-)
-@click.option(
-    '--name',
-    type=click.STRING,
-    required=True,
-    help='Name of the account to be deleted.'
-)
-@click.option(
-    '--cloud',
-    type=click.Choice(SUPPORTED_CLOUDS),
-    required=True,
-    help='The target cloud framework for this job.'
-)
-@click.option(
-    '--mash-user',
-    type=click.STRING,
-    required=True,
-    help='The user in MASH user space to delete the account from.'
-)
-@click.pass_context
-def delete_account(context, name, cloud, mash_user):
-    """
-    Delete an account in the user name space on the MASH server.
-    """
-    config_data = get_config(context.obj)
-
-    with handle_errors(config_data['log_level'], config_data['no_color']):
-        job_data = {
-            'account_name': name,
-            'cloud': cloud,
-            'requesting_user': mash_user
-        }
-        handle_request(config_data, '/delete_account', job_data)
 
 
 @click.group(name='add')
@@ -297,7 +300,6 @@ def add_ec2_account(
                 'secret_access_key': secret_access_key
             },
             'partition': partition,
-            'cloud': 'ec2',
             'requesting_user': mash_user,
             'region': region
         }
@@ -328,7 +330,7 @@ def add_ec2_account(
         if subnet:
             data['subnet'] = subnet
 
-        handle_request(config_data, '/add_account', data)
+        handle_request(config_data, '/accounts/ec2/', data)
 
 
 @click.command(
@@ -424,7 +426,6 @@ def add_azure_account(
         data = {
             'account_name': name,
             'credentials': creds,
-            'cloud': 'azure',
             'region': region,
             'requesting_user': mash_user,
             'source_container': source_container,
@@ -438,7 +439,7 @@ def add_azure_account(
         if group:
             data['group'] = group
 
-        handle_request(config_data, '/add_account', data)
+        handle_request(config_data, '/accounts/azure/', data)
 
 
 @click.command(
@@ -508,7 +509,6 @@ def add_gce_account(
             'account_name': name,
             'bucket': bucket,
             'credentials': creds,
-            'cloud': 'gce',
             'region': zone,
             'requesting_user': mash_user
         }
@@ -522,12 +522,148 @@ def add_gce_account(
         if is_publishing_account:
             data['is_publishing_account'] = True
 
-        handle_request(config_data, '/add_account', data)
+        handle_request(config_data, '/accounts/gce/', data)
 
 
-job.add_command(add)
+@click.group(name='delete')
+def delete_account():
+    """
+    Handle mash account delete requests.
+    """
+
+
+@click.command(
+    name='ec2', context_settings=dict(token_normalize_func=str.lower)
+)
+@click.option(
+    '--force',
+    is_flag=True,
+    callback=abort_if_false,
+    expose_value=False,
+    help='Force deletion without prompt.',
+    prompt='Are you sure you want to delete account?'
+)
+@click.option(
+    '--name',
+    type=click.STRING,
+    required=True,
+    help='Name of the account to be deleted.'
+)
+@click.option(
+    '--mash-user',
+    type=click.STRING,
+    required=True,
+    help='The user in MASH user space to delete the account from.'
+)
+@click.pass_context
+def delete_ec2_account(context, name, mash_user):
+    """
+    Delete an ec2 account in the user name space on the MASH server.
+    """
+    config_data = get_config(context.obj)
+
+    with handle_errors(config_data['log_level'], config_data['no_color']):
+        job_data = {'requesting_user': mash_user}
+
+        handle_request(
+            config_data,
+            '/accounts/ec2/{name}'.format(name=name),
+            job_data=job_data,
+            action='delete'
+        )
+
+
+@click.command(
+    name='gce', context_settings=dict(token_normalize_func=str.lower)
+)
+@click.option(
+    '--force',
+    is_flag=True,
+    callback=abort_if_false,
+    expose_value=False,
+    help='Force deletion without prompt.',
+    prompt='Are you sure you want to delete account?'
+)
+@click.option(
+    '--name',
+    type=click.STRING,
+    required=True,
+    help='Name of the account to be deleted.'
+)
+@click.option(
+    '--mash-user',
+    type=click.STRING,
+    required=True,
+    help='The user in MASH user space to delete the account from.'
+)
+@click.pass_context
+def delete_gce_account(context, name, mash_user):
+    """
+    Delete an gce account in the user name space on the MASH server.
+    """
+    config_data = get_config(context.obj)
+
+    with handle_errors(config_data['log_level'], config_data['no_color']):
+        job_data = {'requesting_user': mash_user}
+
+        handle_request(
+            config_data,
+            '/accounts/gce/{name}'.format(name=name),
+            job_data=job_data,
+            action='delete'
+        )
+
+
+@click.command(
+    name='azure', context_settings=dict(token_normalize_func=str.lower)
+)
+@click.option(
+    '--force',
+    is_flag=True,
+    callback=abort_if_false,
+    expose_value=False,
+    help='Force deletion without prompt.',
+    prompt='Are you sure you want to delete account?'
+)
+@click.option(
+    '--name',
+    type=click.STRING,
+    required=True,
+    help='Name of the account to be deleted.'
+)
+@click.option(
+    '--mash-user',
+    type=click.STRING,
+    required=True,
+    help='The user in MASH user space to delete the account from.'
+)
+@click.pass_context
+def delete_azure_account(context, name, mash_user):
+    """
+    Delete an azure account in the user name space on the MASH server.
+    """
+    config_data = get_config(context.obj)
+
+    with handle_errors(config_data['log_level'], config_data['no_color']):
+        job_data = {'requesting_user': mash_user}
+
+        handle_request(
+            config_data,
+            '/accounts/azure/{name}'.format(name=name),
+            job_data=job_data,
+            action='delete'
+        )
+
+
+add_job.add_command(add_ec2_job)
+add_job.add_command(add_gce_job)
+add_job.add_command(add_azure_job)
+job.add_command(add_job)
 job.add_command(delete)
 main.add_command(job)
+delete_account.add_command(delete_ec2_account)
+delete_account.add_command(delete_gce_account)
+delete_account.add_command(delete_azure_account)
 account.add_command(delete_account)
 add_account.add_command(add_ec2_account)
 add_account.add_command(add_azure_account)

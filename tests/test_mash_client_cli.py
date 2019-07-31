@@ -3,7 +3,7 @@
 
 """MASH client cli unit tests."""
 
-# Copyright (c) 2018 SUSE LLC
+# Copyright (c) 2019 SUSE LLC. All rights reserved.
 #
 # This file is part of mash_client. mash_client provides a command line
 # utility for interfacing with a MASH server.
@@ -51,7 +51,7 @@ def test_job_add_invalid():
     result = runner.invoke(
         main,
         [
-            '-C', 'tests/data/.config', 'job', 'add',
+            '-C', 'tests/data/.config', 'job', 'add', 'ec2',
             'tests/data/invalid_job.json'
         ]
     )
@@ -59,16 +59,49 @@ def test_job_add_invalid():
     assert "'utctime' is a required property" in result.output
 
 
-@vcr.use_cassette('tests/cassettes/job_add.yml')
-def test_job_add():
+@vcr.use_cassette('tests/cassettes/job_add_ec2.yml')
+def test_job_add_ec2():
     """Test mash job add valid job."""
     runner = CliRunner()
     result = runner.invoke(
         main,
-        ['-C', 'tests/data/.config', 'job', 'add', 'tests/data/job.json']
+        [
+            '-C', 'tests/data/.config', 'job', 'add',
+            'ec2', 'tests/data/job.json'
+        ]
     )
     assert result.exit_code == 0
-    assert 'Add job request submitted.' in result.output
+    assert '91b218d9-37c7-4638-9959-3259d77e3325' in result.output
+
+
+@vcr.use_cassette('tests/cassettes/job_add_gce.yml')
+def test_job_add_gce():
+    """Test mash job add valid job."""
+    runner = CliRunner()
+    result = runner.invoke(
+        main,
+        [
+            '-C', 'tests/data/.config', 'job', 'add',
+            'gce', 'tests/data/gce_job.json'
+        ]
+    )
+    assert result.exit_code == 0
+    assert '799e85c9-9933-4772-b2ea-247dc1fc81af' in result.output
+
+
+@vcr.use_cassette('tests/cassettes/job_add_azure.yml')
+def test_job_add_azure():
+    """Test mash job add valid job."""
+    runner = CliRunner()
+    result = runner.invoke(
+        main,
+        [
+            '-C', 'tests/data/.config', 'job', 'add',
+            'azure', 'tests/data/azure_job.json'
+        ]
+    )
+    assert result.exit_code == 0
+    assert '23fc826b-f6f5-4fbe-947d-52dcd097f0bc' in result.output
 
 
 @vcr.use_cassette('tests/cassettes/job_delete.yml')
@@ -83,22 +116,52 @@ def test_job_delete():
         ]
     )
     assert result.exit_code == 0
-    assert 'Delete job request submitted.' in result.output
+    assert '12345678-1234-1234-1234-123456789012' in result.output
 
 
-@vcr.use_cassette('tests/cassettes/account_delete.yml')
-def test_account_delete():
+@vcr.use_cassette('tests/cassettes/account_delete_ec2.yml')
+def test_account_delete_ec2():
     """Test mash account delete."""
     runner = CliRunner()
     result = runner.invoke(
         main,
         [
-            '-C', 'tests/data/.config', 'account', 'delete', '--cloud', 'ec2',
+            '-C', 'tests/data/.config', 'account', 'delete', 'ec2',
             '--name', 'acnt1', '--mash-user', 'user1', '--force'
         ]
     )
     assert result.exit_code == 0
-    assert 'Delete account request submitted.' in result.output
+    assert 'acnt1' in result.output
+
+
+@vcr.use_cassette('tests/cassettes/account_delete_azure.yml')
+def test_account_delete_azure():
+    """Test mash account delete."""
+    runner = CliRunner()
+    result = runner.invoke(
+        main,
+        [
+            '-C', 'tests/data/.config', 'account', 'delete', 'azure',
+            '--name', 'acnt1', '--mash-user', 'user1', '--force'
+        ]
+    )
+    assert result.exit_code == 0
+    assert 'acnt1' in result.output
+
+
+@vcr.use_cassette('tests/cassettes/account_delete_gce.yml')
+def test_account_delete_gce():
+    """Test mash account delete."""
+    runner = CliRunner()
+    result = runner.invoke(
+        main,
+        [
+            '-C', 'tests/data/.config', 'account', 'delete', 'gce',
+            '--name', 'acnt1', '--mash-user', 'user1', '--force'
+        ]
+    )
+    assert result.exit_code == 0
+    assert 'acnt1' in result.output
 
 
 @vcr.use_cassette('tests/cassettes/account_add_ec2.yml')
@@ -120,7 +183,7 @@ def test_account_add_ec2():
               'n'
     )
     assert result.exit_code == 0
-    assert 'Add account request submitted.' in result.output
+    assert 'acnt1' in result.output
 
 
 @vcr.use_cassette('tests/cassettes/account_add_azure.yml')
@@ -140,7 +203,7 @@ def test_account_add_azure():
         ]
     )
     assert result.exit_code == 0
-    assert 'Add account request submitted.' in result.output
+    assert 'acnt1' in result.output
 
 
 @vcr.use_cassette('tests/cassettes/account_add_gce.yml')
@@ -158,4 +221,4 @@ def test_account_add_gce():
         ]
     )
     assert result.exit_code == 0
-    assert 'Add account request submitted.' in result.output
+    assert 'acnt1' in result.output
