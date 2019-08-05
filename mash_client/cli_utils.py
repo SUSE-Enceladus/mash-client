@@ -2,7 +2,7 @@
 
 """Utility methods for mash client cli endpoints."""
 
-# Copyright (c) 2018 SUSE LLC
+# Copyright (c) 2019 SUSE LLC. All rights reserved.
 #
 # This file is part of mash_client. mash_client provides a command line
 # utility for interfacing with a MASH server.
@@ -43,7 +43,6 @@ defaults = {
     'verify': True
 }
 EC2_PARTITIONS = ('aws', 'aws-cn', 'aws-us-gov')
-SUPPORTED_CLOUDS = ('azure', 'ec2', 'gce')
 
 
 def echo_dict(
@@ -136,23 +135,32 @@ def handle_errors(log_level, no_color):
         sys.exit(1)
 
 
-def handle_request(config_data, endpoint, job_data=None):
+def handle_request(config_data, endpoint, job_data=None, action='post'):
     """
     Post request based on endpoint and data.
 
     If response is successful echo the dictionary status.
     Otherwise raise exception.
     """
-    response = requests.post(
+    method = getattr(requests, action)
+
+    headers = {}
+    if job_data:
+        headers = {'content-type': 'application/json'}
+        job_data = json.dumps(job_data)
+
+    response = method(
         ''.join([config_data['url'], endpoint]),
-        data=None if not job_data else json.dumps(job_data),
+        data=job_data,
+        headers=headers,
         verify=config_data['verify']
     )
 
-    if response.status_code == 200:
+    if response.status_code in (200, 201):
         echo_dict(response.json(), config_data['no_color'])
     elif response.status_code == 400:
-        raise MashClientException(response.json()['error'])
+        error = '\n'.join(response.json()['errors'].values())
+        raise MashClientException(error)
     else:
         response.raise_for_status()
 

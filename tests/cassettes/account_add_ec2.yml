@@ -1,25 +1,39 @@
 interactions:
 - request:
     body: '{"account_name": "acnt1", "credentials": {"access_key_id": "123456", "secret_access_key":
-      "654321"}, "partition": "aws", "cloud": "ec2", "requesting_user": "user1",
-      "region": "us-east-1", "subnet": "subnet-123456789",
-      "additional_regions": [{"name": "us-east-5", "helper_image": "ami-12345"}]}'
+      "654321"}, "partition": "aws", "requesting_user": "user1", "region": "us-east-1",
+      "additional_regions": [{"name": "us-east-5", "helper_image": "ami-12345"}],
+      "subnet": "subnet-123456789"}'
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      Content-Length: ['243']
-      User-Agent: [python-requests/2.19.1]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '277'
+      User-Agent:
+      - python-requests/2.22.0
+      content-type:
+      - application/json
     method: POST
-    uri: http://127.0.0.1:5000/add_account
+    uri: http://127.0.0.1:5000/accounts/ec2/
   response:
-    body: {string: '{"status":"Add account request submitted."}
+    body:
+      string: '{"name":"acnt1"}
 
-        '}
+        '
     headers:
-      Content-Length: ['44']
-      Content-Type: [application/json]
-      Date: ['Fri, 16 Nov 2018 23:07:58 GMT']
-      Server: [Werkzeug/0.14.1 Python/3.6.5]
-    status: {code: 200, message: OK}
+      Content-Length:
+      - '17'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 31 Jul 2019 23:35:30 GMT
+      Server:
+      - Werkzeug/0.14.1 Python/3.7.3
+    status:
+      code: 201
+      message: CREATED
 version: 1
