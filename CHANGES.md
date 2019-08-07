@@ -1,3 +1,9 @@
+v0.6.0 (2019-08-07)
+===================
+
+- Update client for mash server api changes.
+  [\21](https://github.com/suse-enceladus/mash-client/pull/21)
+
 v0.5.0 (2019-07-29)
 ===================
 
