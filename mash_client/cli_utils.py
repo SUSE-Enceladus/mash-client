@@ -30,7 +30,6 @@ import yaml
 
 from collections import ChainMap
 from contextlib import contextmanager, suppress
-from textwrap import TextWrapper
 
 from mash_client.mash_client_exceptions import MashClientException
 
@@ -45,31 +44,11 @@ defaults = {
 EC2_PARTITIONS = ('aws', 'aws-cn', 'aws-us-gov')
 
 
-def echo_dict(
-    data, no_color, key_color='green', spaces=None, value_color='blue'
-):
+def echo_dict(data, no_color):
     """
     Echoes a dictionary pretty-print style to terminal.
     """
-    if not spaces:
-        spaces = get_max_key(data)
-
-    for key, value in data.items():
-        title = '{spaces}{key}:  '.format(
-            spaces=' ' * (spaces - len(key)),
-            key=key
-        )
-        wrapper = TextWrapper(
-            width=(82 - spaces),
-            subsequent_indent=' ' * (spaces + 3)
-        )
-
-        click.echo(
-            ''.join([
-                style_string(title, no_color, fg=key_color),
-                wrapper.fill(style_string(value, no_color, fg=value_color))
-            ])
-        )
+    echo_style(json.dumps(data, indent=2), no_color)
 
 
 def echo_style(message, no_color, fg='yellow'):
@@ -107,13 +86,6 @@ def get_config(cli_context):
         data['url'] = data['host']
 
     return data
-
-
-def get_max_key(data):
-    """
-    Get the max key length from dictionary.
-    """
-    return max(map(len, data))
 
 
 @contextmanager
