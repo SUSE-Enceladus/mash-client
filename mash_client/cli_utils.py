@@ -48,7 +48,7 @@ def echo_dict(data, no_color):
     """
     Echoes a dictionary pretty-print style to terminal.
     """
-    echo_style(json.dumps(data, indent=2), no_color)
+    echo_style(json.dumps(data, indent=4), no_color)
 
 
 def echo_style(message, no_color, fg='yellow'):
