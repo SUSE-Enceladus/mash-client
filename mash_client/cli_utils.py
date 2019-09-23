@@ -68,11 +68,11 @@ def get_config(cli_context):
     Use ChainMap to build config values based on
     command line args, config and defaults.
     """
-    config_path = cli_context['config_dir'] or default_config_dir
+    config_dir = cli_context['config_dir'] or default_config_dir
 
     config_values = {}
     with suppress(Exception):
-        with open(config_path + 'config.yaml') as config_file:
+        with open(config_dir + 'config.yaml') as config_file:
             config_values = yaml.safe_load(config_file)
 
     cli_values = {
