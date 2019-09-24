@@ -22,10 +22,12 @@
 
 import click
 import json
+import jwt
 import logging
 import os
 import requests
 import sys
+import time
 import yaml
 
 from collections import ChainMap
@@ -107,11 +109,17 @@ def handle_errors(log_level, no_color):
         sys.exit(1)
 
 
-def handle_request(config_data, endpoint, job_data=None, action='post'):
+def handle_request(
+    config_data,
+    endpoint,
+    job_data=None,
+    action='post',
+    token=None
+):
     """
     Post request based on endpoint and data.
 
-    If response is successful echo the dictionary status.
+    If response is successful return the json data.
     Otherwise raise exception.
     """
     method = getattr(requests, action)
@@ -121,6 +129,9 @@ def handle_request(config_data, endpoint, job_data=None, action='post'):
         headers = {'content-type': 'application/json'}
         job_data = json.dumps(job_data)
 
+    if token:
+        headers['authorization'] = 'Bearer {token}'.format(token=token)
+
     response = method(
         ''.join([config_data['url'], endpoint]),
         data=job_data,
@@ -129,12 +140,97 @@ def handle_request(config_data, endpoint, job_data=None, action='post'):
     )
 
     if response.status_code in (200, 201):
-        echo_dict(response.json(), config_data['no_color'])
+        return response.json()
     elif response.status_code == 400:
-        error = '\n'.join(response.json()['errors'].values())
+        try:
+            error = '\n'.join(response.json()['errors'].values())
+        except KeyError:
+            error = response.json()['msg']
+
         raise MashClientException(error)
+    elif response.status_code == 401:
+        raise MashClientException(
+            response.json()['msg'] + '. Please login again.'
+        )
+    elif response.status_code in (404, 409):
+        raise MashClientException(response.json()['msg'])
     else:
         response.raise_for_status()
+
+
+def handle_request_with_token(
+    config_data,
+    endpoint,
+    job_data=None,
+    action='post'
+):
+    """
+    Submit request to API with access token.
+
+    If access token is past expiration date attempt to refresh token.
+    """
+    tokens = get_tokens_from_file(config_data['config_dir'])
+
+    if 'access_token' not in tokens:
+        refresh_token(config_data)
+    else:
+        access_token = jwt.decode(tokens['access_token'], verify=False)
+        now = int(time.time())
+
+        if access_token.get('exp') and now >= access_token['exp']:
+            refresh_token(config_data)
+
+    tokens = get_tokens_from_file(config_data['config_dir'])
+
+    result = handle_request(
+        config_data,
+        endpoint,
+        job_data=job_data,
+        action=action,
+        token=tokens['access_token']
+    )
+
+    return result
+
+
+def refresh_token(config_data):
+    tokens = get_tokens_from_file(config_data['config_dir'])
+
+    if 'refresh_token' not in tokens:
+        echo_style(
+            'No refresh token, please login (mash auth login).',
+            config_data['no_color'],
+            fg='red'
+        )
+        sys.exit(1)
+
+    result = handle_request(
+        config_data,
+        '/auth/token/refresh',
+        action='post',
+        token=tokens['refresh_token']
+    )
+
+    tokens['access_token'] = result['access_token']
+    save_tokens_to_file(config_data['config_dir'], tokens)
+
+
+def get_tokens_from_file(config_dir):
+    try:
+        with open(config_dir + 'tokens.json') as tokens_file:
+            tokens = json.load(tokens_file)
+    except FileNotFoundError:
+        raise MashClientException(
+            'No tokens available, please login (mash auth login).'
+        )
+
+    return tokens
+
+
+def save_tokens_to_file(config_dir, tokens):
+    with open(config_dir + 'tokens.json', 'w') as tokens_file:
+        json.dump(tokens, tokens_file, indent=2)
+        tokens_file.write('\n')
 
 
 def style_string(message, no_color, fg='yellow'):
