@@ -6,6 +6,5 @@ coverage
 pytest
 pytest-cov
 flake8
-vcrpy
 Sphinx
 sphinx-click
