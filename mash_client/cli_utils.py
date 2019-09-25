@@ -241,3 +241,8 @@ def style_string(message, no_color, fg='yellow'):
         return message
     else:
         return click.style(message, fg=fg)
+
+
+def abort_if_false(ctx, param, value):
+    if not value:
+        ctx.abort()
