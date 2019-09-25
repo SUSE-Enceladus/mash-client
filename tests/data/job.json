@@ -3,7 +3,6 @@
     {"name": "test-aws-gov", "region": "us-gov-west-1"}
   ],
   "cloud_groups": ["test"],
-  "requesting_user": "user1",
   "last_service": "deprecation",
   "utctime": "now",
   "image": "test_image_oem",

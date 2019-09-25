@@ -1,6 +1,5 @@
 {
-  "cloud_groups": ["test"],
-  "requesting_user": "user1",
+  "cloud_account": "test",
   "last_service": "deprecation",
   "utctime": "now",
   "image": "test_image_oem",
