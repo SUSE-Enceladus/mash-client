@@ -35,9 +35,9 @@ from contextlib import contextmanager, suppress
 
 from mash_client.mash_client_exceptions import MashClientException
 
-default_config = os.path.expanduser('~/.config/mash_client/config.yaml')
+default_config_dir = os.path.expanduser('~/.config/mash_client/')
 defaults = {
-    'config': default_config,
+    'config_dir': default_config_dir,
     'host': 'http://127.0.0.1',
     'log_level': logging.INFO,
     'no_color': False,
@@ -70,11 +70,11 @@ def get_config(cli_context):
     Use ChainMap to build config values based on
     command line args, config and defaults.
     """
-    config_path = cli_context['config'] or default_config
+    config_dir = cli_context['config_dir'] or default_config_dir
 
     config_values = {}
     with suppress(Exception):
-        with open(config_path) as config_file:
+        with open(config_dir + 'config.yaml') as config_file:
             config_values = yaml.safe_load(config_file)
 
     cli_values = {
