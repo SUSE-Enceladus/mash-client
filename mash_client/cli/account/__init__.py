@@ -22,9 +22,14 @@
 
 import click
 
+from mash_client.cli.account.azure import azure
+
 
 @click.group()
 def account():
     """
     Submit account requests to the MASH server.
     """
+
+
+account.add_command(azure)
