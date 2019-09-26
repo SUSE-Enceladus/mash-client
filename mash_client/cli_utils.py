@@ -246,3 +246,24 @@ def style_string(message, no_color, fg='yellow'):
 def abort_if_false(ctx, param, value):
     if not value:
         ctx.abort()
+
+
+def additional_regions_repl():
+    regions = []
+
+    while True:
+        if click.confirm('Add an additional region?'):
+            name = click.prompt('Enter the region name', type=str)
+            helper_image = click.prompt(
+                'Enter the helper image id',
+                type=str
+            )
+
+            regions.append({
+                'name': name,
+                'helper_image': helper_image
+            })
+        else:
+            break
+
+    return regions
