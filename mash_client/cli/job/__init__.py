@@ -31,6 +31,10 @@ from mash_client.cli_utils import (
     echo_style
 )
 
+from mash_client.cli.job.azure import azure
+from mash_client.cli.job.ec2 import ec2
+from mash_client.cli.job.gce import gce
+
 
 @click.group()
 def job():
@@ -118,3 +122,7 @@ def delete(context, job_id):
 job.add_command(delete)
 job.add_command(get)
 job.add_command(list_jobs)
+
+job.add_command(azure)
+job.add_command(ec2)
+job.add_command(gce)
