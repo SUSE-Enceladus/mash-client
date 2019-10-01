@@ -24,6 +24,7 @@ import click
 import logging
 
 from mash_client.cli.account import account
+from mash_client.cli.job import job
 
 
 def print_license(ctx, param, value):
@@ -100,4 +101,5 @@ def main(context, config_dir, no_color, host, port, log_level):
     context.obj['log_level'] = log_level
 
 
+main.add_command(job)
 main.add_command(account)
