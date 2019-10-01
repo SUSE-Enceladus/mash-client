@@ -23,6 +23,7 @@
 import click
 import logging
 
+from mash_client.cli.user import user
 from mash_client.cli.account import account
 from mash_client.cli.job import job
 
@@ -103,3 +104,4 @@ def main(context, config_dir, no_color, host, port, log_level):
 
 main.add_command(job)
 main.add_command(account)
+main.add_command(user)
