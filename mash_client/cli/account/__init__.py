@@ -23,6 +23,7 @@
 import click
 
 from mash_client.cli.account.azure import azure
+from mash_client.cli.account.ec2 import ec2
 from mash_client.cli.account.gce import gce
 
 
@@ -34,4 +35,5 @@ def account():
 
 
 account.add_command(azure)
+account.add_command(ec2)
 account.add_command(gce)
