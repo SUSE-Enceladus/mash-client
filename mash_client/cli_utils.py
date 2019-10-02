@@ -22,21 +22,22 @@
 
 import click
 import json
+import jwt
 import logging
 import os
 import requests
 import sys
+import time
 import yaml
 
 from collections import ChainMap
 from contextlib import contextmanager, suppress
-from textwrap import TextWrapper
 
 from mash_client.mash_client_exceptions import MashClientException
 
-default_config = os.path.expanduser('~/.config/mash_client/config.yaml')
+default_config_dir = os.path.expanduser('~/.config/mash_client/')
 defaults = {
-    'config': default_config,
+    'config_dir': default_config_dir,
     'host': 'http://127.0.0.1',
     'log_level': logging.INFO,
     'no_color': False,
@@ -45,31 +46,11 @@ defaults = {
 EC2_PARTITIONS = ('aws', 'aws-cn', 'aws-us-gov')
 
 
-def echo_dict(
-    data, no_color, key_color='green', spaces=None, value_color='blue'
-):
+def echo_dict(data, no_color):
     """
     Echoes a dictionary pretty-print style to terminal.
     """
-    if not spaces:
-        spaces = get_max_key(data)
-
-    for key, value in data.items():
-        title = '{spaces}{key}:  '.format(
-            spaces=' ' * (spaces - len(key)),
-            key=key
-        )
-        wrapper = TextWrapper(
-            width=(82 - spaces),
-            subsequent_indent=' ' * (spaces + 3)
-        )
-
-        click.echo(
-            ''.join([
-                style_string(title, no_color, fg=key_color),
-                wrapper.fill(style_string(value, no_color, fg=value_color))
-            ])
-        )
+    echo_style(json.dumps(data, indent=4), no_color)
 
 
 def echo_style(message, no_color, fg='yellow'):
@@ -89,11 +70,11 @@ def get_config(cli_context):
     Use ChainMap to build config values based on
     command line args, config and defaults.
     """
-    config_path = cli_context['config'] or default_config
+    config_dir = cli_context['config_dir'] or default_config_dir
 
     config_values = {}
     with suppress(Exception):
-        with open(config_path) as config_file:
+        with open(config_dir + 'config.yaml') as config_file:
             config_values = yaml.safe_load(config_file)
 
     cli_values = {
@@ -107,13 +88,6 @@ def get_config(cli_context):
         data['url'] = data['host']
 
     return data
-
-
-def get_max_key(data):
-    """
-    Get the max key length from dictionary.
-    """
-    return max(map(len, data))
 
 
 @contextmanager
@@ -135,11 +109,17 @@ def handle_errors(log_level, no_color):
         sys.exit(1)
 
 
-def handle_request(config_data, endpoint, job_data=None, action='post'):
+def handle_request(
+    config_data,
+    endpoint,
+    job_data=None,
+    action='post',
+    token=None
+):
     """
     Post request based on endpoint and data.
 
-    If response is successful echo the dictionary status.
+    If response is successful return the json data.
     Otherwise raise exception.
     """
     method = getattr(requests, action)
@@ -149,20 +129,124 @@ def handle_request(config_data, endpoint, job_data=None, action='post'):
         headers = {'content-type': 'application/json'}
         job_data = json.dumps(job_data)
 
-    response = method(
-        ''.join([config_data['url'], endpoint]),
-        data=job_data,
-        headers=headers,
-        verify=config_data['verify']
-    )
+    if token:
+        headers['authorization'] = 'Bearer {token}'.format(token=token)
+
+    try:
+        response = method(
+            ''.join([config_data['url'], endpoint]),
+            data=job_data,
+            headers=headers,
+            verify=config_data['verify']
+        )
+    except requests.ConnectionError:
+        raise MashClientException(
+            'Failed to establish connection with MASH server at: '
+            '{url}'.format(url=config_data['url'])
+        )
 
     if response.status_code in (200, 201):
-        echo_dict(response.json(), config_data['no_color'])
+        return response.json()
     elif response.status_code == 400:
-        error = '\n'.join(response.json()['errors'].values())
+        try:
+            error = '\n'.join(response.json()['errors'].values())
+        except KeyError:
+            error = response.json()['msg']
+
         raise MashClientException(error)
+    elif response.status_code == 401:
+        raise MashClientException(
+            response.json()['msg'] + '. Please login again.'
+        )
+    elif response.status_code == 404:
+        try:
+            msg = response.json()['msg']
+        except (json.decoder.JSONDecodeError, KeyError):
+            msg = 'The requested URL was not found on the server:' \
+                  ' {url}'.format(
+                      url=''.join([config_data['url'], endpoint])
+                  )
+
+        raise MashClientException(msg)
+    elif response.status_code == 409:
+        raise MashClientException(response.json()['msg'])
     else:
         response.raise_for_status()
+
+
+def handle_request_with_token(
+    config_data,
+    endpoint,
+    job_data=None,
+    action='post'
+):
+    """
+    Submit request to API with access token.
+
+    If access token is past expiration date attempt to refresh token.
+    """
+    tokens = get_tokens_from_file(config_data['config_dir'])
+
+    if 'access_token' not in tokens:
+        refresh_token(config_data)
+    else:
+        access_token = jwt.decode(tokens['access_token'], verify=False)
+        now = int(time.time())
+
+        if access_token.get('exp') and now >= access_token['exp']:
+            refresh_token(config_data)
+
+    tokens = get_tokens_from_file(config_data['config_dir'])
+
+    result = handle_request(
+        config_data,
+        endpoint,
+        job_data=job_data,
+        action=action,
+        token=tokens['access_token']
+    )
+
+    return result
+
+
+def refresh_token(config_data):
+    tokens = get_tokens_from_file(config_data['config_dir'])
+
+    if 'refresh_token' not in tokens:
+        echo_style(
+            'No refresh token, please login (mash auth login).',
+            config_data['no_color'],
+            fg='red'
+        )
+        sys.exit(1)
+
+    result = handle_request(
+        config_data,
+        '/auth/token/refresh',
+        action='post',
+        token=tokens['refresh_token']
+    )
+
+    tokens['access_token'] = result['access_token']
+    save_tokens_to_file(config_data['config_dir'], tokens)
+
+
+def get_tokens_from_file(config_dir):
+    try:
+        with open(config_dir + 'tokens.json') as tokens_file:
+            tokens = json.load(tokens_file)
+    except FileNotFoundError:
+        raise MashClientException(
+            'No tokens available, please login (mash auth login).'
+        )
+
+    return tokens
+
+
+def save_tokens_to_file(config_dir, tokens):
+    with open(config_dir + 'tokens.json', 'w') as tokens_file:
+        json.dump(tokens, tokens_file, indent=2)
+        tokens_file.write('\n')
 
 
 def style_string(message, no_color, fg='yellow'):
@@ -173,3 +257,29 @@ def style_string(message, no_color, fg='yellow'):
         return message
     else:
         return click.style(message, fg=fg)
+
+
+def abort_if_false(ctx, param, value):
+    if not value:
+        ctx.abort()
+
+
+def additional_regions_repl():
+    regions = []
+
+    while True:
+        if click.confirm('Add an additional region?'):
+            name = click.prompt('Enter the region name', type=str)
+            helper_image = click.prompt(
+                'Enter the helper image id',
+                type=str
+            )
+
+            regions.append({
+                'name': name,
+                'helper_image': helper_image
+            })
+        else:
+            break
+
+    return regions
