@@ -31,6 +31,7 @@ from mash_client.cli_utils import (
     save_tokens_to_file,
     get_tokens_from_file
 )
+from mash_client.cli.auth.token import token
 
 
 @click.group()
@@ -106,3 +107,4 @@ def logout(context):
 
 auth.add_command(login)
 auth.add_command(logout)
+auth.add_command(token)
