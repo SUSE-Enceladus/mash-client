@@ -29,9 +29,11 @@ BuildRequires:  python3-setuptools
 BuildRequires:  python3-click
 BuildRequires:  python3-requests
 BuildRequires:  python3-PyYAML
+BuildRequires:  python3-PyJWT
 Requires:       python3-click
 Requires:       python3-requests
 Requires:       python3-PyYAML
+Requires:       python3-PyJWT
 BuildArch:      noarch
 
 %description

@@ -28,6 +28,7 @@ Requirements
 -   Click
 -   requests
 -   PyYaml
+-   PyJWT
 
 # [Docs](https://mash-client.readthedocs.io/en/latest/)
 

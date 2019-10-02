@@ -1,3 +1,11 @@
+v1.0.0 (2019-10-02)
+===================
+
+- Integrate all endpoints from MASH v4.0.0
+- Add authentication to requests
+- Split up cli into multiple modules
+- Simplify the echo dictionary function
+
 v0.6.0 (2019-08-07)
 ===================
 
