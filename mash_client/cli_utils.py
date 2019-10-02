@@ -132,12 +132,18 @@ def handle_request(
     if token:
         headers['authorization'] = 'Bearer {token}'.format(token=token)
 
-    response = method(
-        ''.join([config_data['url'], endpoint]),
-        data=job_data,
-        headers=headers,
-        verify=config_data['verify']
-    )
+    try:
+        response = method(
+            ''.join([config_data['url'], endpoint]),
+            data=job_data,
+            headers=headers,
+            verify=config_data['verify']
+        )
+    except requests.ConnectionError:
+        raise MashClientException(
+            'Failed to establish connection with MASH server at: '
+            '{url}'.format(url=config_data['url'])
+        )
 
     if response.status_code in (200, 201):
         return response.json()
@@ -152,7 +158,17 @@ def handle_request(
         raise MashClientException(
             response.json()['msg'] + '. Please login again.'
         )
-    elif response.status_code in (404, 409):
+    elif response.status_code == 404:
+        try:
+            msg = response.json()['msg']
+        except (json.decoder.JSONDecodeError, KeyError):
+            msg = 'The requested URL was not found on the server:' \
+                  ' {url}'.format(
+                      url=''.join([config_data['url'], endpoint])
+                  )
+
+        raise MashClientException(msg)
+    elif response.status_code == 409:
         raise MashClientException(response.json()['msg'])
     else:
         response.raise_for_status()
