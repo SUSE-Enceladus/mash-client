@@ -7,7 +7,7 @@ python:
 install:
   - pip install -e .[dev]
 script:
-  - pytest
+  - pytest --cov=mash_client
   - flake8
 deploy:
   provider: pypi
