@@ -29,6 +29,7 @@ from mash_client.cli_utils import (
     handle_request,
     echo_style,
     save_tokens_to_file,
+    get_tokens_file,
     get_tokens_from_file
 )
 from mash_client.cli.auth.token import token
@@ -66,7 +67,11 @@ def login(context, username):
             action='post'
         )
 
-        save_tokens_to_file(config_data['config_dir'], tokens)
+        tokens_file = get_tokens_file(
+            config_data['config_dir'],
+            config_data['profile']
+        )
+        save_tokens_to_file(tokens_file, tokens)
         echo_style('Login successful.', config_data['no_color'])
 
 
@@ -81,7 +86,12 @@ def logout(context):
     config_data = get_config(context.obj)
 
     with handle_errors(config_data['log_level'], config_data['no_color']):
-        tokens = get_tokens_from_file(config_data['config_dir'])
+        tokens_file = get_tokens_file(
+            config_data['config_dir'],
+            config_data['profile']
+        )
+
+        tokens = get_tokens_from_file(tokens_file)
         refresh_token = tokens.get('refresh_token')
 
         if not refresh_token:
@@ -93,7 +103,7 @@ def logout(context):
             sys.exit(1)
 
         tokens = {}  # Clear local sessions
-        save_tokens_to_file(config_data['config_dir'], tokens)
+        save_tokens_to_file(tokens_file, tokens)
 
         result = handle_request(
             config_data,

@@ -37,7 +37,7 @@ def test_token_refresh(mock_requests, mock_time):
     runner = CliRunner()
     with runner.isolated_filesystem():
         os.makedirs('tests/data/')
-        with open('tests/data/tokens.json', 'w') as f:
+        with open('tests/data/default_tokens.json', 'w') as f:
             json.dump(tokens, f, indent=2)
 
         result = runner.invoke(

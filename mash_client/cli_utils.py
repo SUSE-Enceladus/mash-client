@@ -36,8 +36,10 @@ from contextlib import contextmanager, suppress
 from mash_client.mash_client_exceptions import MashClientException
 
 default_config_dir = os.path.expanduser('~/.config/mash_client/')
+default_profile = 'default'
 defaults = {
     'config_dir': default_config_dir,
+    'profile': default_profile,
     'host': 'http://127.0.0.1',
     'log_level': logging.INFO,
     'no_color': False,
@@ -71,10 +73,11 @@ def get_config(cli_context):
     command line args, config and defaults.
     """
     config_dir = cli_context['config_dir'] or default_config_dir
+    profile = cli_context['profile'] or default_profile
 
     config_values = {}
     with suppress(Exception):
-        with open(config_dir + 'config.yaml') as config_file:
+        with open(config_dir + profile + '.yaml') as config_file:
             config_values = yaml.safe_load(config_file)
 
     cli_values = {
@@ -185,7 +188,11 @@ def handle_request_with_token(
 
     If access token is past expiration date attempt to refresh token.
     """
-    tokens = get_tokens_from_file(config_data['config_dir'])
+    tokens_file = get_tokens_file(
+        config_data['config_dir'],
+        config_data['profile']
+    )
+    tokens = get_tokens_from_file(tokens_file)
 
     if 'access_token' not in tokens:
         refresh_token(config_data)
@@ -196,7 +203,7 @@ def handle_request_with_token(
         if access_token.get('exp') and now >= access_token['exp']:
             refresh_token(config_data)
 
-    tokens = get_tokens_from_file(config_data['config_dir'])
+    tokens = get_tokens_from_file(tokens_file)
 
     result = handle_request(
         config_data,
@@ -210,7 +217,11 @@ def handle_request_with_token(
 
 
 def refresh_token(config_data):
-    tokens = get_tokens_from_file(config_data['config_dir'])
+    tokens_file = get_tokens_file(
+        config_data['config_dir'],
+        config_data['profile']
+    )
+    tokens = get_tokens_from_file(tokens_file)
 
     if 'refresh_token' not in tokens:
         echo_style(
@@ -228,12 +239,22 @@ def refresh_token(config_data):
     )
 
     tokens['access_token'] = result['access_token']
-    save_tokens_to_file(config_data['config_dir'], tokens)
+
+    tokens_file = get_tokens_file(
+        config_data['config_dir'],
+        config_data['profile']
+    )
+
+    save_tokens_to_file(tokens_file, tokens)
 
 
-def get_tokens_from_file(config_dir):
+def get_tokens_file(config_dir, profile):
+    return ''.join([config_dir, profile, '_tokens.json'])
+
+
+def get_tokens_from_file(tokens_path):
     try:
-        with open(config_dir + 'tokens.json') as tokens_file:
+        with open(tokens_path) as tokens_file:
             tokens = json.load(tokens_file)
     except FileNotFoundError:
         raise MashClientException(
@@ -243,8 +264,8 @@ def get_tokens_from_file(config_dir):
     return tokens
 
 
-def save_tokens_to_file(config_dir, tokens):
-    with open(config_dir + 'tokens.json', 'w') as tokens_file:
+def save_tokens_to_file(tokens_path, tokens):
+    with open(tokens_path, 'w') as tokens_file:
         json.dump(tokens, tokens_file, indent=2)
         tokens_file.write('\n')
 

@@ -76,7 +76,7 @@ def test_auth_logout(mock_requests):
     runner = CliRunner()
     with runner.isolated_filesystem():
         os.makedirs('tests/data/')
-        with open('tests/data/tokens.json', 'w') as f:
+        with open('tests/data/default_tokens.json', 'w') as f:
             json.dump(tokens, f, indent=2)
 
         result = runner.invoke(main, ['-C', 'tests/data/', 'auth', 'logout'])
