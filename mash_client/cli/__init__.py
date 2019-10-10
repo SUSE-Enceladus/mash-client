@@ -54,6 +54,12 @@ def print_license(ctx, param, value):
          '~/.config/mash_client/'
 )
 @click.option(
+    '--profile',
+    help='The configuration profile to use. Expected to match '
+         'a config file in config directory. Example: production, '
+         'for ~/.config/mash_client/production.yaml'
+)
+@click.option(
     '--no-color',
     is_flag=True,
     help='Remove ANSI color and styling from output.'
@@ -86,7 +92,7 @@ def print_license(ctx, param, value):
     help='Disable console output.'
 )
 @click.pass_context
-def main(context, config_dir, no_color, host, port, log_level):
+def main(context, config_dir, profile, no_color, host, port, log_level):
     """
     The command line interface allows you to interact with a MASH server.
 
@@ -97,6 +103,7 @@ def main(context, config_dir, no_color, host, port, log_level):
         context.obj = {}
 
     context.obj['config_dir'] = config_dir
+    context.obj['profile'] = profile
     context.obj['no_color'] = no_color
     context.obj['host'] = host
     context.obj['port'] = port
