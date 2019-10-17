@@ -170,7 +170,9 @@ def list_gce_accounts(context):
     callback=abort_if_false,
     expose_value=False,
     help='Force deletion without prompt.',
-    prompt='Are you sure you want to delete account?'
+    prompt='Are you sure you want to delete account? '
+           'You can make account updates instead using '
+           '`mash account gce update`.'
 )
 @click.option(
     '--name',
