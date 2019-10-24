@@ -163,7 +163,7 @@ def list_ec2_accounts(context):
     with handle_errors(config_data['log_level'], config_data['no_color']):
         result = handle_request_with_token(
             config_data,
-            '/accounts/ec2',
+            '/accounts/ec2/',
             action='get'
         )
 
