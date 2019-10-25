@@ -1,3 +1,15 @@
+v1.1.0 (2019-10-25)
+===================
+
+- Add coverage to travis testing.
+  [\42](https://github.com/suse-enceladus/mash-client/pull/42)
+- Add profiles option to handle multiple configs.
+  [\43](https://github.com/suse-enceladus/mash-client/pull/43)
+- Add comment to delete confirmation about updates.
+  [\44](https://github.com/suse-enceladus/mash-client/pull/44)
+- Fix account list routes.
+  [\45](https://github.com/suse-enceladus/mash-client/pull/45)
+
 v1.0.0 (2019-10-02)
 ===================
 
