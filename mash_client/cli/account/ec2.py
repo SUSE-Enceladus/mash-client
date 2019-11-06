@@ -156,7 +156,7 @@ def get(context, name):
 @click.pass_context
 def list_ec2_accounts(context):
     """
-    Get a lift of all ec2 accounts.
+    Get a list of all ec2 accounts.
     """
     config_data = get_config(context.obj)
 
