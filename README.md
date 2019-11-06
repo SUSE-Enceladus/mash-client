@@ -8,7 +8,7 @@
 overview
 ========
 
-**mash-client** provides a command line utilty to interface with the
+**mash-client** provides a command line utility to interface with the
 MASH server REST API.
 
 Installation
@@ -35,29 +35,71 @@ Requirements
 Usage
 =====
 
-The client has the following endpoints:
+Mash user commands:
+===================
 
-`mash job add`
+The mash user account is the authentication mechanism of a user against the mash server. It will store information about cloud framework specific account information. The cloud framework account information stored for a given mash user provides the credentials necessary for mash to access a cloud framework account.
 
-Send add job request to mash server based on provided json document.
+`mash user create`
+
+Create a mash user account.
+
+`mash user delete`
+
+Delete a mash user account.
+
+`mash user info`
+
+List information about your user account.
+
+
+Mash cloud account commands
+==========================
+
+`mash account <framework> add`
+
+Add cloud framework account information to the mash user account. Supported <framework>s are azure, ec2, and gce.
+
+`mash account <framework> delete`
+
+Remove cloud framework account information from the mash user account.
+
+`mash account <framework> info`
+
+Retrieve cloud framework account information from the mash user account.
+
+`mash account <framework> list`
+
+List all the framework accounts configured for the mash user.
+
+`mash account <framework> update`
+
+Update information for a cloud framework account for the mash user.
+
+
+Mash job commands
+=================
+
+`mash job <framework> add [PATH_TO_JOB_DOC]`
+
+Send a job request to the mash server submitting the specified job document.
+The job document will be validated and a UUID is returned if the job is accepted.
 
 `mash job delete`
 
-Delete a job given the UUID.
+Delete a job from the mash server. If the job is a one time job parts of the job may already be executed and created artifacts are not cleaned up.
 
-`mash account add azure`
-`mash account add ec2`
-`mash account add gce`
+`mash job info`
 
-Add account based on cloud framework.
+Retrieve information about a given job in the pipeline.
 
-`mash account delete`
+`mash job list`
 
-Delete mash account.
+List all the user's job in the mash pipeline.
 
-To get more info on an endpoint use the `--help` option:
+All commands and subcommands support the `--help` option to provide command help. For example
 
-`mash account add azure --help`
+`mash account azure add --help`
 
 Issues/Enhancements
 ===================
