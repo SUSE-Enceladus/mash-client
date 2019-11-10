@@ -35,8 +35,8 @@ Requirements
 Usage
 =====
 
-Mash user commands:
-===================
+Mash user commands
+==================
 
 The mash user account is the authentication mechanism of a user against the mash server. It will store information about cloud framework specific account information. The cloud framework account information stored for a given mash user provides the credentials necessary for mash to access a cloud framework account.
 
@@ -53,8 +53,26 @@ Delete a mash user account.
 List information about your user account.
 
 
+Mash authentication commands
+============================
+
+Authentication command are used after a mash user has been created
+
+`mash auth login`
+
+Login to the mash user account
+
+`mash auth logout`
+
+Log out of the mash user account
+
+`mash auth token`
+
+Manage the authentication token
+
+
 Mash cloud account commands
-==========================
+===========================
 
 `mash account <framework> add`
 
