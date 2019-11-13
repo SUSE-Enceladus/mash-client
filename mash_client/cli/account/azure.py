@@ -175,7 +175,7 @@ def get(context, name):
 @click.pass_context
 def list_azure_accounts(context):
     """
-    Get a lift of all Azure accounts.
+    Get a list of all Azure accounts.
     """
     config_data = get_config(context.obj)
 

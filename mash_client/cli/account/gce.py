@@ -149,7 +149,7 @@ def get(context, name):
 @click.pass_context
 def list_gce_accounts(context):
     """
-    Get a lift of all gce accounts.
+    Get a list of all gce accounts.
     """
     config_data = get_config(context.obj)
 
