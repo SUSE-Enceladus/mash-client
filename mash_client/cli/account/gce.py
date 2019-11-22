@@ -199,11 +199,6 @@ def delete(context, name):
 
 @click.command()
 @click.option(
-    '--group',
-    type=click.STRING,
-    help='Group name to associate account with.'
-)
-@click.option(
     '--name',
     type=click.STRING,
     required=True,
@@ -232,7 +227,7 @@ def delete(context, name):
 )
 @click.pass_context
 def update(
-    context, group, name, bucket, zone, testing_account, credentials
+    context, name, bucket, zone, testing_account, credentials
 ):
     """
     Update a GCE account in the user name space on the MASH server.
@@ -253,9 +248,6 @@ def update(
 
         if zone:
             data['region'] = zone
-
-        if group:
-            data['group'] = group
 
         if testing_account:
             data['testing_account'] = testing_account
