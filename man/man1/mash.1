@@ -1,45 +1,59 @@
-.TH "MASH" "1" "27-Aug-2018" "" "mash Manual"
+.TH "MASH" "1" "22-Nov-2019" "" "mash Manual"
 .SH NAME
-mash \- mash client provides a command line interface...
+mash \- The command line interface allows you to...
 .SH SYNOPSIS
 .B mash
 [OPTIONS] COMMAND [ARGS]...
 .SH DESCRIPTION
-mash client provides a command line interface to access mash servers.
+The command line interface allows you to interact with a MASH server.
+.PP
+It provides commands to submit jobs to the MASH server pipeline or
+add/delete a user account.
 .SH OPTIONS
 .TP
 \fB\-\-version\fP
 Show the version and exit.
 .TP
 \fB\-\-license\fP
-Show license information and exit.
+Show license information.
 .TP
-\fB\-C,\fP \-\-config PATH
-mash client config file location. Default: ~/.config/mash_client/config
+\fB\-C,\fP \-\-config\-dir PATH
+MASH client config directory to use. Default: ~/.config/mash_client/
+.TP
+\fB\-\-profile\fP TEXT
+The configuration profile to use. Expected to match a config file in config directory. Example: production, for ~/.config/mash_client/production.yaml
 .TP
 \fB\-\-no\-color\fP
 Remove ANSI color and styling from output.
 .TP
 \fB\-\-host\fP TEXT
-Host for the MASH server instance.
+Resolvable hostname for the MASH server instance.
 .TP
 \fB\-\-port\fP TEXT
-Port for the MASH host.
+The port number the MASH server is listening on.
 .TP
 \fB\-\-debug\fP
 Display debug level logging to console.
 .TP
 \fB\-\-verbose\fP
-(Default) Display logging info to console.
+Display logging info to console. (Default)
 .TP
 \fB\-\-quiet\fP
-Silence logging information on test run.
+Disable console output.
 .SH COMMANDS
 .PP
 \fBjob\fP
-  Handle mash job requests.
+  Submit job requests to the MASH server...
   See \fBmash-job(1)\fP for full documentation on the \fBjob\fP command.
 .PP
 \fBaccount\fP
-  Handle mash account requests.
+  Submit account requests to the MASH server.
   See \fBmash-account(1)\fP for full documentation on the \fBaccount\fP command.
+.PP
+\fBauth\fP
+  Submit authentication requests.
+  See \fBmash-auth(1)\fP for full documentation on the \fBauth\fP command.
+.PP
+\fBuser\fP
+  Submit user requests.
+  See \fBmash-user(1)\fP for full documentation on the \fBuser\fP command.

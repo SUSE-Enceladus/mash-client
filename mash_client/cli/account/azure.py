@@ -225,11 +225,6 @@ def delete(context, name):
 
 @click.command()
 @click.option(
-    '--group',
-    type=click.STRING,
-    help='Group name to associate the account with.'
-)
-@click.option(
     '--name',
     type=click.STRING,
     required=True,
@@ -283,7 +278,7 @@ def delete(context, name):
 )
 @click.pass_context
 def update(
-    context, group, name, region, source_container,
+    context, name, region, source_container,
     source_resource_group, source_storage_account,
     destination_container, destination_resource_group,
     destination_storage_account, credentials
@@ -301,9 +296,6 @@ def update(
                 creds = json.load(credentials_file)
 
             data['credentials'] = creds
-
-        if group:
-            data['group'] = group
 
         if region:
             data['region'] = region
