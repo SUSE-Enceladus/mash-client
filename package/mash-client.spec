@@ -27,6 +27,7 @@ Source:         https://files.pythonhosted.org/packages/source/p/mash-client/%{n
 BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
 BuildRequires:  python3-click
+BuildRequires:  python3-click-man
 BuildRequires:  python3-requests
 BuildRequires:  python3-PyYAML
 BuildRequires:  python3-PyJWT
@@ -45,6 +46,8 @@ with a MASH server instance.
 
 %build
 python3 setup.py build
+mkdir -p man/man1
+python3 setup.py --command-packages=click_man.commands man_pages --target man/man1
 
 %install
 python3 setup.py install --prefix=%{_prefix} --root=%{buildroot}
