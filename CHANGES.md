@@ -1,3 +1,15 @@
+v2.0.0 (2019-12-20)
+===================
+
+- Update the configuration docs with profile.
+  [\46](https://github.com/suse-enceladus/mash-client/pull/46)
+- Update README to reflect the latest command line interface.
+  [\47](https://github.com/suse-enceladus/mash-client/pull/47)
+- Remove group option from gce and azure accounts.
+  [\49](https://github.com/suse-enceladus/mash-client/pull/49)
+- Remove man pages from source.
+  [\50](https://github.com/suse-enceladus/mash-client/pull/50)
+
 v1.1.0 (2019-10-25)
 ===================
 
