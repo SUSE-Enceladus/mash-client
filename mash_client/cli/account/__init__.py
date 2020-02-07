@@ -2,7 +2,7 @@
 
 """mash client CLI account endpoints using click library."""
 
-# Copyright (c) 2019 SUSE LLC. All rights reserved.
+# Copyright (c) 2020 SUSE LLC. All rights reserved.
 #
 # This file is part of mash_client. mash_client provides a command line
 # utility for interfacing with a MASH server.
@@ -25,6 +25,7 @@ import click
 from mash_client.cli.account.azure import azure
 from mash_client.cli.account.ec2 import ec2
 from mash_client.cli.account.gce import gce
+from mash_client.cli.account.oci import oci
 
 
 @click.group()
@@ -37,3 +38,4 @@ def account():
 account.add_command(azure)
 account.add_command(ec2)
 account.add_command(gce)
+account.add_command(oci)
