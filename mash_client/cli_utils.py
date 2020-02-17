@@ -32,6 +32,8 @@ import yaml
 
 from collections import ChainMap
 from contextlib import contextmanager, suppress
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from urllib.parse import urlparse, parse_qs
 
 from mash_client.mash_client_exceptions import MashClientException
 
@@ -304,3 +306,39 @@ def additional_regions_repl():
             break
 
     return regions
+
+
+def get_oauth2_code(port):
+    class CodeReceivedException(BaseException):
+        def __init__(self, code):
+            self.code = code
+
+    class RequestHandler(BaseHTTPRequestHandler):
+        def do_GET(self):
+            self.send_response(200)
+            self.send_header('Content-type', 'text/html')
+            self.end_headers()
+            params = parse_qs(urlparse(self.path).query)
+            if not params.get('code'):
+                msg = 'ERROR: No authentication code received.'
+                exception = Exception(msg)
+            else:
+                msg = 'Authentication code received. You may close this tab.'
+                exception = CodeReceivedException(params['code'][0])
+            self.wfile.write(bytes(
+                '<html><body><h1>{}</h1></body></html>'.format(msg), 'utf-8'
+            ))
+            raise exception
+
+        def log_message(self, *args):
+            # supress logging of requests
+            pass
+
+    httpd = HTTPServer(('localhost', port), RequestHandler)
+    try:
+        httpd.serve_forever()
+    except CodeReceivedException as e:
+        code = e.code
+    finally:
+        httpd.shutdown()
+    return code

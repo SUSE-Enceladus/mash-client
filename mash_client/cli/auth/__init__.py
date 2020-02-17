@@ -30,7 +30,8 @@ from mash_client.cli_utils import (
     echo_style,
     save_tokens_to_file,
     get_tokens_file,
-    get_tokens_from_file
+    get_tokens_from_file,
+    get_oauth2_code
 )
 from mash_client.cli.auth.token import token
 
@@ -115,6 +116,59 @@ def logout(context):
         echo_style(result['msg'], config_data['no_color'])
 
 
+@click.command()
+@click.option(
+    '--username',
+    type=click.STRING,
+    required=True,
+    help='The username for the mash user.'
+)
+@click.pass_context
+def oidc(context, username):
+    """
+    Handle mash OpenID Connect authentication.
+    """
+    config_data = get_config(context.obj)
+
+    with handle_errors(config_data['log_level'], config_data['no_color']):
+        job_data = {'username': username}
+        result = handle_request(
+            config_data,
+            '/auth/oauth2_req',
+            job_data=job_data,
+            action='post'
+        )
+
+        # display authentication message
+        echo_style(
+            '{}: {}'.format(result['msg'], result['auth_url']),
+            config_data['no_color']
+        )
+
+        auth_code = get_oauth2_code(result['redirect_port'])
+
+        job_data = {
+            'username': username,
+            'auth_code': auth_code,
+            'state': result['state']
+        }
+
+        tokens = handle_request(
+            config_data,
+            '/auth/oauth2_login',
+            job_data=job_data,
+            action='post'
+        )
+
+        tokens_file = get_tokens_file(
+            config_data['config_dir'],
+            config_data['profile']
+        )
+        save_tokens_to_file(tokens_file, tokens)
+        echo_style('Login successful.', config_data['no_color'])
+
+
 auth.add_command(login)
 auth.add_command(logout)
 auth.add_command(token)
+auth.add_command(oidc)
