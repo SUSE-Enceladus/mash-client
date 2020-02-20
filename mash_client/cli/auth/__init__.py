@@ -31,7 +31,8 @@ from mash_client.cli_utils import (
     save_tokens_to_file,
     get_tokens_file,
     get_tokens_from_file,
-    get_oauth2_code
+    get_oauth2_code,
+    get_free_port
 )
 from mash_client.cli.auth.token import token
 
@@ -117,45 +118,45 @@ def logout(context):
 
 
 @click.command()
-@click.option(
-    '--username',
-    type=click.STRING,
-    required=True,
-    help='The username for the mash user.'
-)
 @click.pass_context
-def oidc(context, username):
+def oidc(context):
     """
     Handle mash OpenID Connect authentication.
     """
     config_data = get_config(context.obj)
 
     with handle_errors(config_data['log_level'], config_data['no_color']):
-        job_data = {'username': username}
         result = handle_request(
             config_data,
-            '/auth/oauth2_req',
-            job_data=job_data,
-            action='post'
+            '/auth/oauth2',
+            action='get'
+        )
+
+        redirect_port = get_free_port(result['redirect_ports'])
+        if not redirect_port:
+            raise Exception('No redirect port available')
+
+        auth_url = '{}&redirect_uri=http%3A%2F%2Flocalhost%3A{}'.format(
+            result['auth_url'], redirect_port
         )
 
         # display authentication message
         echo_style(
-            '{}: {}'.format(result['msg'], result['auth_url']),
+            '{}: {}'.format(result['msg'], auth_url),
             config_data['no_color']
         )
 
-        auth_code = get_oauth2_code(result['redirect_port'])
+        auth_code = get_oauth2_code(redirect_port)
 
         job_data = {
-            'username': username,
             'auth_code': auth_code,
-            'state': result['state']
+            'state': result['state'],
+            'redirect_port': redirect_port
         }
 
         tokens = handle_request(
             config_data,
-            '/auth/oauth2_login',
+            '/auth/oauth2',
             job_data=job_data,
             action='post'
         )

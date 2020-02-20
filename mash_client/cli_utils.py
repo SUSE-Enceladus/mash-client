@@ -26,6 +26,7 @@ import jwt
 import logging
 import os
 import requests
+import socket
 import sys
 import time
 import yaml
@@ -306,6 +307,19 @@ def additional_regions_repl():
             break
 
     return regions
+
+
+def get_free_port(ports):
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    local_addr = socket.gethostbyname('localhost')
+    for port in ports:
+        try:
+            sock.bind((local_addr, port))
+            sock.close()
+            return port
+        except Exception:
+            pass
+    return None
 
 
 def get_oauth2_code(port):
