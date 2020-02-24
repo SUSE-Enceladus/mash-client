@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""mash client CLI account endpoints using click library."""
+"""mash client CLI oci job endpoints using click library."""
 
 # Copyright (c) 2020 SUSE LLC. All rights reserved.
 #
@@ -21,21 +21,45 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import click
+import json
 
-from mash_client.cli.account.azure import azure
-from mash_client.cli.account.ec2 import ec2
-from mash_client.cli.account.gce import gce
-from mash_client.cli.account.oci import oci
+from mash_client.cli_utils import (
+    get_config,
+    handle_errors,
+    handle_request_with_token,
+    echo_dict
+)
 
 
 @click.group()
-def account():
+def oci():
     """
-    Submit account requests to the MASH server.
+    Submit OCI job requests.
     """
 
 
-account.add_command(azure)
-account.add_command(ec2)
-account.add_command(gce)
-account.add_command(oci)
+@click.command()
+@click.argument(
+    'document',
+    type=click.Path(exists=True)
+)
+@click.pass_context
+def add(context, document):
+    """
+    Send add oci job request to mash server based on provided json document.
+    """
+    config_data = get_config(context.obj)
+
+    with handle_errors(config_data['log_level'], config_data['no_color']):
+        with open(document) as job_file:
+            job_data = json.load(job_file)
+
+        result = handle_request_with_token(
+            config_data,
+            '/jobs/oci/',
+            job_data
+        )
+        echo_dict(result, config_data['no_color'])
+
+
+oci.add_command(add)

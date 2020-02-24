@@ -34,6 +34,7 @@ from mash_client.cli_utils import (
 from mash_client.cli.job.azure import azure
 from mash_client.cli.job.ec2 import ec2
 from mash_client.cli.job.gce import gce
+from mash_client.cli.job.oci import oci
 
 
 @click.group()
@@ -126,3 +127,4 @@ job.add_command(list_jobs)
 job.add_command(azure)
 job.add_command(ec2)
 job.add_command(gce)
+job.add_command(oci)
