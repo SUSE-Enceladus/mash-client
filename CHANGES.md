@@ -1,3 +1,9 @@
+v2.1.0 (2020-02-24)
+===================
+
+- Integrate OCI cloud framework into mash pipeline.
+  [\51](https://github.com/suse-enceladus/mash-client/pull/51)
+
 v2.0.0 (2019-12-20)
 ===================
 
