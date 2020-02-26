@@ -41,7 +41,7 @@ setup(
     long_description_content_type="text/markdown",
     author="SUSE",
     author_email='public-cloud-dev@susecloud.net',
-    url='https://github.com/SUSE-enceladus/pubcloud/mash-client',
+    url='https://github.com/SUSE-enceladus/mash-client',
     packages=find_packages(),
     package_dir={
         'mash_client': 'mash_client'
