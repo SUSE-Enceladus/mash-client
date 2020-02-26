@@ -25,6 +25,7 @@ import os
 from unittest.mock import Mock, patch
 
 from mash_client.cli import main
+from mash_client.cli_utils import CodeReceivedException
 
 from click.testing import CliRunner
 
@@ -67,7 +68,7 @@ def test_auth_login(mock_requests):
 
 @patch('mash_client.cli_utils.requests')
 def test_auth_logout(mock_requests):
-    """Test mash auth login."""
+    """Test mash auth logout."""
     response = Mock()
     response.status_code = 200
     response.json.return_value = {'msg': 'Logout successful'}
@@ -83,3 +84,43 @@ def test_auth_logout(mock_requests):
 
     assert result.exit_code == 0
     assert 'Logout successful' in result.output
+
+
+@patch('mash_client.cli_utils.HTTPServer')
+@patch('mash_client.cli_utils.socket.gethostbyname')
+@patch('mash_client.cli_utils.socket.socket')
+@patch('mash_client.cli_utils.requests')
+def test_auth_oidc(mock_requests, mock_socket, mock_gethostbyname, mock_http_server):
+    """Test mash auth oidc."""
+    response_get = Mock()
+    response_get.status_code = 200
+    response_get.json.return_value = {
+       'msg': 'Please open the following URL and log in',
+       'auth_url': 'https://provider/autorize',
+       'state': 'state-0123-45678-90AB',
+       'redirect_ports': [9000]
+    }
+    mock_requests.get.return_value = response_get
+    response_post = Mock()
+    response_post.status_code = 200
+    response_post.json.return_value = tokens
+    mock_requests.post.return_value = response_post
+
+    socket = Mock()
+    mock_socket.return_value = socket
+    mock_gethostbyname.return_value = '127.0.0.1'
+
+    server = Mock()
+    server.serve_forever.side_effect = CodeReceivedException('0123456789ABCDEF')
+    mock_http_server.return_value = server
+
+    runner = CliRunner()
+    result = runner.invoke(
+        main,
+        [
+            '--debug', '-C', 'tests/data/', 'auth', 'oidc'
+        ]
+    )
+
+    assert result.exit_code == 0
+    assert 'Login successful' in result.output
