@@ -90,7 +90,12 @@ def test_auth_logout(mock_requests):
 @patch('mash_client.cli_utils.socket.gethostbyname')
 @patch('mash_client.cli_utils.socket.socket')
 @patch('mash_client.cli_utils.requests')
-def test_auth_oidc(mock_requests, mock_socket, mock_gethostbyname, mock_http_server):
+def test_auth_oidc(
+    mock_requests,
+    mock_socket,
+    mock_gethostbyname,
+    mock_http_server
+):
     """Test mash auth oidc."""
     response_get = Mock()
     response_get.status_code = 200
@@ -111,7 +116,7 @@ def test_auth_oidc(mock_requests, mock_socket, mock_gethostbyname, mock_http_ser
     mock_gethostbyname.return_value = '127.0.0.1'
 
     server = Mock()
-    server.serve_forever.side_effect = CodeReceivedException('0123456789ABCDEF')
+    server.serve_forever.side_effect = CodeReceivedException('0123456789ABCDE')
     mock_http_server.return_value = server
 
     runner = CliRunner()
