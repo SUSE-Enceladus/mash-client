@@ -96,6 +96,25 @@ def get_config(cli_context):
     return data
 
 
+def update_config(cli_context, key, value):
+    """
+    Update a key in the current config profile.
+    """
+    config_dir = cli_context['config_dir'] or default_config_dir
+    profile = cli_context['profile'] or default_profile
+    config_path = config_dir + profile + '.yaml'
+
+    config_values = {}
+    with suppress(Exception):
+        with open(config_path) as config_file:
+            config_values = yaml.safe_load(config_file)
+
+    config_values[key] = value
+
+    with open(config_path, 'w') as config_file:
+        yaml.dump(config_values, config_file, default_flow_style=False)
+
+
 @contextmanager
 def handle_errors(log_level, no_color):
     """

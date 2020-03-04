@@ -46,22 +46,32 @@ def auth():
 
 @click.command()
 @click.option(
-    '--username',
+    '--email',
     type=click.STRING,
-    required=True,
-    help='The username for the mash user.'
+    help='The email for the mash user (default taken from config).'
 )
 @click.pass_context
-def login(context, username):
+def login(context, email):
     """
     Handle mash user login.
     """
     config_data = get_config(context.obj)
 
+    if not email:
+        email = config_data.get('email')
+
+    if not email:
+        echo_style(
+            'No --email parameter and no email in config.',
+            config_data['no_color'],
+            fg='red'
+        )
+        sys.exit(1)
+
     with handle_errors(config_data['log_level'], config_data['no_color']):
         password = click.prompt('Enter password', type=str, hide_input=True)
 
-        job_data = {'username': username, 'password': password}
+        job_data = {'email': email, 'password': password}
         tokens = handle_request(
             config_data,
             '/auth/login',
