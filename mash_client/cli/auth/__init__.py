@@ -35,6 +35,7 @@ from mash_client.cli_utils import (
     get_free_port
 )
 from mash_client.cli.auth.token import token
+from mash_client.mash_client_exceptions import MashClientException
 
 
 @click.group()
@@ -134,7 +135,7 @@ def oidc(context):
 
         redirect_port = get_free_port(result['redirect_ports'])
         if not redirect_port:
-            raise Exception('No redirect port available')
+            raise MashClientException('No redirect port available')
 
         auth_url = '{}&redirect_uri=http%3A%2F%2Flocalhost%3A{}'.format(
             result['auth_url'], redirect_port
