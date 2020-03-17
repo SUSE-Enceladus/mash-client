@@ -25,6 +25,7 @@ import sys
 
 from mash_client.cli_utils import (
     get_config,
+    update_config,
     handle_errors,
     handle_request,
     handle_request_with_token,
@@ -43,19 +44,13 @@ def user():
 
 @click.command(name='create')
 @click.option(
-    '--username',
-    type=click.STRING,
-    required=True,
-    help='The username for the mash user.'
-)
-@click.option(
     '--email',
     type=click.STRING,
     required=True,
     help='The email address for the mash user.'
 )
 @click.pass_context
-def create_user(context, username, email):
+def create_user(context, email):
     """
     Handle mash user creation requests.
     """
@@ -68,7 +63,7 @@ def create_user(context, username, email):
         if pass1 != pass2:
             raise MashClientException('Passwords do not match!')
 
-        job_data = {'username': username, 'email': email, 'password': pass1}
+        job_data = {'email': email, 'password': pass1}
         result = handle_request(
             config_data,
             '/user/',
@@ -77,6 +72,9 @@ def create_user(context, username, email):
         )
 
         echo_dict(result, config_data['no_color'])
+
+        if result.get('id'):
+            update_config(context.obj, 'email', email)
 
 
 @click.command(name='info')

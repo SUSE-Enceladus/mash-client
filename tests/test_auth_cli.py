@@ -58,7 +58,7 @@ def test_auth_login(mock_requests):
     result = runner.invoke(
         main,
         [
-            '-C', 'tests/data/', 'auth', 'login', '--username', 'user1'
+            '-C', 'tests/data/', 'auth', 'login', '--email', 'user1@fake.com'
         ],
         input='secretpassword123\n'
     )
