@@ -12,7 +12,6 @@ def test_user_create(mock_requests):
     response.status_code = 200
     response.json.return_value = {
         'id': '1',
-        'username': 'user1',
         'email': 'user1@fake.com'
     }
     mock_requests.post.return_value = response
@@ -21,8 +20,7 @@ def test_user_create(mock_requests):
     result = runner.invoke(
         main,
         [
-            '-C', 'tests/data/', 'user', 'create', '--username', 'user1',
-            '--email', 'user1@fake.com'
+            '-C', 'tests/data/', 'user', 'create', '--email', 'user1@fake.com'
         ],
         input='secretpassword\n'
               'secretpassword\n'
@@ -39,7 +37,6 @@ def test_user_info(mock_requests, mock_time):
     response.status_code = 200
     response.json.return_value = {
         'id': '1',
-        'username': 'user1',
         'email': 'user1@fake.com'
     }
     mock_requests.get.return_value = response

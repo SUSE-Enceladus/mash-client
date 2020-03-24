@@ -30,9 +30,12 @@ from mash_client.cli_utils import (
     echo_style,
     save_tokens_to_file,
     get_tokens_file,
-    get_tokens_from_file
+    get_tokens_from_file,
+    get_oauth2_code,
+    get_free_port
 )
 from mash_client.cli.auth.token import token
+from mash_client.mash_client_exceptions import MashClientException
 
 
 @click.group()
@@ -44,22 +47,32 @@ def auth():
 
 @click.command()
 @click.option(
-    '--username',
+    '--email',
     type=click.STRING,
-    required=True,
-    help='The username for the mash user.'
+    help='The email for the mash user (default taken from config).'
 )
 @click.pass_context
-def login(context, username):
+def login(context, email):
     """
     Handle mash user login.
     """
     config_data = get_config(context.obj)
 
+    if not email:
+        email = config_data.get('email')
+
+    if not email:
+        echo_style(
+            'No --email parameter and no email in config.',
+            config_data['no_color'],
+            fg='red'
+        )
+        sys.exit(1)
+
     with handle_errors(config_data['log_level'], config_data['no_color']):
         password = click.prompt('Enter password', type=str, hide_input=True)
 
-        job_data = {'username': username, 'password': password}
+        job_data = {'email': email, 'password': password}
         tokens = handle_request(
             config_data,
             '/auth/login',
@@ -115,6 +128,59 @@ def logout(context):
         echo_style(result['msg'], config_data['no_color'])
 
 
+@click.command()
+@click.pass_context
+def oidc(context):
+    """
+    Handle mash OpenID Connect authentication.
+    """
+    config_data = get_config(context.obj)
+
+    with handle_errors(config_data['log_level'], config_data['no_color']):
+        result = handle_request(
+            config_data,
+            '/auth/oauth2',
+            action='get'
+        )
+
+        redirect_port = get_free_port(result['redirect_ports'])
+        if not redirect_port:
+            raise MashClientException('No redirect port available')
+
+        auth_url = '{}&redirect_uri=http%3A%2F%2Flocalhost%3A{}'.format(
+            result['auth_url'], redirect_port
+        )
+
+        # display authentication message
+        echo_style(
+            '{}: {}'.format(result['msg'], auth_url),
+            config_data['no_color']
+        )
+
+        auth_code = get_oauth2_code(redirect_port)
+
+        job_data = {
+            'auth_code': auth_code,
+            'state': result['state'],
+            'redirect_port': redirect_port
+        }
+
+        tokens = handle_request(
+            config_data,
+            '/auth/oauth2',
+            job_data=job_data,
+            action='post'
+        )
+
+        tokens_file = get_tokens_file(
+            config_data['config_dir'],
+            config_data['profile']
+        )
+        save_tokens_to_file(tokens_file, tokens)
+        echo_style('Login successful.', config_data['no_color'])
+
+
 auth.add_command(login)
 auth.add_command(logout)
 auth.add_command(token)
+auth.add_command(oidc)
