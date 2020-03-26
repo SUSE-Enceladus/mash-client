@@ -1,4 +1,4 @@
 email: user1@fake.com
 host: http://127.0.0.1
 port: 5000
-verify: False
+verify: false

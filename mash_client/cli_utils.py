@@ -193,7 +193,7 @@ def handle_request(
                   )
 
         raise MashClientException(msg)
-    elif response.status_code == 409:
+    elif response.status_code in (403, 409):
         raise MashClientException(response.json()['msg'])
     else:
         response.raise_for_status()

@@ -120,6 +120,121 @@ def delete_user(context):
             sys.exit(1)
 
 
+@click.group()
+def password():
+    """
+    Submit user password requests.
+    """
+
+
+@click.command(name='reset')
+@click.option(
+    '--email',
+    type=click.STRING,
+    help='The email for the mash user (default taken from config).'
+)
+@click.pass_context
+def reset_password(context, email):
+    """
+    Initialize password reset for user.
+    """
+    config_data = get_config(context.obj)
+
+    if not email:
+        email = config_data.get('email')
+
+    if not email:
+        echo_style(
+            'No --email parameter and no email in config.',
+            config_data['no_color'],
+            fg='red'
+        )
+        sys.exit(1)
+
+    with handle_errors(config_data['log_level'], config_data['no_color']):
+        if click.confirm('Are you sure you want to reset password?'):
+            result = handle_request(
+                config_data,
+                '/user/password',
+                job_data={'email': email},
+                action='post'
+            )
+
+            echo_style(
+                result['msg'],
+                config_data['no_color']
+            )
+        else:
+            echo_style('Aborted', config_data['no_color'], fg='red')
+            sys.exit(1)
+
+
+@click.command(name='change')
+@click.option(
+    '--email',
+    type=click.STRING,
+    help='The email for the mash user (default taken from config).'
+)
+@click.pass_context
+def change_password(context, email):
+    """
+    Change password for user.
+    """
+    config_data = get_config(context.obj)
+
+    if not email:
+        email = config_data.get('email')
+
+    if not email:
+        echo_style(
+            'No --email parameter and no email in config.',
+            config_data['no_color'],
+            fg='red'
+        )
+        sys.exit(1)
+
+    with handle_errors(config_data['log_level'], config_data['no_color']):
+        current_pass = click.prompt(
+            'Enter current password',
+            type=str,
+            hide_input=True
+        )
+        new_pass1 = click.prompt(
+            'Enter new password',
+            type=str,
+            hide_input=True
+        )
+        new_pass2 = click.prompt(
+            'Confirm new password',
+            type=str,
+            hide_input=True
+        )
+
+        if new_pass1 != new_pass2:
+            raise MashClientException('New passwords do not match!')
+
+        job_data = {
+            'email': email,
+            'current_password': current_pass,
+            'new_password': new_pass1
+        }
+        result = handle_request(
+            config_data,
+            '/user/password',
+            job_data=job_data,
+            action='put'
+        )
+
+        echo_style(
+            result['msg'],
+            config_data['no_color']
+        )
+
+
 user.add_command(create_user)
 user.add_command(get_user)
 user.add_command(delete_user)
+
+password.add_command(reset_password)
+password.add_command(change_password)
+user.add_command(password)
