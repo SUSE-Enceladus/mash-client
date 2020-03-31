@@ -46,7 +46,18 @@ def gce():
 @click.pass_context
 def add(context, document):
     """
-    Send add gce job request to mash server based on provided json document.
+    Send add gce job request to mash server based on provided JSON document.
+
+    .SH JSON ARGUMENTS
+    .TP
+    \\fBbucket\\fP TEXT
+    Bucket where images will be stored.
+    .TP
+    \\fBcloud_account\\fP TEXT
+    Name of account credentials to use for job. [required]
+    .TP
+    \\fBcloud_architecture\\fP ENUM
+    Architecture of the image.  (x86_64, aarch64)
     """
     config_data = get_config(context.obj)
 
