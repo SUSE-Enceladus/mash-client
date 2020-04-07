@@ -2,7 +2,7 @@
 
 """mash client CLI endpoints using click library."""
 
-# Copyright (c) 2019 SUSE LLC. All rights reserved.
+# Copyright (c) 2020 SUSE LLC. All rights reserved.
 #
 # This file is part of mash_client. mash_client provides a command line
 # utility for interfacing with a MASH server.
@@ -27,6 +27,7 @@ from mash_client.cli.auth import auth
 from mash_client.cli.user import user
 from mash_client.cli.account import account
 from mash_client.cli.job import job
+from mash_client.cli.config import config
 
 
 def print_license(ctx, param, value):
@@ -114,3 +115,4 @@ main.add_command(job)
 main.add_command(account)
 main.add_command(auth)
 main.add_command(user)
+main.add_command(config)
