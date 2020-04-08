@@ -79,9 +79,20 @@ def get_config(cli_context):
     profile = cli_context['profile'] or default_profile
 
     config_values = {}
-    with suppress(Exception):
-        with open(config_dir + profile + '.yaml') as config_file:
+    config_file_path = os.path.join(config_dir, profile + '.yaml')
+
+    try:
+        with open(config_file_path) as config_file:
             config_values = yaml.safe_load(config_file)
+    except FileNotFoundError:
+        echo_style(
+            'Config file: {config_file_path} not found. Using default '
+            'configuration values. See `mash config setup` for info on '
+            'setting up a config file for this profile.'.format(
+                config_file_path=config_file_path
+            ),
+            no_color=True
+        )
 
     cli_values = {
         key: value for key, value in cli_context.items() if value is not None
