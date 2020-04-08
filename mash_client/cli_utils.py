@@ -389,3 +389,65 @@ def get_oauth2_code(port):
     finally:
         httpd.shutdown()
     return code
+
+
+def get_annotated_property(key, value, required):
+    annotated_keys = (
+        'description', 'type', 'example', 'enum', 'format', 'pattern'
+    )
+    annotated_value = {
+        key: value[key] for key in value if key in annotated_keys
+    }
+
+    if key in required:
+        annotated_value['required'] = True
+
+    if value['type'] == 'array':
+        nested_type = value['items']['type']
+        annotated_value['type'] = 'list of {nested_type}s'.format(
+            nested_type=nested_type
+        )
+
+        if nested_type == 'object':
+            properties = {}
+
+            for obj_key, obj_value in value['items']['properties'].items():
+                properties[obj_key] = get_annotated_property(
+                    obj_key,
+                    obj_value,
+                    value['items'].get('required', tuple())
+                )
+
+            annotated_value['properties'] = properties
+
+    return annotated_value
+
+
+def get_job_schema_by_cloud(context, output_style, cloud):
+    config_data = get_config(context.obj)
+
+    with handle_errors(config_data['log_level'], config_data['no_color']):
+        result = handle_request(
+            config_data,
+            '/jobs/{cloud}/'.format(cloud=cloud),
+            action='get'
+        )
+
+    if output_style == 'json':
+        json_result = {}
+        for key, value in result['properties'].items():
+            json_result[key] = '' if value['type'] == 'string' else None
+
+        result = json_result
+    elif output_style == 'annotated':
+        annotated_result = {}
+        for key, value in result['properties'].items():
+            annotated_result[key] = get_annotated_property(
+                key,
+                value,
+                result.get('required', tuple())
+            )
+
+        result = annotated_result
+
+    echo_dict(result, config_data['no_color'])
