@@ -119,7 +119,9 @@ def setup_config(
     config_dir, profile, email, host, port, log_level, color, verify
 ):
     """
-    Creates a client config file based on user input to prompts.
+    Create a configuration file for the mash command line tool
+
+    For details see man 5 mash_client.conf
     """
     no_color = not color  # Value is stored as no_color in config file
 
