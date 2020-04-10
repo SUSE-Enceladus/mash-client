@@ -43,11 +43,6 @@ def azure():
 
 @click.command()
 @click.option(
-    '--group',
-    type=click.STRING,
-    help='Group name to associate the account with.'
-)
-@click.option(
     '--name',
     type=click.STRING,
     required=True,
@@ -109,7 +104,7 @@ def azure():
 )
 @click.pass_context
 def add(
-    context, group, name, region, source_container,
+    context, name, region, source_container,
     source_resource_group, source_storage_account,
     destination_container, destination_resource_group,
     destination_storage_account, credentials
@@ -134,9 +129,6 @@ def add(
             'destination_resource_group': destination_resource_group,
             'destination_storage_account': destination_storage_account
         }
-
-        if group:
-            data['group'] = group
 
         result = handle_request_with_token(
             config_data,
