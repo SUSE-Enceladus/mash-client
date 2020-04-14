@@ -27,7 +27,8 @@ from mash_client.cli_utils import (
     get_config,
     handle_errors,
     handle_request_with_token,
-    echo_dict
+    echo_dict,
+    get_job_schema_by_cloud
 )
 
 
@@ -62,4 +63,33 @@ def add(context, document):
         echo_dict(result, config_data['no_color'])
 
 
+@click.command(name='schema')
+@click.option(
+    '--json',
+    'output_style',
+    flag_value='json',
+    help='Prints an example json dictionary with example values.'
+)
+@click.option(
+    '--raw',
+    'output_style',
+    flag_value='raw',
+    help='Prints a raw jsonschema dictionary.'
+)
+@click.option(
+    '--annotated',
+    'output_style',
+    flag_value='annotated',
+    default=True,
+    help='Prints a raw jsonschema dictionary.'
+)
+@click.pass_context
+def get_schema(context, output_style):
+    """
+    Get the an annotated json dictionary for a OCI job.
+    """
+    get_job_schema_by_cloud(context, output_style, 'oci')
+
+
 oci.add_command(add)
+oci.add_command(get_schema)
