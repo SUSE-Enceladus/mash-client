@@ -43,11 +43,6 @@ def gce():
 
 @click.command()
 @click.option(
-    '--group',
-    type=click.STRING,
-    help='Group name to associate account with.'
-)
-@click.option(
     '--name',
     type=click.STRING,
     required=True,
@@ -84,7 +79,7 @@ def gce():
 )
 @click.pass_context
 def add(
-    context, group, name, bucket, zone, testing_account,
+    context, name, bucket, zone, testing_account,
     is_publishing_account, credentials
 ):
     """
@@ -102,9 +97,6 @@ def add(
             'credentials': creds,
             'region': zone
         }
-
-        if group:
-            data['group'] = group
 
         if testing_account:
             data['testing_account'] = testing_account
