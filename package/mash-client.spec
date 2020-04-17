@@ -52,14 +52,18 @@ python3 setup.py --command-packages=click_man.commands man_pages --target man/ma
 %install
 python3 setup.py install --prefix=%{_prefix} --root=%{buildroot}
 install -d -m 755 %{buildroot}/%{_mandir}/man1
+install -d -m 755 %{buildroot}/%{_mandir}/man5
 install -m 644 man/man1/*.1 %{buildroot}/%{_mandir}/man1
+install -m 644 man/man1/*.5 %{buildroot}/%{_mandir}/man5
 gzip %{buildroot}/%{_mandir}/man1/*
+gzip %{buildroot}/%{_mandir}/man5/*
 
 %files
 %defattr(-,root,root)
 %license LICENSE
 %doc CHANGES.md CONTRIBUTING.md README.md
 %{_mandir}/man1/*
+%{_mandir}/man5/*
 %{_bindir}/mash
 %{python3_sitelib}/*
 

@@ -1,0 +1,130 @@
+.\" Process this file with
+.\" groff -man -Tascii mash_client.conf.5
+.\"
+.TH mash_client.conf.5
+.SH NAME
+{profile}.yaml \- Configuration file for the mash client
+.SH DESCRIPTION
+The mash client is the command line tool to interact with a mash server.
+The mash command by default reads a configuration file from
+.IR ~/.config/mash_client.
+The mash client supports so called profiles. Each profile is represented by
+a configuration file in the configuration directory with the file name of
+.IR profile.yaml.
+This allows a user of mash to configure multiple target mash servers and/or
+multiple users on a given mash server, if the target mash server supports
+multiple user configuration. The support of multiple users on the mash server
+is controlled by the mash server administrator. In most cases the mash server
+will be configured to use OIDC (Open ID Connect) in which case only a single
+user account per mash user should exist on the mash server.
+
+The configuration file syntax is YAML style expressed as
+.IR key:value
+pairs.
+.PP
+email
+.RS 4
+Set the e-mail for the mash user account to be used for this profile for
+authentication to the mash server. If the server is configured to use OIDC
+the client will set the value based on the e-mail from the OIDC server.
+Please check with your mash server administrator.
+
+.B Example
+
+email: foo@example.com
+.RE
+.PP
+host
+.RS 4
+The mash client communicates with the mash server using the http protocol.
+Depending on the server setup encrypted communication, i.e. https, is also
+supported. The
+.IR host
+and
+.IR port
+settings work in conjunction in that it is possible to specify a server
+configured for
+.IR https
+as using the http protocol on port 443 (if the server runs TLS on the
+default port) or by specifying the host as using
+.IR https,
+and not specifying the
+.IR port
+configuration option, if the server accepts communication on the default
+TLS port of 443.
+
+.B Examples
+
+\fI Using TLS on a non default port\fP
+
+host: http//:127.0.0.1
+
+port: 9045
+
+\fI Using TLS on the default port\fP
+
+host: https://127.0.0.1
+.RE
+.PP
+log_level
+.RS 4
+Set the log level to use for submitted jobs. Log level values follow the
+Python log setting, https://docs.python.org/3/library/logging.html#levels
+
+.B Example
+
+log_level: 30
+.RE
+.PP
+port
+.RS 4
+The
+.IR port
+setting works in conjunction with the
+.IR host
+setting and is used to specify the port on which the mash server API is
+set up. Please check with the mash server administrator for this information.
+If the server uses the default port for the protocol (http or https) specified
+with the
+.IR host
+setting the
+.IR port
+value does not need to be set.
+
+.B Example
+
+port: 8080
+.RE
+.PP
+no_color
+.RS 4
+By default the output of the mash command is colorized. Setting this
+option to
+.IR false
+enables ANSI colorized output to the terminal. Not all terminals support
+colorized output and this may lead to the output of control characters as
+part of the return of a mash command execution.
+
+.B Example
+
+no_color: false
+.RE
+.PP
+verify
+.RS 4
+In cases where the mash server is configured to use TLS server certificate
+validation is enabled by default. If the server has a self signed certificate
+and the certificate has not been imported into the system chain of trust
+mash commands will fail with a certificate verification error. Setting the
+verification to
+.IR false
+disables certificate validation. Alternatively the value may also be a path
+to a specific certificate. This allows verification against a self signed
+certificate that has not been imported to the trust chain on the system.
+
+.B Examples
+
+verify: false
+
+verify: /home/my_user/mash_server_cert/mash_server.pem
+.RE
