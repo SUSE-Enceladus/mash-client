@@ -1,3 +1,23 @@
+v3.0.0 (2020-04-20)
+===================
+
+- Add OpenID Connect authentication support.
+  [\52](https://github.com/suse-enceladus/mash-client/pull/52)
+- Remove username, email is now primary key for user.
+  [\55](https://github.com/suse-enceladus/mash-client/pull/55)
+- Add commands for password change and reset.
+  [\58](https://github.com/suse-enceladus/mash-client/pull/58)
+- Add new commands for setup and echo client config.
+  [\60](https://github.com/suse-enceladus/mash-client/pull/60)
+- Provide useful msg if config file not found.
+  [\61](https://github.com/suse-enceladus/mash-client/pull/61)
+- Add man page text for configuration file creation.
+  [\62](https://github.com/suse-enceladus/mash-client/pull/62)
+- Add API to retrieve job doc examples.
+  [\63](https://github.com/suse-enceladus/mash-client/pull/63)
+- Cleanup (remove) group options in azure and gce accounts.
+  [\64](https://github.com/suse-enceladus/mash-client/pull/64)
+
 v2.1.0 (2020-02-24)
 ===================
 
