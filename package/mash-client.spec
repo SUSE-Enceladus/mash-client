@@ -54,7 +54,7 @@ python3 setup.py install --prefix=%{_prefix} --root=%{buildroot}
 install -d -m 755 %{buildroot}/%{_mandir}/man1
 install -d -m 755 %{buildroot}/%{_mandir}/man5
 install -m 644 man/man1/*.1 %{buildroot}/%{_mandir}/man1
-install -m 644 man/man1/*.5 %{buildroot}/%{_mandir}/man5
+install -m 644 man/man5/*.5 %{buildroot}/%{_mandir}/man5
 gzip %{buildroot}/%{_mandir}/man1/*
 gzip %{buildroot}/%{_mandir}/man5/*
 
