@@ -44,7 +44,7 @@ def config():
 @click.option(
     '--config-dir',
     type=click.STRING,
-    default='',
+    default=default_config_dir,
     show_default=True,
     prompt='Enter Mash client config directory',
     help='Mash client config directory to use. It is recommended that this'
@@ -148,8 +148,9 @@ def setup_config(
     if port:
         config_values['port'] = port
 
-    if not config_dir:
-        config_dir = default_config_dir
+    config_dir = os.path.expanduser(config_dir)
+    if not os.path.isdir(config_dir):
+        os.makedirs(config_dir)
 
     config_file_path = os.path.join(config_dir, profile + '.yaml')
 
