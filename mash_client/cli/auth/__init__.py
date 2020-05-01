@@ -156,6 +156,7 @@ def oidc(context):
             '{}: {}'.format(result['msg'], auth_url),
             config_data['no_color']
         )
+        click.launch(auth_url)
 
         auth_code = get_oauth2_code(redirect_port)
 
