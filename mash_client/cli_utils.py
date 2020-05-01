@@ -375,7 +375,10 @@ class RequestHandler(BaseHTTPRequestHandler):
 
         exception = CodeReceivedException(params.get('code', [None])[0])
         self.wfile.write(bytes(
-            '<html><body><h1>{}</h1></body></html>'.format(msg), 'utf-8'
+            '<html><body><div style="background-color:#FF8E77;width:50%;'
+            'margin:auto;padding:10px;border-radius:10px;text-align:center;">'
+            '<h3>{}</h3></div></body></html>'.format(msg),
+            'utf-8'
         ))
         raise exception
 
