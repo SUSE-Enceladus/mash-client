@@ -364,11 +364,16 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
         params = parse_qs(urlparse(self.path).query)
         if not params.get('code'):
-            msg = 'ERROR: No authentication code received.'
-            exception = Exception(msg)
+            if params.get('error_description', []):
+                msg = params['error_description'][0]
+            else:
+                msg = 'ERROR: No authentication code received.'
+
+            msg += ' Ensure you have added the Mash app to your Okta account.'
         else:
             msg = 'Authentication code received. You may close this tab.'
-            exception = CodeReceivedException(params['code'][0])
+
+        exception = CodeReceivedException(params.get('code', [None])[0])
         self.wfile.write(bytes(
             '<html><body><h1>{}</h1></body></html>'.format(msg), 'utf-8'
         ))

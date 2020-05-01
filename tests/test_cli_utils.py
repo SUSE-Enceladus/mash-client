@@ -34,6 +34,7 @@ from mash_client.cli_utils import CodeReceivedException
 @patch.object(RequestHandler, '__init__', lambda x: None)
 def test_request_handler(mock_send_header, mock_send_response, mock_end_hdrs):
     code = '0123456789ABCDEF'
+    description = 'User+is+not+assigned+to+the+client+application.'
 
     rh = RequestHandler()
     setattr(rh, 'wfile', Mock())
@@ -48,11 +49,11 @@ def test_request_handler(mock_send_header, mock_send_response, mock_end_hdrs):
 
     mock_send_response.reset_mock()
     mock_send_header.reset_mock()
-    rh.path = 'http://localhost:9000/?nocode'
+    rh.path = 'http://localhost:9000/?error_description={}'.format(description)
 
-    with raises(Exception) as e:
+    with raises(CodeReceivedException) as e:
         rh.do_GET()
 
-    assert(str(e.value) == 'ERROR: No authentication code received.')
+    assert e.value.code is None
     mock_send_response.assert_called_once_with(200)
     mock_send_header.assert_called_once_with('Content-type', 'text/html')

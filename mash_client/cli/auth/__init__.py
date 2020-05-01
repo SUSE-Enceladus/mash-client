@@ -159,6 +159,14 @@ def oidc(context):
 
         auth_code = get_oauth2_code(redirect_port)
 
+        if not auth_code:
+            echo_style(
+                'Failed login: No authentication code received.',
+                config_data['no_color'],
+                fg='red'
+            )
+            sys.exit(1)
+
         job_data = {
             'auth_code': auth_code,
             'state': result['state'],
