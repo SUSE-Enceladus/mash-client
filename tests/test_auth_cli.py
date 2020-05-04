@@ -86,6 +86,7 @@ def test_auth_logout(mock_requests):
     assert 'Logout successful' in result.output
 
 
+@patch('click.launch')
 @patch('mash_client.cli_utils.HTTPServer')
 @patch('mash_client.cli_utils.socket.gethostbyname')
 @patch('mash_client.cli_utils.socket.socket')
@@ -94,7 +95,8 @@ def test_auth_oidc(
     mock_requests,
     mock_socket,
     mock_gethostbyname,
-    mock_http_server
+    mock_http_server,
+    mock_click_launch
 ):
     """Test mash auth oidc."""
     response_get = Mock()
