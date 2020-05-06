@@ -364,20 +364,23 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
         params = parse_qs(urlparse(self.path).query)
         if not params.get('code'):
+            bg_color = 'FF8E77'
+            msg = 'ERROR: No authentication code received.'
+
             if params.get('error_description', []):
-                msg = params['error_description'][0]
-            else:
-                msg = 'ERROR: No authentication code received.'
-
-            msg += ' Ensure you have added the Mash app to your Okta account.'
+                msg += ' '
+                msg += params['error_description'][0]
         else:
-            msg = 'Authentication code received. You may close this tab.'
+            msg = 'Authentication code received.'
+            bg_color = '7AD4AA'
 
+        msg += ' You may close this tab.'
         exception = CodeReceivedException(params.get('code', [None])[0])
         self.wfile.write(bytes(
-            '<html><body><div style="background-color:#FF8E77;width:50%;'
-            'margin:auto;padding:10px;border-radius:10px;text-align:center;">'
-            '<h3>{}</h3></div></body></html>'.format(msg),
+            '<html><body><div style="background-color:#{};width:50%;'
+            'margin:auto;padding:10px;border-radius:10px;text-align:center;'
+            'border-color:#0C322C;border-width:2px;border-style:solid;">'
+            '<h3>{}</h3></div></body></html>'.format(bg_color, msg),
             'utf-8'
         ))
         raise exception
@@ -396,6 +399,7 @@ def get_oauth2_code(port):
         code = e.code
     finally:
         httpd.shutdown()
+        httpd.server_close()
     return code
 
 
