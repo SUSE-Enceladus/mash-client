@@ -2,7 +2,7 @@
 
 """mash client CLI Azure job endpoints using click library."""
 
-# Copyright (c) 2019 SUSE LLC. All rights reserved.
+# Copyright (c) 2020 SUSE LLC. All rights reserved.
 #
 # This file is part of mash_client. mash_client provides a command line
 # utility for interfacing with a MASH server.
@@ -28,6 +28,7 @@ from mash_client.cli_utils import (
     handle_errors,
     handle_request_with_token,
     echo_dict,
+    echo_style,
     get_job_schema_by_cloud
 )
 
@@ -40,12 +41,17 @@ def azure():
 
 
 @click.command()
+@click.option(
+    '--dry-run',
+    is_flag=True,
+    help='Validate job document but do not create job.'
+)
 @click.argument(
     'document',
     type=click.Path(exists=True)
 )
 @click.pass_context
-def add(context, document):
+def add(context, dry_run, document):
     """
     Send add azure job request to mash server based on provided json document.
     """
@@ -55,12 +61,19 @@ def add(context, document):
         with open(document) as job_file:
             job_data = json.load(job_file)
 
+        if dry_run:
+            job_data['dry_run'] = True
+
         result = handle_request_with_token(
             config_data,
             '/jobs/azure/',
             job_data
         )
-        echo_dict(result, config_data['no_color'])
+
+        if 'msg' in result:
+            echo_style(result['msg'], config_data['no_color'])
+        else:
+            echo_dict(result, config_data['no_color'])
 
 
 @click.command(name='schema')
