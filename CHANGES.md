@@ -1,3 +1,17 @@
+v3.1.0 (2020-06-19)
+===================
+
+- Fix typo in spec for config man page.
+  [\65](https://github.com/suse-enceladus/mash-client/pull/65)
+- Improvements to config file setup.
+  [\66](https://github.com/suse-enceladus/mash-client/pull/66)
+- Handle errors from OIDC provider.
+  [\67](https://github.com/suse-enceladus/mash-client/pull/67)
+- Add border on div and change color on status.
+  [\68](https://github.com/suse-enceladus/mash-client/pull/68)
+- Add option for job dry run.
+  [\70](https://github.com/suse-enceladus/mash-client/pull/70)
+
 v3.0.0 (2020-04-20)
 ===================
 
