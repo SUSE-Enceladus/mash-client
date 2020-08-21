@@ -22,6 +22,8 @@
 
 import click
 
+from contextlib import suppress
+
 from mash_client.cli_utils import (
     get_config,
     handle_errors,
@@ -64,6 +66,11 @@ def list_jobs(context):
 
 @click.command(name='info')
 @click.option(
+    '--show-data',
+    is_flag=True,
+    help='Include all status info for the job.'
+)
+@click.option(
     '--job-id',
     type=click.UUID,
     required=True,
@@ -71,7 +78,7 @@ def list_jobs(context):
          'from the MASH server pipeline.'
 )
 @click.pass_context
-def get(context, job_id):
+def get(context, job_id, show_data):
     """
     Get info for a job in the MASH server pipeline.
     """
@@ -83,6 +90,10 @@ def get(context, job_id):
             '/jobs/{0}'.format(job_id),
             action='get'
         )
+
+        if not show_data:
+            with suppress(KeyError):
+                del result['data']
 
         echo_dict(result, config_data['no_color'])
 
