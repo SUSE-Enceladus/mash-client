@@ -21,6 +21,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import click
+import json
+import sys
 
 from contextlib import suppress
 
@@ -30,7 +32,8 @@ from mash_client.cli_utils import (
     handle_request_with_token,
     abort_if_false,
     echo_dict,
-    echo_style
+    echo_style,
+    echo_results
 )
 
 from mash_client.cli.job.azure import azure
@@ -100,6 +103,128 @@ def get(context, job_id, show_data):
 
 @click.command()
 @click.option(
+    '--job-id',
+    type=click.UUID,
+    required=True,
+    help='The UUID of the job to be removed '
+         'from the MASH server pipeline.'
+)
+@click.pass_context
+def status(context, job_id):
+    """
+    Get basic status for a job in the MASH server pipeline.
+    """
+    config_data = get_config(context.obj)
+
+    with handle_errors(config_data['log_level'], config_data['no_color']):
+        result = handle_request_with_token(
+            config_data,
+            '/jobs/{0}'.format(job_id),
+            action='get'
+        )
+
+        status_info = {'state': result['state']}
+
+        if result['state'] == 'running' and 'current_service' in result:
+            status_info['current_service'] = result['current_service']
+
+        echo_dict(status_info, config_data['no_color'])
+
+
+@click.command()
+@click.option(
+    '--job-id',
+    type=click.UUID,
+    required=True,
+    help='The UUID of the job to be removed '
+         'from the MASH server pipeline.'
+)
+@click.pass_context
+def wait(context, job_id):
+    """
+    Get basic status for a job in the MASH server pipeline.
+    """
+    config_data = get_config(context.obj)
+
+    state = 'undefined'
+    while state in ('running', 'undefined'):
+        with handle_errors(config_data['log_level'], config_data['no_color']):
+            result = handle_request_with_token(
+                config_data,
+                '/jobs/{0}'.format(job_id),
+                action='get'
+            )
+
+        state = result['state']
+
+    click.echo(state)
+
+
+@click.command(name='test-results')
+@click.option(
+    '-v',
+    '--verbose',
+    is_flag=True,
+    help='Display each test and subsequent result. '
+         'By default only the summary is displayed.'
+)
+@click.option(
+    '--job-id',
+    type=click.UUID,
+    required=True,
+    help='The UUID of the job to be removed '
+         'from the MASH server pipeline.'
+)
+@click.pass_context
+def test_results(context, job_id, verbose):
+    """
+    Display test results for a job in the MASH server pipeline.
+    """
+    config_data = get_config(context.obj)
+
+    with handle_errors(config_data['log_level'], config_data['no_color']):
+        result = handle_request_with_token(
+            config_data,
+            '/jobs/{0}'.format(job_id),
+            action='get'
+        )
+
+        if 'data' not in result:
+            click.secho(
+                'The job has no status data, cannot provide test results.',
+                fg='red'
+            )
+            sys.exit(1)
+
+        if 'test_results' not in result['data']:
+            click.secho(
+                'The job has no test results.',
+                fg='red'
+            )
+            sys.exit(1)
+
+        try:
+            result_data = json.loads(
+                result['data']['test_results'].replace('\'', '"')
+            )
+        except Exception:
+            click.secho(
+                'The job\'s test results are malformed, the data can be '
+                'viewed using '
+                '"mash job info --job-id {job_id} --show-data".',
+                fg='red'
+            )
+            sys.exit(1)
+
+        echo_results(
+            result_data,
+            config_data['no_color'],
+            verbose
+        )
+
+
+@click.command()
+@click.option(
     '--force',
     is_flag=True,
     callback=abort_if_false,
@@ -134,6 +259,9 @@ def delete(context, job_id):
 job.add_command(delete)
 job.add_command(get)
 job.add_command(list_jobs)
+job.add_command(status)
+job.add_command(wait)
+job.add_command(test_results)
 
 job.add_command(azure)
 job.add_command(ec2)

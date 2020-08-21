@@ -463,3 +463,70 @@ def get_job_schema_by_cloud(context, output_style, cloud):
         result = annotated_result
 
     echo_dict(result, config_data['no_color'])
+
+
+def parse_test_name(name):
+    """Parse and return formatted pytest test name string."""
+    test_class = None
+    if '::' in name:
+        try:
+            path, test_class, parens, test_case = name.split('::')
+        except ValueError:
+            path, test_case = name.split('::')
+
+        test_file = path.split(os.sep)[-1].replace('.py', '')
+        return '::'.join(filter(None, [test_file, test_class, test_case]))
+    else:
+        return name
+
+
+def echo_verbose_results(data, no_color):
+    """Print list of tests and result of each test."""
+    click.echo()
+
+    for test in data['tests']:
+        if test['outcome'] == 'passed':
+            fg = 'green'
+        elif test['outcome'] == 'skipped':
+            fg = 'yellow'
+        else:
+            fg = 'red'
+
+        name = parse_test_name(test['name'])
+        echo_style(
+            '{} {}'.format(name, test['outcome'].upper()),
+            no_color,
+            fg=fg
+        )
+
+
+def echo_results(data, no_color, verbose=False):
+    """Print test results in nagios style format."""
+    try:
+        summary = data['summary']
+    except KeyError as error:
+        click.secho(
+            'The results json is missing key: %s' % error,
+            fg='red'
+        )
+        sys.exit(1)
+
+    if 'failed' in summary or 'error' in summary:
+        fg = 'red'
+        status = 'FAILED'
+    else:
+        fg = 'green'
+        status = 'PASSED'
+
+    results = '{} tests={}|pass={}|skip={}|fail={}|error={}'.format(
+        status,
+        str(summary.get('num_tests', 0)),
+        str(summary.get('passed', 0)),
+        str(summary.get('skipped', 0)),
+        str(summary.get('failed', 0)),
+        str(summary.get('error', 0))
+    )
+    echo_style(results, no_color, fg=fg)
+
+    if verbose:
+        echo_verbose_results(data, no_color)
