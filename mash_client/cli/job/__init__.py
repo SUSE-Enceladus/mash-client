@@ -23,6 +23,7 @@
 import click
 import json
 import sys
+import time
 
 from contextlib import suppress
 
@@ -147,7 +148,9 @@ def wait(context, job_id):
     config_data = get_config(context.obj)
 
     state = 'undefined'
-    while state in ('running', 'undefined'):
+    wait = 1
+
+    while True:
         with handle_errors(config_data['log_level'], config_data['no_color']):
             result = handle_request_with_token(
                 config_data,
@@ -156,6 +159,12 @@ def wait(context, job_id):
             )
 
         state = result['state']
+
+        if state not in ('running', 'undefined'):
+            break
+
+        time.sleep(wait)
+        wait *= 2
 
     click.echo(state)
 
