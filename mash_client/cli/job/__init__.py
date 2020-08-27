@@ -78,8 +78,7 @@ def list_jobs(context):
     '--job-id',
     type=click.UUID,
     required=True,
-    help='The UUID of the job to be removed '
-         'from the MASH server pipeline.'
+    help='The UUID of the job to retrieve.'
 )
 @click.pass_context
 def get(context, job_id, show_data):
@@ -107,8 +106,7 @@ def get(context, job_id, show_data):
     '--job-id',
     type=click.UUID,
     required=True,
-    help='The UUID of the job to be removed '
-         'from the MASH server pipeline.'
+    help='The UUID of the job for the status query.'
 )
 @click.pass_context
 def status(context, job_id):
@@ -137,8 +135,7 @@ def status(context, job_id):
     '--job-id',
     type=click.UUID,
     required=True,
-    help='The UUID of the job to be removed '
-         'from the MASH server pipeline.'
+    help='The UUID of the job to wait for a finished state.'
 )
 @click.pass_context
 def wait(context, job_id):
@@ -181,8 +178,7 @@ def wait(context, job_id):
     '--job-id',
     type=click.UUID,
     required=True,
-    help='The UUID of the job to be removed '
-         'from the MASH server pipeline.'
+    help='The UUID of the job for test results query.'
 )
 @click.pass_context
 def test_results(context, job_id, verbose):
