@@ -137,15 +137,22 @@ def status(context, job_id):
     required=True,
     help='The UUID of the job to wait for a finished state.'
 )
+@click.option(
+    '-t',
+    '--wait-time',
+    type=click.IntRange(min=60),
+    default=300,
+    help='The time to wait before checking job status again (seconds).'
+)
 @click.pass_context
-def wait(context, job_id):
+def wait(context, wait_time, job_id):
     """
-    Get basic status for a job in the MASH server pipeline.
+    Wait for job to arrive at finished or failed status.
+
+    By default waits 5 minutes between status queries.
     """
     config_data = get_config(context.obj)
-
     state = 'undefined'
-    wait = 1
 
     while True:
         with handle_errors(config_data['log_level'], config_data['no_color']):
@@ -160,8 +167,7 @@ def wait(context, job_id):
         if state not in ('running', 'undefined'):
             break
 
-        time.sleep(wait)
-        wait *= 2
+        time.sleep(wait_time)
 
     click.echo(state)
 
