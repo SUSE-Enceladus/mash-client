@@ -1,3 +1,9 @@
+v3.2.0 (2020-09-17)
+===================
+
+- Add API commands for job status.
+  [\72](https://github.com/suse-enceladus/mash-client/pull/72)
+
 v3.1.0 (2020-06-19)
 ===================
 
