@@ -20,12 +20,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import json
+
 from mash_client.cli_utils import (
     handle_request,
     save_tokens_to_file,
     get_tokens_file,
     get_tokens_from_file,
-    get_annotated_property
+    get_annotated_property,
+    handle_request_with_token
 )
 
 
@@ -65,24 +68,30 @@ def get_job_schema_by_cloud(
     return result
 
 
-def login_with_pass(config_data, email, password):
+def login_with_pass(config_data, email, password, raise_for_status=True):
     job_data = {'email': email, 'password': password}
 
-    tokens = handle_request(
+    result = handle_request(
         config_data,
         '/auth/login',
         job_data=job_data,
-        action='post'
+        action='post',
+        raise_for_status=raise_for_status
     )
+
+    if 'refresh_token' not in result:
+        return result
 
     tokens_file = get_tokens_file(
         config_data['config_dir'],
         config_data['profile']
     )
-    save_tokens_to_file(tokens_file, tokens)
+    save_tokens_to_file(tokens_file, result)
+
+    return {'msg': 'Login successful.'}
 
 
-def logout_session(config_data):
+def logout_session(config_data, raise_for_status=True):
     tokens_file = get_tokens_file(
         config_data['config_dir'],
         config_data['profile']
@@ -101,7 +110,8 @@ def logout_session(config_data):
         config_data,
         '/auth/logout',
         action='delete',
-        token=refresh_token
+        token=refresh_token,
+        raise_for_status=raise_for_status
     )
 
 
@@ -111,3 +121,75 @@ def get_token(tokens_file, token_type=None):
 
     tokens = get_tokens_from_file(tokens_file)
     return tokens.get(token_type)
+
+
+def delete_job(config_data, job_id, raise_for_status=True):
+    return handle_request_with_token(
+        config_data,
+        '/jobs/{0}'.format(job_id),
+        action='delete',
+        raise_for_status=raise_for_status
+    )
+
+
+def get_job(config_data, job_id, raise_for_status=True):
+    return handle_request_with_token(
+        config_data,
+        '/jobs/{0}'.format(job_id),
+        action='get',
+        raise_for_status=raise_for_status
+    )
+
+
+def list_user_jobs(config_data, raise_for_status=True):
+    return handle_request_with_token(
+        config_data,
+        '/jobs/',
+        action='get',
+        raise_for_status=raise_for_status
+    )
+
+
+def get_job_status(config_data, job_id, raise_for_status=True):
+    result = handle_request_with_token(
+        config_data,
+        '/jobs/{0}'.format(job_id),
+        action='get',
+        raise_for_status=raise_for_status
+    )
+
+    if 'state' not in result:
+        return result
+
+    status_info = {'state': result['state']}
+
+    if result['state'] == 'running' and 'current_service' in result:
+        status_info['current_service'] = result['current_service']
+
+    return status_info
+
+
+def get_job_test_results(config_data, job_id, raise_for_status=True):
+    result = handle_request_with_token(
+        config_data,
+        '/jobs/{0}'.format(job_id),
+        action='get',
+        raise_for_status=raise_for_status
+    )
+
+    if 'job_id' not in result:
+        # An error occurred and raise_for_status is False.
+        # job_id is required in all jobs.
+        return result
+
+    try:
+        raw_test_results = result['data']['test_results']
+    except KeyError:
+        return {'msg': 'The job has no test results.'}
+
+    try:
+        result_data = json.loads(raw_test_results.replace('\'', '"'))
+    except json.decoder.JSONDecodeError:
+        return {'msg': 'The job\'s test results are malformed.'}
+
+    return result_data

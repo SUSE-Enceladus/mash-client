@@ -71,8 +71,8 @@ def login(context, email):
 
     with handle_errors(config_data['log_level'], config_data['no_color']):
         password = click.prompt('Enter password', type=str, hide_input=True)
-        login_with_pass(config_data, email, password)
-        echo_style('Login successful.', config_data['no_color'])
+        result = login_with_pass(config_data, email, password)
+        echo_style(result['msg'], config_data['no_color'])
 
 
 @click.command()
