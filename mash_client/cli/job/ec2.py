@@ -28,9 +28,9 @@ from mash_client.cli_utils import (
     handle_errors,
     handle_request_with_token,
     echo_dict,
-    echo_style,
-    get_job_schema_by_cloud
+    echo_style
 )
+from mash_client.controller import get_job_schema_by_cloud
 
 
 @click.group()

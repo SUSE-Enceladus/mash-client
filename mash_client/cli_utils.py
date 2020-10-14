@@ -433,42 +433,6 @@ def get_annotated_property(key, value, required):
     return annotated_value
 
 
-def get_job_schema_by_cloud(
-    config_data,
-    output_style,
-    cloud,
-    raise_for_status=True
-):
-    result = handle_request(
-        config_data,
-        '/jobs/{cloud}/'.format(cloud=cloud),
-        action='get',
-        raise_for_status=raise_for_status
-    )
-
-    if 'properties' not in result:
-        return result
-
-    if output_style == 'json':
-        json_result = {}
-        for key, value in result['properties'].items():
-            json_result[key] = '' if value['type'] == 'string' else None
-
-        result = json_result
-    elif output_style == 'annotated':
-        annotated_result = {}
-        for key, value in result['properties'].items():
-            annotated_result[key] = get_annotated_property(
-                key,
-                value,
-                result.get('required', tuple())
-            )
-
-        result = annotated_result
-
-    return result
-
-
 def parse_test_name(name):
     """Parse and return formatted pytest test name string."""
     test_class = None
