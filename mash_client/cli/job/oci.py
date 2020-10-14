@@ -101,7 +101,12 @@ def get_schema(context, output_style):
     """
     Get the an annotated json dictionary for a OCI job.
     """
-    get_job_schema_by_cloud(context, output_style, 'oci')
+    config_data = get_config(context.obj)
+
+    with handle_errors(config_data['log_level'], config_data['no_color']):
+        result = get_job_schema_by_cloud(config_data, output_style, 'oci')
+
+    echo_dict(result, config_data['no_color'])
 
 
 oci.add_command(add)

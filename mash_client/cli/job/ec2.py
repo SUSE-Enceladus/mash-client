@@ -101,7 +101,12 @@ def get_schema(context, output_style):
     """
     Get the an annotated json dictionary for a EC2 job.
     """
-    get_job_schema_by_cloud(context, output_style, 'ec2')
+    config_data = get_config(context.obj)
+
+    with handle_errors(config_data['log_level'], config_data['no_color']):
+        result = get_job_schema_by_cloud(config_data, output_style, 'ec2')
+
+    echo_dict(result, config_data['no_color'])
 
 
 ec2.add_command(add)

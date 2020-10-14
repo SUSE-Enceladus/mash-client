@@ -435,15 +435,12 @@ def get_annotated_property(key, value, required):
     return annotated_value
 
 
-def get_job_schema_by_cloud(context, output_style, cloud):
-    config_data = get_config(context.obj)
-
-    with handle_errors(config_data['log_level'], config_data['no_color']):
-        result = handle_request(
-            config_data,
-            '/jobs/{cloud}/'.format(cloud=cloud),
-            action='get'
-        )
+def get_job_schema_by_cloud(config_data, output_style, cloud):
+    result = handle_request(
+        config_data,
+        '/jobs/{cloud}/'.format(cloud=cloud),
+        action='get'
+    )
 
     if output_style == 'json':
         json_result = {}
@@ -462,7 +459,7 @@ def get_job_schema_by_cloud(context, output_style, cloud):
 
         result = annotated_result
 
-    echo_dict(result, config_data['no_color'])
+    return result
 
 
 def parse_test_name(name):
