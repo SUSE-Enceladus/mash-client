@@ -30,12 +30,12 @@ from mash_client.cli_utils import (
     echo_style,
     save_tokens_to_file,
     get_tokens_file,
-    get_tokens_from_file,
     get_oauth2_code,
     get_free_port
 )
 from mash_client.cli.auth.token import token
 from mash_client.mash_client_exceptions import MashClientException
+from mash_client.controller import login_with_pass, logout_session
 
 
 @click.group()
@@ -71,20 +71,7 @@ def login(context, email):
 
     with handle_errors(config_data['log_level'], config_data['no_color']):
         password = click.prompt('Enter password', type=str, hide_input=True)
-
-        job_data = {'email': email, 'password': password}
-        tokens = handle_request(
-            config_data,
-            '/auth/login',
-            job_data=job_data,
-            action='post'
-        )
-
-        tokens_file = get_tokens_file(
-            config_data['config_dir'],
-            config_data['profile']
-        )
-        save_tokens_to_file(tokens_file, tokens)
+        login_with_pass(config_data, email, password)
         echo_style('Login successful.', config_data['no_color'])
 
 
@@ -99,32 +86,7 @@ def logout(context):
     config_data = get_config(context.obj)
 
     with handle_errors(config_data['log_level'], config_data['no_color']):
-        tokens_file = get_tokens_file(
-            config_data['config_dir'],
-            config_data['profile']
-        )
-
-        tokens = get_tokens_from_file(tokens_file)
-        refresh_token = tokens.get('refresh_token')
-
-        if not refresh_token:
-            echo_style(
-                'No refresh token, unable to logout.',
-                config_data['no_color'],
-                fg='red'
-            )
-            sys.exit(1)
-
-        tokens = {}  # Clear local sessions
-        save_tokens_to_file(tokens_file, tokens)
-
-        result = handle_request(
-            config_data,
-            '/auth/logout',
-            action='delete',
-            token=refresh_token
-        )
-
+        result = logout_session(config_data)
         echo_style(result['msg'], config_data['no_color'])
 
 

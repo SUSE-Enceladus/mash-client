@@ -20,7 +20,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mash_client.cli_utils import handle_request, get_annotated_property
+from mash_client.cli_utils import (
+    handle_request,
+    save_tokens_to_file,
+    get_tokens_file,
+    get_tokens_from_file,
+    get_annotated_property
+)
 
 
 def get_job_schema_by_cloud(
@@ -57,3 +63,51 @@ def get_job_schema_by_cloud(
         result = annotated_result
 
     return result
+
+
+def login_with_pass(config_data, email, password):
+    job_data = {'email': email, 'password': password}
+
+    tokens = handle_request(
+        config_data,
+        '/auth/login',
+        job_data=job_data,
+        action='post'
+    )
+
+    tokens_file = get_tokens_file(
+        config_data['config_dir'],
+        config_data['profile']
+    )
+    save_tokens_to_file(tokens_file, tokens)
+
+
+def logout_session(config_data):
+    tokens_file = get_tokens_file(
+        config_data['config_dir'],
+        config_data['profile']
+    )
+    refresh_token = get_token(tokens_file)
+
+    if not refresh_token:
+        return {
+            'msg': 'No refresh token, unable to logout.'
+        }
+
+    tokens = {}  # Clear local sessions
+    save_tokens_to_file(tokens_file, tokens)
+
+    return handle_request(
+        config_data,
+        '/auth/logout',
+        action='delete',
+        token=refresh_token
+    )
+
+
+def get_token(tokens_file, token_type=None):
+    if not token_type:
+        token_type = 'refresh_token'
+
+    tokens = get_tokens_from_file(tokens_file)
+    return tokens.get(token_type)
