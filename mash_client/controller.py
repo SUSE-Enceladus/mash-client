@@ -193,3 +193,12 @@ def get_job_test_results(config_data, job_id, raise_for_status=True):
         return {'msg': 'The job\'s test results are malformed.'}
 
     return result_data
+
+
+def add_job(config_data, job_data, cloud, raise_for_status=True):
+    return handle_request_with_token(
+        config_data,
+        '/jobs/{cloud}/'.format(cloud=cloud),
+        job_data,
+        raise_for_status=raise_for_status
+    )

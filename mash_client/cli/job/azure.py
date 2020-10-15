@@ -26,11 +26,10 @@ import json
 from mash_client.cli_utils import (
     get_config,
     handle_errors,
-    handle_request_with_token,
     echo_dict,
     echo_style
 )
-from mash_client.controller import get_job_schema_by_cloud
+from mash_client.controller import get_job_schema_by_cloud, add_job
 
 
 @click.group()
@@ -64,11 +63,7 @@ def add(context, dry_run, document):
         if dry_run:
             job_data['dry_run'] = True
 
-        result = handle_request_with_token(
-            config_data,
-            '/jobs/azure/',
-            job_data
-        )
+        result = add_job(config_data, job_data, 'azure')
 
         if 'msg' in result:
             echo_style(result['msg'], config_data['no_color'])
