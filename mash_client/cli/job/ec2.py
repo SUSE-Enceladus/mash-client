@@ -26,11 +26,10 @@ import json
 from mash_client.cli_utils import (
     get_config,
     handle_errors,
-    handle_request_with_token,
     echo_dict,
-    echo_style,
-    get_job_schema_by_cloud
+    echo_style
 )
+from mash_client.controller import get_job_schema_by_cloud, add_job
 
 
 @click.group()
@@ -64,11 +63,7 @@ def add(context, dry_run, document):
         if dry_run:
             job_data['dry_run'] = True
 
-        result = handle_request_with_token(
-            config_data,
-            '/jobs/ec2/',
-            job_data
-        )
+        result = add_job(config_data, job_data, 'ec2')
 
         if 'msg' in result:
             echo_style(result['msg'], config_data['no_color'])
@@ -101,7 +96,12 @@ def get_schema(context, output_style):
     """
     Get the an annotated json dictionary for a EC2 job.
     """
-    get_job_schema_by_cloud(context, output_style, 'ec2')
+    config_data = get_config(context.obj)
+
+    with handle_errors(config_data['log_level'], config_data['no_color']):
+        result = get_job_schema_by_cloud(config_data, output_style, 'ec2')
+
+    echo_dict(result, config_data['no_color'])
 
 
 ec2.add_command(add)

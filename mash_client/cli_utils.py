@@ -150,7 +150,8 @@ def handle_request(
     endpoint,
     job_data=None,
     action='post',
-    token=None
+    token=None,
+    raise_for_status=True
 ):
     """
     Post request based on endpoint and data.
@@ -181,31 +182,27 @@ def handle_request(
             '{url}'.format(url=config_data['url'])
         )
 
-    if response.status_code in (200, 201):
-        return response.json()
-    elif response.status_code == 400:
-        try:
-            error = '\n'.join(response.json()['errors'].values())
-        except KeyError:
-            error = response.json()['msg']
-
-        raise MashClientException(error)
-    elif response.status_code == 401:
+    try:
+        result = response.json()
+    except json.decoder.JSONDecodeError:
         raise MashClientException(
-            response.json()['msg'] + '. Please login again.'
+            'The requested URL was not found on the server: {url}'.format(
+                url=''.join([config_data['url'], endpoint])
+            )
         )
-    elif response.status_code == 404:
-        try:
-            msg = response.json()['msg']
-        except (json.decoder.JSONDecodeError, KeyError):
-            msg = 'The requested URL was not found on the server:' \
-                  ' {url}'.format(
-                      url=''.join([config_data['url'], endpoint])
-                  )
 
-        raise MashClientException(msg)
-    elif response.status_code in (403, 409):
-        raise MashClientException(response.json()['msg'])
+    if not raise_for_status or response.status_code in (200, 201):
+        return result
+    elif 'errors' in result:
+        # Unknown properties have no keys
+        raise MashClientException(
+            '\n'.join(
+                ': '.join(filter(None, [key, val]))
+                for key, val in result['errors'].items()
+            )
+        )
+    elif 'msg' in result:
+        raise MashClientException(result['msg'])
     else:
         response.raise_for_status()
 
@@ -214,7 +211,8 @@ def handle_request_with_token(
     config_data,
     endpoint,
     job_data=None,
-    action='post'
+    action='post',
+    raise_for_status=True
 ):
     """
     Submit request to API with access token.
@@ -243,7 +241,8 @@ def handle_request_with_token(
         endpoint,
         job_data=job_data,
         action=action,
-        token=tokens['access_token']
+        token=tokens['access_token'],
+        raise_for_status=raise_for_status
     )
 
     return result
@@ -433,36 +432,6 @@ def get_annotated_property(key, value, required):
             annotated_value['properties'] = properties
 
     return annotated_value
-
-
-def get_job_schema_by_cloud(context, output_style, cloud):
-    config_data = get_config(context.obj)
-
-    with handle_errors(config_data['log_level'], config_data['no_color']):
-        result = handle_request(
-            config_data,
-            '/jobs/{cloud}/'.format(cloud=cloud),
-            action='get'
-        )
-
-    if output_style == 'json':
-        json_result = {}
-        for key, value in result['properties'].items():
-            json_result[key] = '' if value['type'] == 'string' else None
-
-        result = json_result
-    elif output_style == 'annotated':
-        annotated_result = {}
-        for key, value in result['properties'].items():
-            annotated_result[key] = get_annotated_property(
-                key,
-                value,
-                result.get('required', tuple())
-            )
-
-        result = annotated_result
-
-    echo_dict(result, config_data['no_color'])
 
 
 def parse_test_name(name):

@@ -21,7 +21,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import click
-import json
 import sys
 import time
 
@@ -35,6 +34,13 @@ from mash_client.cli_utils import (
     echo_dict,
     echo_style,
     echo_results
+)
+from mash_client.controller import (
+    delete_job,
+    get_job,
+    list_user_jobs,
+    get_job_status,
+    get_job_test_results
 )
 
 from mash_client.cli.job.azure import azure
@@ -59,12 +65,7 @@ def list_jobs(context):
     config_data = get_config(context.obj)
 
     with handle_errors(config_data['log_level'], config_data['no_color']):
-        result = handle_request_with_token(
-            config_data,
-            '/jobs/',
-            action='get'
-        )
-
+        result = list_user_jobs(config_data)
         echo_dict(result, config_data['no_color'])
 
 
@@ -88,11 +89,7 @@ def get(context, job_id, show_data):
     config_data = get_config(context.obj)
 
     with handle_errors(config_data['log_level'], config_data['no_color']):
-        result = handle_request_with_token(
-            config_data,
-            '/jobs/{0}'.format(job_id),
-            action='get'
-        )
+        result = get_job(config_data, job_id)
 
         if not show_data:
             with suppress(KeyError):
@@ -116,17 +113,7 @@ def status(context, job_id):
     config_data = get_config(context.obj)
 
     with handle_errors(config_data['log_level'], config_data['no_color']):
-        result = handle_request_with_token(
-            config_data,
-            '/jobs/{0}'.format(job_id),
-            action='get'
-        )
-
-        status_info = {'state': result['state']}
-
-        if result['state'] == 'running' and 'current_service' in result:
-            status_info['current_service'] = result['current_service']
-
+        status_info = get_job_status(config_data, job_id)
         echo_dict(status_info, config_data['no_color'])
 
 
@@ -194,37 +181,15 @@ def test_results(context, job_id, verbose):
     config_data = get_config(context.obj)
 
     with handle_errors(config_data['log_level'], config_data['no_color']):
-        result = handle_request_with_token(
-            config_data,
-            '/jobs/{0}'.format(job_id),
-            action='get'
-        )
+        result_data = get_job_test_results(config_data, job_id)
 
-        if 'data' not in result:
-            click.secho(
-                'The job has no status data, cannot provide test results.',
-                fg='red'
-            )
-            sys.exit(1)
-
-        if 'test_results' not in result['data']:
-            click.secho(
-                'The job has no test results.',
-                fg='red'
-            )
-            sys.exit(1)
-
-        try:
-            result_data = json.loads(
-                result['data']['test_results'].replace('\'', '"')
-            )
-        except Exception:
-            click.secho(
-                'The job\'s test results are malformed, the data can be '
-                'viewed using '
-                '"mash job info --job-id {job_id} --show-data".',
-                fg='red'
-            )
+        if 'msg' in result_data:
+            msg = ' '.join([
+                result_data['msg'],
+                'The data can be viewed using: '
+                '"mash job info --job-id {job_id} --show-data".'
+            ])
+            click.secho(msg, fg='red')
             sys.exit(1)
 
         echo_results(
@@ -258,12 +223,7 @@ def delete(context, job_id):
     config_data = get_config(context.obj)
 
     with handle_errors(config_data['log_level'], config_data['no_color']):
-        result = handle_request_with_token(
-            config_data,
-            '/jobs/{0}'.format(job_id),
-            action='delete'
-        )
-
+        result = delete_job(config_data, job_id)
         echo_style(result['msg'], config_data['no_color'])
 
 
