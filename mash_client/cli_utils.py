@@ -194,9 +194,10 @@ def handle_request(
     if not raise_for_status or response.status_code in (200, 201):
         return result
     elif 'errors' in result:
+        # Unknown properties have no keys
         raise MashClientException(
             '\n'.join(
-                '{key}: {val}'.format(key=key, val=val)
+                ': '.join(filter(None, [key, val]))
                 for key, val in result['errors'].items()
             )
         )
