@@ -340,6 +340,7 @@ def additional_regions_repl():
 
 def get_free_port(ports):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     local_addr = socket.gethostbyname('localhost')
     for port in ports:
         try:
