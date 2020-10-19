@@ -1,3 +1,11 @@
+v3.3.0 (2020-10-19)
+===================
+
+- Fix potential 'no redirect port available' error.
+  [\71](https://github.com/suse-enceladus/mash-client/pull/71)
+- Reorganize the CLI to allow for function usage as an SDK.
+  [\73](https://github.com/suse-enceladus/mash-client/pull/73)
+
 v3.2.0 (2020-09-17)
 ===================
 
