@@ -67,7 +67,10 @@ def print_license(ctx, param, value):
 )
 @click.option(
     '--host',
-    help='Resolvable hostname for the MASH server instance.'
+    help='Resolvable hostname for the MASH server instance. '
+         'A protocol is required in the hostname: '
+         'Either http:// or https://. If it is not provided '
+         'the default http:// will be used.'
 )
 @click.option(
     '--port',
