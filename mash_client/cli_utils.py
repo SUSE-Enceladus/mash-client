@@ -99,10 +99,14 @@ def get_config(cli_context):
     }
     data = ChainMap(cli_values, config_values, defaults)
 
+    host = data['host']
+    if not host.startswith('http'):
+        host = ''.join(['http://', host])
+
     if 'port' in data:
-        data['url'] = ':'.join([data['host'], str(data['port'])])
+        data['url'] = ':'.join([host, str(data['port'])])
     else:
-        data['url'] = data['host']
+        data['url'] = host
 
     return data
 
