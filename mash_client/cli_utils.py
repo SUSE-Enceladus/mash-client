@@ -232,7 +232,11 @@ def handle_request_with_token(
     if 'access_token' not in tokens:
         refresh_token(config_data)
     else:
-        access_token = jwt.decode(tokens['access_token'], verify=False)
+        access_token = jwt.decode(
+            tokens['access_token'],
+            verify=False,
+            options={'verify_signature': False}
+        )
         now = int(time.time())
 
         if access_token.get('exp') and now >= access_token['exp']:
