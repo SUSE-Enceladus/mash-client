@@ -1,4 +1,4 @@
 Click
 requests
 PyYAML
-PyJWT
+PyJWT<2.0.0
