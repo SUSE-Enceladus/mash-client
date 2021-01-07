@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/SUSE-Enceladus/mash-client.svg?branch=master)](https://travis-ci.com/SUSE-Enceladus/mash-client)
+![Build Status](https://github.com/SUSE-Enceladus/mash-client/workflows/Continuous%20testing%20&%20Linting/badge.svg?branch=master)
 [![Documentation Status](https://readthedocs.org/projects/mash-client/badge/?version=latest)](https://mash-client.readthedocs.io/en/latest/?badge=latest)
 [![Py Versions](https://img.shields.io/pypi/pyversions/mash-client.svg)](https://pypi.org/project/mash-client/)
 [![License](https://img.shields.io/pypi/l/mash-client.svg)](https://pypi.org/project/mash-client/)
