@@ -1,3 +1,13 @@
+v3.4.0 (2021-2-04)
+===================
+
+- If protocol isn't part of hostname prepend http.
+  [\74](https://github.com/suse-enceladus/mash-client/pull/74)
+- Pass in verify_signature value to options dict.
+  [\75](https://github.com/suse-enceladus/mash-client/pull/75)
+- Migrate to GitHub Actions from Travis CI.
+  [\76](https://github.com/suse-enceladus/mash-client/pull/76)
+
 v3.3.0 (2020-10-19)
 ===================
 
