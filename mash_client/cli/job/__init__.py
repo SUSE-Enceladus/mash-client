@@ -57,15 +57,31 @@ def job():
 
 
 @click.command(name='list')
+@click.option(
+    '--page',
+    type=click.INT,
+    help='The page number of results to return.'
+)
+@click.option(
+    '--per-page',
+    type=click.INT,
+    help='The number of results to return per page.'
+)
 @click.pass_context
-def list_jobs(context):
+def list_jobs(context, per_page, page):
     """
     List all jobs in the MASH server pipeline.
     """
     config_data = get_config(context.obj)
 
     with handle_errors(config_data['log_level'], config_data['no_color']):
-        result = list_user_jobs(config_data)
+        kwargs = {}
+        if page:
+            kwargs['page'] = page
+        if per_page:
+            kwargs['per_page'] = per_page
+
+        result = list_user_jobs(config_data, **kwargs)
         echo_dict(result, config_data['no_color'])
 
 

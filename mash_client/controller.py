@@ -141,10 +141,24 @@ def get_job(config_data, job_id, raise_for_status=True):
     )
 
 
-def list_user_jobs(config_data, raise_for_status=True):
+def list_user_jobs(
+    config_data,
+    raise_for_status=True,
+    page=None,
+    per_page=None
+):
+    job_data = {}
+
+    if page:
+        job_data['page'] = page
+
+    if per_page:
+        job_data['per_page'] = per_page
+
     return handle_request_with_token(
         config_data,
         '/jobs/',
+        job_data=job_data,
         action='get',
         raise_for_status=raise_for_status
     )

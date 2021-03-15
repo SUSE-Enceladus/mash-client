@@ -166,7 +166,7 @@ def handle_request(
     method = getattr(requests, action)
 
     headers = {}
-    if job_data:
+    if job_data is not None:
         headers = {'content-type': 'application/json'}
         job_data = json.dumps(job_data)
 
