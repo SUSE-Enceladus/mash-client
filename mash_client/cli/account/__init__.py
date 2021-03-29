@@ -26,6 +26,7 @@ from mash_client.cli.account.azure import azure
 from mash_client.cli.account.ec2 import ec2
 from mash_client.cli.account.gce import gce
 from mash_client.cli.account.oci import oci
+from mash_client.cli.account.aliyun import aliyun
 
 
 @click.group()
@@ -39,3 +40,4 @@ account.add_command(azure)
 account.add_command(ec2)
 account.add_command(gce)
 account.add_command(oci)
+account.add_command(aliyun)
