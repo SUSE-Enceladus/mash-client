@@ -1,0 +1,15 @@
+{
+  "cloud_account": "test",
+  "last_service": "deprecation",
+  "utctime": "now",
+  "image": "test_image_oem",
+  "cloud_image_name": "new_image_123",
+  "old_cloud_image_name": "old_new_image_123",
+  "conditions": [
+    {"package_name": "name", "version": "4.13.1"},
+    {"image": "version"}
+  ],
+  "download_url": "http://download.opensuse.org/repositories/Cloud:Tools/images",
+  "image_description": "New Image #123",
+  "tests": ["test_stuff"]
+}
