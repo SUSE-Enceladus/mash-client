@@ -76,27 +76,6 @@ def azure():
          'where the source container exists.'
 )
 @click.option(
-    '--destination-container',
-    type=click.STRING,
-    required=True,
-    help='The name of the container that images will be'
-         ' copied to and published from.'
-)
-@click.option(
-    '--destination-resource-group',
-    type=click.STRING,
-    required=True,
-    help='The name of the resource group where '
-         'the destination storage account exists.'
-)
-@click.option(
-    '--destination-storage-account',
-    type=click.STRING,
-    required=True,
-    help='The name of the ASM based storage account where '
-         'the destination container exists.'
-)
-@click.option(
     '--credentials',
     type=click.Path(exists=True),
     required=True,
@@ -106,8 +85,7 @@ def azure():
 def add(
     context, name, region, source_container,
     source_resource_group, source_storage_account,
-    destination_container, destination_resource_group,
-    destination_storage_account, credentials
+    credentials
 ):
     """
     Add an Azure account in the user name space on the MASH server.
@@ -124,10 +102,7 @@ def add(
             'region': region,
             'source_container': source_container,
             'source_resource_group': source_resource_group,
-            'source_storage_account': source_storage_account,
-            'destination_container': destination_container,
-            'destination_resource_group': destination_resource_group,
-            'destination_storage_account': destination_storage_account
+            'source_storage_account': source_storage_account
         }
 
         result = handle_request_with_token(
@@ -246,24 +221,6 @@ def delete(context, name):
          'where the source container exists.'
 )
 @click.option(
-    '--destination-container',
-    type=click.STRING,
-    help='The name of the container that images will be'
-         ' copied to and published from.'
-)
-@click.option(
-    '--destination-resource-group',
-    type=click.STRING,
-    help='The name of the resource group where '
-         'the destination storage account exists.'
-)
-@click.option(
-    '--destination-storage-account',
-    type=click.STRING,
-    help='The name of the ASM based storage account where '
-         'the destination container exists.'
-)
-@click.option(
     '--credentials',
     type=click.Path(exists=True),
     help='The JSON service account credentials file.'
@@ -272,8 +229,7 @@ def delete(context, name):
 def update(
     context, name, region, source_container,
     source_resource_group, source_storage_account,
-    destination_container, destination_resource_group,
-    destination_storage_account, credentials
+    credentials
 ):
     """
     Update an Azure account in the user name space on the MASH server.
@@ -300,15 +256,6 @@ def update(
 
         if source_storage_account:
             data['source_storage_account'] = source_storage_account
-
-        if destination_container:
-            data['destination_container'] = destination_container
-
-        if destination_resource_group:
-            data['destination_resource_group'] = destination_resource_group
-
-        if destination_storage_account:
-            data['destination_storage_account'] = destination_storage_account
 
         if not data:
             echo_style('Nothing to update', config_data['no_color'], fg='red')

@@ -17,10 +17,7 @@ def test_account_add_azure(mock_requests, mock_time):
         'region': 'westus',
         'source_container': 'sc1',
         'source_resource_group': 'srg1',
-        'source_storage_account': 'ssa',
-        'destination_container': 'dc1',
-        'destination_resource_group': 'drg1',
-        'destination_storage_account': 'dsa1'
+        'source_storage_account': 'ssa'
     }
     mock_requests.post.return_value = response
     mock_time.time.return_value = 1568150480
@@ -32,9 +29,7 @@ def test_account_add_azure(mock_requests, mock_time):
             '-C', 'tests/data/', 'account', 'azure', 'add',
             '--name', 'acnt1', '--region', 'westus',
             '--source-container', 'sc1', '--source-resource-group', 'srg1',
-            '--source-storage-account', 'ssa', '--destination-container',
-            'dc1', '--destination-resource-group', 'drg1',
-            '--destination-storage-account', 'dsa1', '--credentials',
+            '--source-storage-account', 'ssa', '--credentials',
             'tests/data/azure_creds.json'
         ]
     )
@@ -76,10 +71,7 @@ def test_azure_account_info(mock_requests, mock_time):
         'region': 'westus',
         'source_container': 'sc1',
         'source_resource_group': 'srg1',
-        'source_storage_account': 'ssa',
-        'destination_container': 'dc1',
-        'destination_resource_group': 'drg1',
-        'destination_storage_account': 'dsa1'
+        'source_storage_account': 'ssa'
     }
     mock_requests.get.return_value = response
     mock_time.time.return_value = 1568150480
@@ -108,10 +100,7 @@ def test_azure_account_list(mock_requests, mock_time):
         'region': 'westus',
         'source_container': 'sc1',
         'source_resource_group': 'srg1',
-        'source_storage_account': 'ssa',
-        'destination_container': 'dc1',
-        'destination_resource_group': 'drg1',
-        'destination_storage_account': 'dsa1'
+        'source_storage_account': 'ssa'
     }]
     mock_requests.get.return_value = response
     mock_time.time.return_value = 1568150480
@@ -139,10 +128,7 @@ def test_account_update_azure(mock_requests, mock_time):
         'region': 'westus',
         'source_container': 'sc1',
         'source_resource_group': 'srg1',
-        'source_storage_account': 'ssa',
-        'destination_container': 'dc1',
-        'destination_resource_group': 'drg1',
-        'destination_storage_account': 'dsa1'
+        'source_storage_account': 'ssa'
     }
     mock_requests.post.return_value = response
     mock_time.time.return_value = 1568150480
@@ -154,9 +140,7 @@ def test_account_update_azure(mock_requests, mock_time):
             '-C', 'tests/data/', 'account', 'azure', 'update',
             '--name', 'acnt1', '--region', 'westus',
             '--source-container', 'sc1', '--source-resource-group', 'srg1',
-            '--source-storage-account', 'ssa', '--destination-container',
-            'dc1', '--destination-resource-group', 'drg1',
-            '--destination-storage-account', 'dsa1', '--credentials',
+            '--source-storage-account', 'ssa', '--credentials',
             'tests/data/azure_creds.json'
         ]
     )
