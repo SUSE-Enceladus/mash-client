@@ -1,3 +1,13 @@
+v3.5.0 (2021-4-07)
+===================
+
+- Add job list pagination options.
+  [\78](https://github.com/suse-enceladus/mash-client/pull/78)
+- Add handling for Aliyun jobs and accounts.
+  [\79](https://github.com/suse-enceladus/mash-client/pull/79)
+- Drop destination fields for Azure accounts.
+  [\80](https://github.com/suse-enceladus/mash-client/pull/80)
+
 v3.4.0 (2021-2-04)
 ===================
 
