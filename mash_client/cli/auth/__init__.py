@@ -101,7 +101,7 @@ def oidc(context):
     with handle_errors(config_data['log_level'], config_data['no_color']):
         result = handle_request(
             config_data,
-            '/auth/oauth2',
+            '/v1/auth/oauth2',
             action='get'
         )
 
@@ -138,7 +138,7 @@ def oidc(context):
 
         tokens = handle_request(
             config_data,
-            '/auth/oauth2',
+            '/v1/auth/oauth2',
             job_data=job_data,
             action='post'
         )

@@ -49,8 +49,15 @@ def aliyun():
     'document',
     type=click.Path(exists=True)
 )
+@click.option(
+    '--api-version',
+    type=click.Choice(['v1']),
+    help='The version of the API to use for request. '
+         'Defaults to the latest API version based on '
+         'client version.'
+)
 @click.pass_context
-def add(context, dry_run, document):
+def add(context, dry_run, document, api_version):
     """
     Send add Aliyun job request to server based on provided json document.
     """
@@ -63,7 +70,11 @@ def add(context, dry_run, document):
         if dry_run:
             job_data['dry_run'] = True
 
-        result = add_job(config_data, job_data, 'aliyun')
+        kwargs = {}
+        if api_version:
+            kwargs['api_version'] = api_version
+
+        result = add_job(config_data, job_data, 'aliyun', **kwargs)
 
         if 'msg' in result:
             echo_style(result['msg'], config_data['no_color'])

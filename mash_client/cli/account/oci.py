@@ -118,7 +118,7 @@ def add(
 
         result = handle_request_with_token(
             config_data,
-            '/accounts/oci/',
+            '/v1/accounts/oci/',
             data
         )
 
@@ -142,7 +142,7 @@ def get(context, name):
     with handle_errors(config_data['log_level'], config_data['no_color']):
         result = handle_request_with_token(
             config_data,
-            '/accounts/oci/{name}'.format(name=name),
+            '/v1/accounts/oci/{name}'.format(name=name),
             action='get'
         )
 
@@ -160,7 +160,7 @@ def list_oci_accounts(context):
     with handle_errors(config_data['log_level'], config_data['no_color']):
         result = handle_request_with_token(
             config_data,
-            '/accounts/oci/',
+            '/v1/accounts/oci/',
             action='get'
         )
 
@@ -194,7 +194,7 @@ def delete(context, name):
     with handle_errors(config_data['log_level'], config_data['no_color']):
         result = handle_request_with_token(
             config_data,
-            '/accounts/oci/{name}'.format(name=name),
+            '/v1/accounts/oci/{name}'.format(name=name),
             action='delete'
         )
 
@@ -288,7 +288,7 @@ def update(
 
         result = handle_request_with_token(
             config_data,
-            '/accounts/oci/{name}'.format(name=name),
+            '/v1/accounts/oci/{name}'.format(name=name),
             data
         )
 
