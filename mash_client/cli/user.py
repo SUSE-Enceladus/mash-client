@@ -66,7 +66,7 @@ def create_user(context, email):
         job_data = {'email': email, 'password': pass1}
         result = handle_request(
             config_data,
-            '/user/',
+            '/v1/user/',
             job_data=job_data,
             action='post'
         )
@@ -88,7 +88,7 @@ def get_user(context):
     with handle_errors(config_data['log_level'], config_data['no_color']):
         result = handle_request_with_token(
             config_data,
-            '/user/',
+            '/v1/user/',
             action='get'
         )
 
@@ -107,7 +107,7 @@ def delete_user(context):
         if click.confirm('Are you sure you want to delete user?'):
             result = handle_request_with_token(
                 config_data,
-                '/user/',
+                '/v1/user/',
                 action='delete'
             )
 
@@ -155,7 +155,7 @@ def reset_password(context, email):
         if click.confirm('Are you sure you want to reset password?'):
             result = handle_request(
                 config_data,
-                '/user/password',
+                '/v1/user/password',
                 job_data={'email': email},
                 action='post'
             )
@@ -220,7 +220,7 @@ def change_password(context, email):
         }
         result = handle_request(
             config_data,
-            '/user/password',
+            '/v1/user/password',
             job_data=job_data,
             action='put'
         )

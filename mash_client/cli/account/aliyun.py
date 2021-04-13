@@ -112,7 +112,7 @@ def add(
 
         result = handle_request_with_token(
             config_data,
-            '/accounts/aliyun/',
+            '/v1/accounts/aliyun/',
             data
         )
 
@@ -136,7 +136,7 @@ def get(context, name):
     with handle_errors(config_data['log_level'], config_data['no_color']):
         result = handle_request_with_token(
             config_data,
-            '/accounts/aliyun/{name}'.format(name=name),
+            '/v1/accounts/aliyun/{name}'.format(name=name),
             action='get'
         )
 
@@ -154,7 +154,7 @@ def list_aliyun_accounts(context):
     with handle_errors(config_data['log_level'], config_data['no_color']):
         result = handle_request_with_token(
             config_data,
-            '/accounts/aliyun/',
+            '/v1/accounts/aliyun/',
             action='get'
         )
 
@@ -188,7 +188,7 @@ def delete(context, name):
     with handle_errors(config_data['log_level'], config_data['no_color']):
         result = handle_request_with_token(
             config_data,
-            '/accounts/aliyun/{name}'.format(name=name),
+            '/v1/accounts/aliyun/{name}'.format(name=name),
             action='delete'
         )
 
@@ -279,7 +279,7 @@ def update(
 
         result = handle_request_with_token(
             config_data,
-            '/accounts/aliyun/{name}'.format(name=name),
+            '/v1/accounts/aliyun/{name}'.format(name=name),
             data
         )
 

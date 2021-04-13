@@ -66,7 +66,7 @@ def token_list(context):
     with handle_errors(config_data['log_level'], config_data['no_color']):
         result = handle_request_with_token(
             config_data,
-            '/auth/token',
+            '/v1/auth/token',
             action='get'
         )
 
@@ -90,7 +90,7 @@ def get(context, jti):
     with handle_errors(config_data['log_level'], config_data['no_color']):
         result = handle_request_with_token(
             config_data,
-            '/auth/token/{jti}'.format(jti=jti),
+            '/v1/auth/token/{jti}'.format(jti=jti),
             action='get'
         )
 
@@ -116,13 +116,13 @@ def delete(context, jti):
         if jti:
             result = handle_request_with_token(
                 config_data,
-                '/auth/token/{jti}'.format(jti=jti),
+                '/v1/auth/token/{jti}'.format(jti=jti),
                 action='delete'
             )
         elif click.confirm('Are you sure you want to delete all tokens?'):
             result = handle_request_with_token(
                 config_data,
-                '/auth/token',
+                '/v1/auth/token',
                 action='delete'
             )
         else:

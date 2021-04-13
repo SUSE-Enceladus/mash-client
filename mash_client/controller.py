@@ -40,7 +40,7 @@ def get_job_schema_by_cloud(
 ):
     result = handle_request(
         config_data,
-        '/jobs/{cloud}/'.format(cloud=cloud),
+        '/v1/jobs/{cloud}/'.format(cloud=cloud),
         action='get',
         raise_for_status=raise_for_status
     )
@@ -73,7 +73,7 @@ def login_with_pass(config_data, email, password, raise_for_status=True):
 
     result = handle_request(
         config_data,
-        '/auth/login',
+        '/v1/auth/login',
         job_data=job_data,
         action='post',
         raise_for_status=raise_for_status
@@ -108,7 +108,7 @@ def logout_session(config_data, raise_for_status=True):
 
     return handle_request(
         config_data,
-        '/auth/logout',
+        '/v1/auth/logout',
         action='delete',
         token=refresh_token,
         raise_for_status=raise_for_status
@@ -126,7 +126,7 @@ def get_token(tokens_file, token_type=None):
 def delete_job(config_data, job_id, raise_for_status=True):
     return handle_request_with_token(
         config_data,
-        '/jobs/{0}'.format(job_id),
+        '/v1/jobs/{0}'.format(job_id),
         action='delete',
         raise_for_status=raise_for_status
     )
@@ -135,7 +135,7 @@ def delete_job(config_data, job_id, raise_for_status=True):
 def get_job(config_data, job_id, raise_for_status=True):
     return handle_request_with_token(
         config_data,
-        '/jobs/{0}'.format(job_id),
+        '/v1/jobs/{0}'.format(job_id),
         action='get',
         raise_for_status=raise_for_status
     )
@@ -145,7 +145,8 @@ def list_user_jobs(
     config_data,
     raise_for_status=True,
     page=None,
-    per_page=None
+    per_page=None,
+    api_version='v1'
 ):
     job_data = {}
 
@@ -157,7 +158,7 @@ def list_user_jobs(
 
     return handle_request_with_token(
         config_data,
-        '/jobs/',
+        '/{api_version}/jobs/'.format(api_version=api_version),
         job_data=job_data,
         action='get',
         raise_for_status=raise_for_status
@@ -167,7 +168,7 @@ def list_user_jobs(
 def get_job_status(config_data, job_id, raise_for_status=True):
     result = handle_request_with_token(
         config_data,
-        '/jobs/{0}'.format(job_id),
+        '/v1/jobs/{0}'.format(job_id),
         action='get',
         raise_for_status=raise_for_status
     )
@@ -186,7 +187,7 @@ def get_job_status(config_data, job_id, raise_for_status=True):
 def get_job_test_results(config_data, job_id, raise_for_status=True):
     result = handle_request_with_token(
         config_data,
-        '/jobs/{0}'.format(job_id),
+        '/v1/jobs/{0}'.format(job_id),
         action='get',
         raise_for_status=raise_for_status
     )
@@ -209,10 +210,29 @@ def get_job_test_results(config_data, job_id, raise_for_status=True):
     return result_data
 
 
-def add_job(config_data, job_data, cloud, raise_for_status=True):
+def add_job(
+    config_data,
+    job_data,
+    cloud,
+    api_version=None,
+    raise_for_status=True
+):
+    versions = {
+        'aliyun': 'v1',
+        'azure': 'v1',
+        'ec2': 'v1',
+        'gce': 'v1',
+        'oci': 'v1'
+    }
+    if not api_version:
+        api_version = versions[cloud]
+
     return handle_request_with_token(
         config_data,
-        '/jobs/{cloud}/'.format(cloud=cloud),
+        '/{api_version}/jobs/{cloud}/'.format(
+            api_version=api_version,
+            cloud=cloud
+        ),
         job_data,
         raise_for_status=raise_for_status
     )

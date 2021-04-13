@@ -107,7 +107,7 @@ def add(
 
         result = handle_request_with_token(
             config_data,
-            '/accounts/azure/',
+            '/v1/accounts/azure/',
             data
         )
 
@@ -131,7 +131,7 @@ def get(context, name):
     with handle_errors(config_data['log_level'], config_data['no_color']):
         result = handle_request_with_token(
             config_data,
-            '/accounts/azure/{name}'.format(name=name),
+            '/v1/accounts/azure/{name}'.format(name=name),
             action='get'
         )
 
@@ -149,7 +149,7 @@ def list_azure_accounts(context):
     with handle_errors(config_data['log_level'], config_data['no_color']):
         result = handle_request_with_token(
             config_data,
-            '/accounts/azure/',
+            '/v1/accounts/azure/',
             action='get'
         )
 
@@ -183,7 +183,7 @@ def delete(context, name):
     with handle_errors(config_data['log_level'], config_data['no_color']):
         result = handle_request_with_token(
             config_data,
-            '/accounts/azure/{name}'.format(name=name),
+            '/v1/accounts/azure/{name}'.format(name=name),
             action='delete'
         )
 
@@ -263,7 +263,7 @@ def update(
 
         result = handle_request_with_token(
             config_data,
-            '/accounts/azure/{name}'.format(name=name),
+            '/v1/accounts/azure/{name}'.format(name=name),
             data
         )
 

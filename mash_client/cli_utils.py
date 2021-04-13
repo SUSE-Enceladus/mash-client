@@ -273,7 +273,7 @@ def refresh_token(config_data):
 
     result = handle_request(
         config_data,
-        '/auth/token/refresh',
+        '/v1/auth/token/refresh',
         action='post',
         token=tokens['refresh_token']
     )

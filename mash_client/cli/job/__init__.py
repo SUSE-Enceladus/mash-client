@@ -68,8 +68,15 @@ def job():
     type=click.INT,
     help='The number of results to return per page.'
 )
+@click.option(
+    '--api-version',
+    type=click.Choice(['v1']),
+    help='The version of the API to use for request. '
+         'Defaults to the latest API version based on '
+         'client version.'
+)
 @click.pass_context
-def list_jobs(context, per_page, page):
+def list_jobs(context, api_version, per_page, page):
     """
     List all jobs in the MASH server pipeline.
     """
@@ -81,6 +88,8 @@ def list_jobs(context, per_page, page):
             kwargs['page'] = page
         if per_page:
             kwargs['per_page'] = per_page
+        if api_version:
+            kwargs['api_version'] = api_version
 
         result = list_user_jobs(config_data, **kwargs)
         echo_dict(result, config_data['no_color'])
@@ -162,7 +171,7 @@ def wait(context, wait_time, job_id):
         with handle_errors(config_data['log_level'], config_data['no_color']):
             result = handle_request_with_token(
                 config_data,
-                '/jobs/{0}'.format(job_id),
+                '/v1/jobs/{0}'.format(job_id),
                 action='get'
             )
 
