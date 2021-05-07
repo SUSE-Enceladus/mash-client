@@ -1,4 +1,10 @@
-v3.5.0 (2021-4-07)
+v4.0.0 (2021-05-07)
+===================
+
+- Add versioning to routes.
+  [\81](https://github.com/suse-enceladus/mash-client/pull/81)
+
+v3.5.0 (2021-04-07)
 ===================
 
 - Add job list pagination options.
@@ -8,7 +14,7 @@ v3.5.0 (2021-4-07)
 - Drop destination fields for Azure accounts.
   [\80](https://github.com/suse-enceladus/mash-client/pull/80)
 
-v3.4.0 (2021-2-04)
+v3.4.0 (2021-02-04)
 ===================
 
 - If protocol isn't part of hostname prepend http.
