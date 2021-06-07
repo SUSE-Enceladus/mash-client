@@ -13,7 +13,7 @@ def test_account_delete_gce(mock_requests, mock_time):
     response.status_code = 200
     response.json.return_value = {'msg': 'GCE account deleted'}
     mock_requests.delete.return_value = response
-    mock_time.time.return_value = 1568150480
+    mock_time.time.return_value = 1568150470
 
     runner = CliRunner()
     result = runner.invoke(
@@ -42,7 +42,7 @@ def test_account_add_gce(mock_requests, mock_time):
         'is_publishing_account': True
     }
     mock_requests.post.return_value = response
-    mock_time.time.return_value = 1568150480
+    mock_time.time.return_value = 1568150470
 
     runner = CliRunner()
     result = runner.invoke(
@@ -74,7 +74,7 @@ def test_ge_account_info(mock_requests, mock_time):
         'is_publishing_account': True
     }
     mock_requests.get.return_value = response
-    mock_time.time.return_value = 1568150480
+    mock_time.time.return_value = 1568150470
 
     runner = CliRunner()
     result = runner.invoke(
@@ -103,7 +103,7 @@ def test_ge_account_list(mock_requests, mock_time):
         'is_publishing_account': True
     }]
     mock_requests.get.return_value = response
-    mock_time.time.return_value = 1568150480
+    mock_time.time.return_value = 1568150470
 
     runner = CliRunner()
     result = runner.invoke(
@@ -131,7 +131,7 @@ def test_account_update_gce(mock_requests, mock_time):
         'is_publishing_account': True
     }
     mock_requests.post.return_value = response
-    mock_time.time.return_value = 1568150480
+    mock_time.time.return_value = 1568150470
 
     runner = CliRunner()
     result = runner.invoke(

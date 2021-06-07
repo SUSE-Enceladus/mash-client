@@ -237,7 +237,7 @@ def handle_request_with_token(
             verify=False,
             options={'verify_signature': False}
         )
-        now = int(time.time())
+        now = int(time.time() + 10)
 
         if access_token.get('exp') and now >= access_token['exp']:
             refresh_token(config_data)

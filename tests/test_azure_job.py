@@ -21,7 +21,7 @@ def test_job_add_azure(mock_requests, mock_time):
         'cloud_architecture': 'x86_64'
     }
     mock_requests.post.return_value = response
-    mock_time.time.return_value = 1568150480
+    mock_time.time.return_value = 1568150470
 
     runner = CliRunner()
     result = runner.invoke(

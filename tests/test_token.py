@@ -32,7 +32,7 @@ def test_token_refresh(mock_requests, mock_time):
     response.status_code = 200
     response.json.return_value = tokens
     mock_requests.post.return_value = response
-    mock_time.time.return_value = 1568150480
+    mock_time.time.return_value = 1568150470
 
     runner = CliRunner()
     with runner.isolated_filesystem():
@@ -63,7 +63,7 @@ def test_get_token(mock_requests, mock_time):
         'expires': '2019-09-13T16:34:22.901Z'
     }
     mock_requests.get.return_value = response
-    mock_time.time.return_value = 1568150480
+    mock_time.time.return_value = 1568150470
 
     runner = CliRunner()
     result = runner.invoke(
@@ -90,7 +90,7 @@ def test_token_list(mock_requests, mock_time):
         'expires': '2019-09-13T16:34:22.901Z'
     }]
     mock_requests.get.return_value = response
-    mock_time.time.return_value = 1568150480
+    mock_time.time.return_value = 1568150470
 
     runner = CliRunner()
     result = runner.invoke(
@@ -111,7 +111,7 @@ def test_token_delete(mock_requests, mock_time):
     response.status_code = 200
     response.json.return_value = {'msg': 'Token revoked'}
     mock_requests.delete.return_value = response
-    mock_time.time.return_value = 1568150480
+    mock_time.time.return_value = 1568150470
 
     runner = CliRunner()
     result = runner.invoke(
@@ -133,7 +133,7 @@ def test_token_delete_all(mock_requests, mock_time):
     response.status_code = 200
     response.json.return_value = {'msg': 'Successfully deleted 2 tokens'}
     mock_requests.delete.return_value = response
-    mock_time.time.return_value = 1568150480
+    mock_time.time.return_value = 1568150470
 
     runner = CliRunner()
     result = runner.invoke(

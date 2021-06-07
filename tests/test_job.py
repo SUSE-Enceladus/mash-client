@@ -43,7 +43,7 @@ def test_job_delete(mock_requests, mock_time):
     response.status_code = 200
     response.json.return_value = {'msg': 'Job deleted'}
     mock_requests.delete.return_value = response
-    mock_time.time.return_value = 1568150480
+    mock_time.time.return_value = 1568150470
 
     runner = CliRunner()
     result = runner.invoke(
@@ -73,7 +73,7 @@ def test_job_info(mock_requests, mock_time):
         'cloud_architecture': 'x86_64'
     }
     mock_requests.get.return_value = response
-    mock_time.time.return_value = 1568150480
+    mock_time.time.return_value = 1568150470
 
     runner = CliRunner()
     result = runner.invoke(
@@ -104,7 +104,7 @@ def test_job_wait(mock_requests, mock_time):
         'state': 'finished'
     }
     mock_requests.get.return_value = response
-    mock_time.time.return_value = 1568150480
+    mock_time.time.return_value = 1568150470
 
     runner = CliRunner()
     result = runner.invoke(
@@ -136,7 +136,7 @@ def test_job_status(mock_requests, mock_time):
         'current_service': 'test'
     }
     mock_requests.get.return_value = response
-    mock_time.time.return_value = 1568150480
+    mock_time.time.return_value = 1568150470
 
     runner = CliRunner()
     result = runner.invoke(
@@ -171,7 +171,7 @@ def test_job_test_results(mock_requests, mock_time):
         }
     }
     mock_requests.get.return_value = response
-    mock_time.time.return_value = 1568150480
+    mock_time.time.return_value = 1568150470
 
     runner = CliRunner()
     result = runner.invoke(
@@ -203,7 +203,7 @@ def test_job_list(mock_requests, mock_time):
         'cloud_architecture': 'x86_64'
     }]
     mock_requests.get.return_value = response
-    mock_time.time.return_value = 1568150480
+    mock_time.time.return_value = 1568150470
 
     runner = CliRunner()
     result = runner.invoke(
