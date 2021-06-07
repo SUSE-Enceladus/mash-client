@@ -40,7 +40,7 @@ def test_user_info(mock_requests, mock_time):
         'email': 'user1@fake.com'
     }
     mock_requests.get.return_value = response
-    mock_time.time.return_value = 1568150480
+    mock_time.time.return_value = 1568150470
 
     runner = CliRunner()
     result = runner.invoke(
@@ -61,7 +61,7 @@ def test_user_delete(mock_requests, mock_time):
     response.status_code = 200
     response.json.return_value = {'msg': 'User deleted'}
     mock_requests.delete.return_value = response
-    mock_time.time.return_value = 1568150480
+    mock_time.time.return_value = 1568150470
 
     runner = CliRunner()
     result = runner.invoke(
@@ -86,7 +86,7 @@ def test_user_password_reset(mock_requests, mock_time):
                'will be sent with steps to change your password.'
     }
     mock_requests.post.return_value = response
-    mock_time.time.return_value = 1568150480
+    mock_time.time.return_value = 1568150470
 
     runner = CliRunner()
     result = runner.invoke(
@@ -110,7 +110,7 @@ def test_user_password_change(mock_requests, mock_time):
         'msg': 'Password changed successfully. You can now login.'
     }
     mock_requests.put.return_value = response
-    mock_time.time.return_value = 1568150480
+    mock_time.time.return_value = 1568150470
 
     runner = CliRunner()
     result = runner.invoke(
