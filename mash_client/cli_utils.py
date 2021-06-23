@@ -470,7 +470,7 @@ def echo_verbose_results(data, no_color):
         else:
             fg = 'red'
 
-        name = parse_test_name(test['name'])
+        name = parse_test_name(test['nodeid'])
         echo_style(
             '{} {}'.format(name, test['outcome'].upper()),
             no_color,

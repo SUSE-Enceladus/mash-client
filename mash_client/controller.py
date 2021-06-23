@@ -203,7 +203,7 @@ def get_job_test_results(config_data, job_id, raise_for_status=True):
         return {'msg': 'The job has no test results.'}
 
     try:
-        result_data = json.loads(raw_test_results.replace('\'', '"'))
+        result_data = json.loads(raw_test_results)
     except json.decoder.JSONDecodeError:
         return {'msg': 'The job\'s test results are malformed.'}
 
