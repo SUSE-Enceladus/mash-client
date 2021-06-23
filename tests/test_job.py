@@ -17,17 +17,17 @@ test_results = {
     },
     'tests': [
         {
-            'name': 'test_soft_reboot',
+            'nodeid': 'test_soft_reboot',
             'outcome': 'failed',
             'test_index': 0
         },
         {
-            'name': 'test_sles_motd.py::test_sles_motd',
+            'nodeid': 'test_sles_motd.py::test_sles_motd',
             'outcome': 'passed',
             'test_index': 1
         },
         {
-            'name': 'test_sles_license.py::test_sles_license',
+            'nodeid': 'test_sles_license.py::test_sles_license',
             'outcome': 'skipped',
             'test_index': 2
         }
