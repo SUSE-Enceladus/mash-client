@@ -68,8 +68,17 @@ def get_job_schema_by_cloud(
     return result
 
 
-def login_with_pass(config_data, email, password, raise_for_status=True):
+def login_with_pass(
+    config_data,
+    email,
+    password,
+    raise_for_status=True,
+    no_expiry=False
+):
     job_data = {'email': email, 'password': password}
+
+    if no_expiry:
+        job_data['no_expiry'] = True
 
     result = handle_request(
         config_data,
