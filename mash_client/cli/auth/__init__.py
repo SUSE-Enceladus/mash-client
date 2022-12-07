@@ -51,8 +51,14 @@ def auth():
     type=click.STRING,
     help='The email for the mash user (default taken from config).'
 )
+@click.option(
+    '--no-expiry',
+    is_flag=True,
+    help='Creates a refresh token with no expiration '
+         '(default expiry is 30 days).'
+)
 @click.pass_context
-def login(context, email):
+def login(context, email, no_expiry):
     """
     Handle mash user login.
     """
@@ -71,7 +77,12 @@ def login(context, email):
 
     with handle_errors(config_data['log_level'], config_data['no_color']):
         password = click.prompt('Enter password', type=str, hide_input=True)
-        result = login_with_pass(config_data, email, password)
+        result = login_with_pass(
+            config_data,
+            email,
+            password,
+            no_expiry=no_expiry
+        )
         echo_style(result['msg'], config_data['no_color'])
 
 

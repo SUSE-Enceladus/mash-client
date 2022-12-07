@@ -43,7 +43,7 @@ def test_request_handler(mock_send_header, mock_send_response, mock_end_hdrs):
     with raises(CodeReceivedException) as e:
         rh.do_GET()
 
-    assert(e.value.code == code)
+    assert (e.value.code == code)
     mock_send_response.assert_called_once_with(200)
     mock_send_header.assert_called_once_with('Content-type', 'text/html')
 
