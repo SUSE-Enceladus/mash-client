@@ -1,3 +1,8 @@
+v4.1.0 (2022-12-07)
+===================
+
+- Add option to create refresh token with no expiry
+
 v4.0.1 (2021-12-17)
 ===================
 
