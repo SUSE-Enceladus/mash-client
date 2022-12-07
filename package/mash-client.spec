@@ -17,7 +17,7 @@
 
 
 Name:           mash-client
-Version:        4.0.1
+Version:        4.1.0
 Release:        0
 Summary:        Command line utility for MASH server
 License:        GPL-3.0-or-later

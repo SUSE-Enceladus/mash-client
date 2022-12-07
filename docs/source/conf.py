@@ -26,7 +26,7 @@ author = 'SUSE Public Cloud Team'
 # The short X.Y version
 version = ''
 # The full version, including alpha/beta/rc tags
-release = '4.0.1'
+release = '4.1.0'
 
 
 # -- General configuration ---------------------------------------------------
