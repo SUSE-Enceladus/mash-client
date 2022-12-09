@@ -120,6 +120,9 @@ def get(context, job_id, show_data):
         if not show_data:
             with suppress(KeyError):
                 del result['data']
+        elif 'test_results' in result['data']:
+            # Retrieved via `mash job test-results` command
+            del result['data']['test_results']
 
         echo_dict(result, config_data['no_color'])
 
