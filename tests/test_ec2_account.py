@@ -16,7 +16,16 @@ def test_account_add_ec2(mock_requests, mock_time):
         'name': 'acnt1',
         'partition': 'aws',
         'region': 'us-east-1',
-        'subnet': 'subnet-123456789',
+        'subnets': [
+            {
+                'region': 'us-east-1',
+                'subnet': 'subnet-123456789'
+            },
+            {
+                'region': 'us-east-2',
+                'subnet': 'subnet-987654321'
+            }
+        ],
         'additional_regions': {
             'id': '1',
             'name': 'us-east-5',
@@ -31,6 +40,7 @@ def test_account_add_ec2(mock_requests, mock_time):
         main,
         [
             '-C', 'tests/data/', 'account', 'ec2', 'add',
+            '--additional-subnets',
             '--additional-regions', '--name', 'acnt1', '--partition', 'aws',
             '--region', 'us-east-1', '--subnet',
             'subnet-123456789', '--access-key-id', '123456',
@@ -39,6 +49,10 @@ def test_account_add_ec2(mock_requests, mock_time):
         input='y\n'
               'us-east-5\n'
               'ami-12345\n'
+              'n'
+              'y\n'
+              'us-east-2\n'
+              'subnet-987654321\n'
               'n'
     )
     assert result.exit_code == 0
@@ -78,7 +92,12 @@ def test_ec2_account_info(mock_requests, mock_time):
         'name': 'acnt1',
         'partition': 'aws',
         'region': 'us-east-1',
-        'subnet': 'subnet-123456789',
+        'subnets': [
+            {
+                'region': 'us-east-1',
+                'subnet': 'subnet-123456789'
+            }
+        ],
         'additional_regions': {
             'id': '1',
             'name': 'us-east-5',
@@ -110,7 +129,12 @@ def test_ec2_account_list(mock_requests, mock_time):
         'name': 'acnt1',
         'partition': 'aws',
         'region': 'us-east-1',
-        'subnet': 'subnet-123456789',
+        'subnets': [
+            {
+                'region': 'us-east-1',
+                'subnet': 'subnet-123456789'
+            }
+        ],
         'additional_regions': {
             'id': '1',
             'name': 'us-east-5',
@@ -142,7 +166,16 @@ def test_account_update_ec2(mock_requests, mock_time):
         'name': 'acnt1',
         'partition': 'aws',
         'region': 'us-east-1',
-        'subnet': 'subnet-123456789',
+        'subnets': [
+            {
+                'region': 'us-east-1',
+                'subnet': 'subnet-123456789'
+            },
+            {
+                'region': 'us-east-5',
+                'subnet': 'subnet-987654321'
+            }
+        ],
         'additional_regions': {
             'id': '1',
             'name': 'us-east-5',
@@ -157,7 +190,7 @@ def test_account_update_ec2(mock_requests, mock_time):
         main,
         [
             '-C', 'tests/data/', 'account', 'ec2', 'update',
-            '--additional-regions', '--name', 'acnt1',
+            '--additional-subnets', '--additional-regions', '--name', 'acnt1',
             '--region', 'us-east-1', '--subnet',
             'subnet-123456789', '--access-key-id', '123456',
             '--secret-access-key', '654321'
@@ -165,6 +198,10 @@ def test_account_update_ec2(mock_requests, mock_time):
         input='y\n'
               'us-east-5\n'
               'ami-12345\n'
+              'n'
+              'y\n'
+              'us-east-5\n'
+              'subnet-987654321\n'
               'n'
     )
     assert result.exit_code == 0
