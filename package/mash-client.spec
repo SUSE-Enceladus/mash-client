@@ -27,6 +27,7 @@ Group:          Development/Languages/Python
 URL:            https://github.com/SUSE-enceladus/mash-client
 Source:         https://files.pythonhosted.org/packages/source/p/mash-client/%{name}-%{version}.tar.gz
 BuildRequires:  python-rpm-macros
+BuildRequires:  fdupes
 BuildRequires:  %{python_module devel}
 BuildRequires:  %{python_module setuptools}
 BuildRequires:  %{python_module wheel}
@@ -53,7 +54,7 @@ with a MASH server instance.
 %build
 %pyproject_wheel
 mkdir -p man/man1
-python3.11 setup.py --command-packages=click_man.commands man_pages --target man/man1
+%python_exec setup.py --command-packages=click_man.commands man_pages --target man/man1
 
 %install
 %pyproject_install
@@ -64,6 +65,7 @@ install -m 644 man/man1/*.1 %{buildroot}/%{_mandir}/man1
 install -m 644 man/man5/*.5 %{buildroot}/%{_mandir}/man5
 gzip %{buildroot}/%{_mandir}/man1/*
 gzip %{buildroot}/%{_mandir}/man5/*
+%{python_expand %fdupes %{buildroot}%{$python_sitelib}}
 
 %files
 %defattr(-,root,root)
