@@ -1,3 +1,9 @@
+v4.2.0 (2024-05-30)
+===================
+
+- Update spec to build for 3.11
+- Update python version support
+
 v4.1.0 (2022-12-07)
 ===================
 
