@@ -31,7 +31,8 @@ from mash_client.cli_utils import (
     abort_if_false,
     echo_dict,
     echo_style,
-    additional_regions_repl
+    additional_regions_repl,
+    additional_subnets_repl
 )
 
 
@@ -43,6 +44,12 @@ def ec2():
 
 
 @click.command()
+@click.option(
+    '--additional-subnets',
+    is_flag=True,
+    help='Invoke subnet addition process to specify information '
+         'for additional subnets in other regions'
+)
 @click.option(
     '--additional-regions',
     is_flag=True,
@@ -91,7 +98,7 @@ def ec2():
 )
 @click.pass_context
 def add(
-    context, additional_regions, group, name, partition,
+    context, additional_subnets, additional_regions, group, name, partition,
     region, subnet, access_key_id, secret_access_key
 ):
     """
@@ -116,8 +123,20 @@ def add(
         if group:
             data['group'] = group
 
-        if subnet:
-            data['subnet'] = subnet
+        if subnet and region:
+            data['subnets'] = [
+                {
+                    'region': region,
+                    'subnet': subnet
+                }
+            ]
+
+        if additional_subnets:
+            if 'subnets' not in data:
+                data['subnets'] = []
+            data['subnets'].extend(
+                additional_subnets_repl()
+            )
 
         result = handle_request_with_token(
             config_data,
@@ -206,6 +225,12 @@ def delete(context, name):
 
 @click.command()
 @click.option(
+    '--additional-subnets',
+    is_flag=True,
+    help='Invoke subnet addition process to specify information '
+         'for additional subnets in other regions for testing purposes.'
+)
+@click.option(
     '--additional-regions',
     is_flag=True,
     help='Invoke region addition process to specify information '
@@ -230,7 +255,8 @@ def delete(context, name):
 @click.option(
     '--subnet',
     type=click.STRING,
-    help='An optional subnet id for image upload and testing.'
+    help='An optional subnet id for image upload and testing in the target'
+         ' region.'
 )
 @click.option(
     '--access-key-id',
@@ -244,7 +270,7 @@ def delete(context, name):
 )
 @click.pass_context
 def update(
-    context, additional_regions, group, name,
+    context, additional_subnets, additional_regions, group, name,
     region, subnet, access_key_id, secret_access_key
 ):
     """
@@ -281,8 +307,21 @@ def update(
         if region:
             data['region'] = region
 
-        if subnet:
-            data['subnet'] = subnet
+        if subnet and region:
+            data['subnets'] = [
+                {
+                    'region': region,
+                    'subnet': subnet
+                }
+            ]
+
+        if additional_subnets:
+            if 'subnets' not in data:
+                data['subnets'] = []
+
+            data['subnets'].extend(
+                additional_subnets_repl()
+            )
 
         if not data:
             echo_style('Nothing to update', config_data['no_color'], fg='red')
