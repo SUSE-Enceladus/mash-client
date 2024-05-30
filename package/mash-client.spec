@@ -19,7 +19,7 @@
 %{?sle15_python_module_pythons}
 
 Name:           mash-client
-Version:        4.1.0
+Version:        4.2.0
 Release:        0
 Summary:        Command line utility for MASH server
 License:        GPL-3.0-or-later
