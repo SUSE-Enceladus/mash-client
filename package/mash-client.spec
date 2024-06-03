@@ -28,21 +28,20 @@ URL:            https://github.com/SUSE-enceladus/mash-client
 Source:         https://files.pythonhosted.org/packages/source/p/mash-client/%{name}-%{version}.tar.gz
 BuildRequires:  python-rpm-macros
 BuildRequires:  fdupes
-BuildRequires:  %{python_module devel}
-BuildRequires:  %{python_module setuptools}
-BuildRequires:  %{python_module wheel}
-BuildRequires:  %{python_module pip}
-BuildRequires:  %{python_module click}
-BuildRequires:  %{python_module click-man}
-BuildRequires:  %{python_module requests}
-BuildRequires:  %{python_module PyYAML}
-BuildRequires:  %{python_module PyJWT}
-Requires:       python-click
-Requires:       python-requests
-Requires:       python-PyYAML
-Requires:       python-PyJWT
+BuildRequires:  python311-devel
+BuildRequires:  python311-setuptools
+BuildRequires:  python311-wheel
+BuildRequires:  python311-pip
+BuildRequires:  python311-click
+BuildRequires:  python311-click-man
+BuildRequires:  python311-requests
+BuildRequires:  python311-PyYAML
+BuildRequires:  python311-PyJWT
+Requires:       python311-click
+Requires:       python311-requests
+Requires:       python311-PyYAML
+Requires:       python311-PyJWT
 BuildArch:      noarch
-%python_subpackages
 
 %description
 mash-client provides a command line utility to interface
@@ -77,4 +76,3 @@ gzip %{buildroot}/%{_mandir}/man5/*
 %{python_sitelib}/*
 
 %changelog
-
