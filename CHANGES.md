@@ -1,3 +1,8 @@
+v4.2.1 (2024-06-03)
+===================
+
+- Use explicit python 3.11 requirements in spec file
+
 v4.2.0 (2024-05-30)
 ===================
 
