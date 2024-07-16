@@ -49,21 +49,24 @@ def user():
     required=True,
     help='The email address for the mash user.'
 )
+@click.option(
+    '--password',
+    required=True,
+    prompt="Enter password",
+    prompt_required=False,
+    hide_input=True,
+    type=click.STRING,
+    confirmation_prompt=True
+)
 @click.pass_context
-def create_user(context, email):
+def create_user(context, email, password):
     """
     Handle mash user creation requests.
     """
     config_data = get_config(context.obj)
 
     with handle_errors(config_data['log_level'], config_data['no_color']):
-        pass1 = click.prompt('Enter password', type=str, hide_input=True)
-        pass2 = click.prompt('Confirm password', type=str, hide_input=True)
-
-        if pass1 != pass2:
-            raise MashClientException('Passwords do not match!')
-
-        job_data = {'email': email, 'password': pass1}
+        job_data = {'email': email, 'password': password}
         result = handle_request(
             config_data,
             '/v1/user/',

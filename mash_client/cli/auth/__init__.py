@@ -57,8 +57,16 @@ def auth():
     help='Creates a refresh token with no expiration '
          '(default expiry is 30 days).'
 )
+@click.option(
+    '--password',
+    required=True,
+    prompt="Enter password",
+    prompt_required=False,
+    hide_input=True,
+    type=click.STRING
+)
 @click.pass_context
-def login(context, email, no_expiry):
+def login(context, email, no_expiry, password):
     """
     Handle mash user login.
     """
@@ -76,7 +84,6 @@ def login(context, email, no_expiry):
         sys.exit(1)
 
     with handle_errors(config_data['log_level'], config_data['no_color']):
-        password = click.prompt('Enter password', type=str, hide_input=True)
         result = login_with_pass(
             config_data,
             email,
