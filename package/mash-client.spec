@@ -1,7 +1,7 @@
 #
 # spec file for package mash-client
 #
-# Copyright (c) 2018 SUSE LINUX GmbH, Nuernberg, Germany.
+# Copyright (c) 2025 SUSE LLC
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -15,8 +15,12 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
-%define python python
+%if 0%{?suse_version} >= 1600
+%define pythons %{primary_python}
+%else
 %{?sle15_python_module_pythons}
+%endif
+%global _sitelibdir %{%{pythons}_sitelib}
 
 Name:           mash-client
 Version:        4.2.1
@@ -28,19 +32,19 @@ URL:            https://github.com/SUSE-enceladus/mash-client
 Source:         https://files.pythonhosted.org/packages/source/p/mash-client/%{name}-%{version}.tar.gz
 BuildRequires:  python-rpm-macros
 BuildRequires:  fdupes
-BuildRequires:  python311-devel
-BuildRequires:  python311-setuptools
-BuildRequires:  python311-wheel
-BuildRequires:  python311-pip
-BuildRequires:  python311-click
-BuildRequires:  python311-click-man
-BuildRequires:  python311-requests
-BuildRequires:  python311-PyYAML
-BuildRequires:  python311-PyJWT
-Requires:       python311-click
-Requires:       python311-requests
-Requires:       python311-PyYAML
-Requires:       python311-PyJWT
+BuildRequires:  %{pythons}-devel
+BuildRequires:  %{pythons}-setuptools
+BuildRequires:  %{pythons}-wheel
+BuildRequires:  %{pythons}-pip
+BuildRequires:  %{pythons}-click
+BuildRequires:  %{pythons}-click-man
+BuildRequires:  %{pythons}-requests
+BuildRequires:  %{pythons}-PyYAML
+BuildRequires:  %{pythons}-PyJWT
+Requires:       %{pythons}-click
+Requires:       %{pythons}-requests
+Requires:       %{pythons}-PyYAML
+Requires:       %{pythons}-PyJWT
 BuildArch:      noarch
 
 %description
@@ -64,7 +68,7 @@ install -m 644 man/man1/*.1 %{buildroot}/%{_mandir}/man1
 install -m 644 man/man5/*.5 %{buildroot}/%{_mandir}/man5
 gzip %{buildroot}/%{_mandir}/man1/*
 gzip %{buildroot}/%{_mandir}/man5/*
-%{python_expand %fdupes %{buildroot}%{$python_sitelib}}
+%python_expand %fdupes %{buildroot}%{_sitelibdir}
 
 %files
 %defattr(-,root,root)
@@ -73,6 +77,7 @@ gzip %{buildroot}/%{_mandir}/man5/*
 %{_mandir}/man1/*
 %{_mandir}/man5/*
 %{_bindir}/mash
-%{python_sitelib}/*
+%{_sitelibdir}/mash_client/
+%{_sitelibdir}/mash_client-*.dist-info/
 
 %changelog
