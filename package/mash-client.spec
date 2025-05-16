@@ -68,7 +68,7 @@ install -m 644 man/man1/*.1 %{buildroot}/%{_mandir}/man1
 install -m 644 man/man5/*.5 %{buildroot}/%{_mandir}/man5
 gzip %{buildroot}/%{_mandir}/man1/*
 gzip %{buildroot}/%{_mandir}/man5/*
-%python_expand %fdupes %{buildroot}%{_sitelibdir}
+%fdupes %{buildroot}%{_sitelibdir}
 
 %files
 %defattr(-,root,root)
