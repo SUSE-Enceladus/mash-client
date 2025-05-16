@@ -23,7 +23,7 @@
 %global _sitelibdir %{%{pythons}_sitelib}
 
 Name:           mash-client
-Version:        4.2.1
+Version:        4.3.0
 Release:        0
 Summary:        Command line utility for MASH server
 License:        GPL-3.0-or-later
