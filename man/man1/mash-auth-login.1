@@ -1,0 +1,20 @@
+.TH "MASH AUTH LOGIN" "1" "2025-05-19" "4.3.0" "mash auth login Manual"
+.SH NAME
+mash\-auth\-login \- Handle mash user login.
+.SH SYNOPSIS
+.B mash auth login
+[OPTIONS]
+.SH DESCRIPTION
+.PP
+    Handle mash user login.
+    
+.SH OPTIONS
+.TP
+\fB\-\-email\fP TEXT
+The email for the mash user (default taken from config).
+.TP
+\fB\-\-no\-expiry\fP
+Creates a refresh token with no expiration (default expiry is 30 days).
+.TP
+\fB\-\-password\fP TEXT
+[required]

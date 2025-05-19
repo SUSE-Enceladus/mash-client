@@ -1,0 +1,29 @@
+.TH "MASH ACCOUNT GCE ADD" "1" "2025-05-19" "4.3.0" "mash account gce add Manual"
+.SH NAME
+mash\-account\-gce\-add \- Add a GCE account in the user name space...
+.SH SYNOPSIS
+.B mash account gce add
+[OPTIONS]
+.SH DESCRIPTION
+.PP
+    Add a GCE account in the user name space on the MASH server.
+    
+.SH OPTIONS
+.TP
+\fB\-\-name\fP TEXT
+Name for the account to add.  [required]
+.TP
+\fB\-\-bucket\fP TEXT
+The storage bucket where images will be uploaded.  [required]
+.TP
+\fB\-\-zone\fP TEXT
+The zone where the test instances will be launched.  [required]
+.TP
+\fB\-\-testing\-account\fP TEXT
+The name of the testing account that will be used for launching test instances.
+.TP
+\fB\-\-is\-publishing\-account\fP
+The new account is a publishing account.
+.TP
+\fB\-\-credentials\fP PATH
+The JSON service account credentials file.  [required]

@@ -37,7 +37,6 @@ BuildRequires:  %{pythons}-setuptools
 BuildRequires:  %{pythons}-wheel
 BuildRequires:  %{pythons}-pip
 BuildRequires:  %{pythons}-click
-BuildRequires:  %{pythons}-click-man
 BuildRequires:  %{pythons}-requests
 BuildRequires:  %{pythons}-PyYAML
 BuildRequires:  %{pythons}-PyJWT
@@ -56,8 +55,6 @@ with a MASH server instance.
 
 %build
 %pyproject_wheel
-mkdir -p man/man1
-%python_exec setup.py --command-packages=click_man.commands man_pages --target man/man1
 
 %install
 %pyproject_install
@@ -66,16 +63,16 @@ install -d -m 755 %{buildroot}/%{_mandir}/man1
 install -d -m 755 %{buildroot}/%{_mandir}/man5
 install -m 644 man/man1/*.1 %{buildroot}/%{_mandir}/man1
 install -m 644 man/man5/*.5 %{buildroot}/%{_mandir}/man5
-gzip %{buildroot}/%{_mandir}/man1/*
-gzip %{buildroot}/%{_mandir}/man5/*
+gzip %{buildroot}/%{_mandir}/man1/mash*
+gzip %{buildroot}/%{_mandir}/man5/mash*
 %fdupes %{buildroot}%{_sitelibdir}
 
 %files
 %defattr(-,root,root)
 %license LICENSE
 %doc CHANGES.md CONTRIBUTING.md README.md
-%{_mandir}/man1/*
-%{_mandir}/man5/*
+%{_mandir}/man1/mash*
+%{_mandir}/man5/mash*
 %{_bindir}/mash
 %{_sitelibdir}/mash_client/
 %{_sitelibdir}/mash_client-*.dist-info/

@@ -1,0 +1,29 @@
+.TH "MASH ACCOUNT AZURE ADD" "1" "2025-05-19" "4.3.0" "mash account azure add Manual"
+.SH NAME
+mash\-account\-azure\-add \- Add an Azure account in the user name...
+.SH SYNOPSIS
+.B mash account azure add
+[OPTIONS]
+.SH DESCRIPTION
+.PP
+    Add an Azure account in the user name space on the MASH server.
+    
+.SH OPTIONS
+.TP
+\fB\-\-name\fP TEXT
+Name for the account to create.  [required]
+.TP
+\fB\-\-region\fP TEXT
+The region where the test instance will be launched.  [required]
+.TP
+\fB\-\-source\-container\fP TEXT
+The name of the container that images will be uploaded to and tested.  [required]
+.TP
+\fB\-\-source\-resource\-group\fP TEXT
+The name of the resource group where the source storage account exists.  [required]
+.TP
+\fB\-\-source\-storage\-account\fP TEXT
+The name of the ARM based storage account where the source container exists.  [required]
+.TP
+\fB\-\-credentials\fP PATH
+The JSON service account credentials file.  [required]

@@ -1,0 +1,19 @@
+.TH "MASH JOB WAIT" "1" "2025-05-19" "4.3.0" "mash job wait Manual"
+.SH NAME
+mash\-job\-wait \- Wait for job to arrive at finished or...
+.SH SYNOPSIS
+.B mash job wait
+[OPTIONS]
+.SH DESCRIPTION
+.PP
+    Wait for job to arrive at finished or failed status.
+.PP
+    By default waits 5 minutes between status queries.
+    
+.SH OPTIONS
+.TP
+\fB\-\-job\-id\fP UUID
+The UUID of the job to wait for a finished state.  [required]
+.TP
+\fB\-t,\fP \-\-wait\-time INTEGER RANGE
+The time to wait before checking job status again (seconds).  [x>=60]

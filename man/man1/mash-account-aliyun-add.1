@@ -1,0 +1,32 @@
+.TH "MASH ACCOUNT ALIYUN ADD" "1" "2025-05-19" "4.3.0" "mash account aliyun add Manual"
+.SH NAME
+mash\-account\-aliyun\-add \- Add a Aliyun account in the user name...
+.SH SYNOPSIS
+.B mash account aliyun add
+[OPTIONS]
+.SH DESCRIPTION
+.PP
+    Add a Aliyun account in the user name space on the MASH server.
+    
+.SH OPTIONS
+.TP
+\fB\-\-name\fP TEXT
+Name for the account to add.  [required]
+.TP
+\fB\-\-bucket\fP TEXT
+The storage bucket where images will be uploaded.  [required]
+.TP
+\fB\-\-region\fP TEXT
+The region where the test instances will be launched.  [required]
+.TP
+\fB\-\-security\-group\-id\fP TEXT
+The security group ID that will be used for launching test instances.
+.TP
+\fB\-\-vswitch\-id\fP TEXT
+The vswitch ID that will be used for launching test instances.
+.TP
+\fB\-\-access\-key\fP TEXT
+Aliyun access key.  [required]
+.TP
+\fB\-\-access\-secret\fP TEXT
+Aliyun access key secret.  [required]

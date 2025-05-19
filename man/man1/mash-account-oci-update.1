@@ -1,0 +1,35 @@
+.TH "MASH ACCOUNT OCI UPDATE" "1" "2025-05-19" "4.3.0" "mash account oci update Manual"
+.SH NAME
+mash\-account\-oci\-update \- Update a OCI account in the user name...
+.SH SYNOPSIS
+.B mash account oci update
+[OPTIONS]
+.SH DESCRIPTION
+.PP
+    Update a OCI account in the user name space on the MASH server.
+    
+.SH OPTIONS
+.TP
+\fB\-\-name\fP TEXT
+Name for the account to add.  [required]
+.TP
+\fB\-\-bucket\fP TEXT
+The storage bucket where images will be uploaded.
+.TP
+\fB\-\-region\fP TEXT
+The region where the test instances will be launched.
+.TP
+\fB\-\-availability\-domain\fP TEXT
+The availability domain that will be used for launching test instances.
+.TP
+\fB\-\-compartment\-id\fP TEXT
+The compartment ID where the images will stored.
+.TP
+\fB\-\-oci\-user\-id\fP TEXT
+The ID for the OCI user.
+.TP
+\fB\-\-tenancy\fP TEXT
+The OCI tenancy where the user exists.
+.TP
+\fB\-\-signing\-key\-file\fP PATH
+The path to the private signing key used for validating OCI API calls.
