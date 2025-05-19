@@ -1,0 +1,37 @@
+.TH "MASH CONFIG SETUP" "1" "2025-05-19" "4.3.0" "mash config setup Manual"
+.SH NAME
+mash\-config\-setup \- Create a configuration file for the mash...
+.SH SYNOPSIS
+.B mash config setup
+[OPTIONS]
+.SH DESCRIPTION
+.PP
+    Create a configuration file for the mash command line tool
+.PP
+    For details see man 5 mash_client.conf
+    
+.SH OPTIONS
+.TP
+\fB\-\-config\-dir\fP TEXT
+Mash client config directory to use. It is recommended that this is left empty and to use the default directory [~/.config/mash_client/]. If you use a custom configuration directory it is required in every command using `-C/--config-dir` option.  [default: /home/smarlow/.config/mash_client/]
+.TP
+\fB\-\-profile\fP TEXT
+The profile for config file. The config file will be saved as {profile}.yaml in the ~/.config/mash_client/ directory.  [default: default]
+.TP
+\fB\-\-email\fP TEXT
+The email address for your Mash user. This can be left blank if you are using OIDC login.
+.TP
+\fB\-\-host\fP TEXT
+The host URI for the Mash server.  [default: http://127.0.0.1]
+.TP
+\fB\-\-port\fP TEXT
+The port for the Mash server API. This is optional and can be left blank if the server uses a default port such as 80 for http and 443 for https.
+.TP
+\fB\-\-log\-level\fP INTEGER
+The Python log level integer see Python docs for more info: https://docs.python.org/3/library/logging.html#levels.  [default: 20]
+.TP
+\fB\-\-color\fP
+If Y command line output may be styled with ANSI color.  [default: True]
+.TP
+\fB\-\-verify\fP
+Whether to verify SSL Certificate. If True You can optionally provide the path to a CA_BUNDLE file.  [default: True]

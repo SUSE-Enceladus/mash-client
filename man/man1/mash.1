@@ -1,0 +1,65 @@
+.TH "MASH" "1" "2025-05-19" "4.3.0" "mash Manual"
+.SH NAME
+mash \- The command line interface allows you to...
+.SH SYNOPSIS
+.B mash
+[OPTIONS] COMMAND [ARGS]...
+.SH DESCRIPTION
+.PP
+    The command line interface allows you to interact with a MASH server.
+.PP
+    It provides commands to submit jobs to the MASH server pipeline or
+    add/delete a user account.
+    
+.SH OPTIONS
+.TP
+\fB\-\-version\fP
+Show the version and exit.
+.TP
+\fB\-\-license\fP
+Show license information.
+.TP
+\fB\-C,\fP \-\-config\-dir PATH
+MASH client config directory to use. Default: ~/.config/mash_client/
+.TP
+\fB\-\-profile\fP TEXT
+The configuration profile to use. Expected to match a config file in config directory. Example: production, for ~/.config/mash_client/production.yaml
+.TP
+\fB\-\-no\-color\fP
+Remove ANSI color and styling from output.
+.TP
+\fB\-\-host\fP TEXT
+Resolvable hostname for the MASH server instance. A protocol is required in the hostname: Either http:// or https://. If it is not provided the default http:// will be used.
+.TP
+\fB\-\-port\fP TEXT
+The port number the MASH server is listening on.
+.TP
+\fB\-\-debug\fP
+Display debug level logging to console.
+.TP
+\fB\-\-verbose\fP
+Display logging info to console. (Default)
+.TP
+\fB\-\-quiet\fP
+Disable console output.
+.SH COMMANDS
+.PP
+\fBjob\fP
+  Submit job requests to the MASH server...
+  See \fBmash-job(1)\fP for full documentation on the \fBjob\fP command.
+.PP
+\fBaccount\fP
+  Submit account requests to the MASH server.
+  See \fBmash-account(1)\fP for full documentation on the \fBaccount\fP command.
+.PP
+\fBauth\fP
+  Submit authentication requests.
+  See \fBmash-auth(1)\fP for full documentation on the \fBauth\fP command.
+.PP
+\fBuser\fP
+  Submit user requests.
+  See \fBmash-user(1)\fP for full documentation on the \fBuser\fP command.
+.PP
+\fBconfig\fP
+  Provides commands to setup and view client...
+  See \fBmash-config(1)\fP for full documentation on the \fBconfig\fP command.

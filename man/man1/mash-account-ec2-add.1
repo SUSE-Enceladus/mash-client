@@ -1,0 +1,35 @@
+.TH "MASH ACCOUNT EC2 ADD" "1" "2025-05-19" "4.3.0" "mash account ec2 add Manual"
+.SH NAME
+mash\-account\-ec2\-add \- Add an EC2 account in the user name space...
+.SH SYNOPSIS
+.B mash account ec2 add
+[OPTIONS]
+.SH DESCRIPTION
+.PP
+    Add an EC2 account in the user name space on the MASH server.
+    
+.SH OPTIONS
+.TP
+\fB\-\-additional\-regions\fP
+Invoke region addition process to specify information for additional regions
+.TP
+\fB\-\-group\fP TEXT
+Group name to associate the account with.
+.TP
+\fB\-\-name\fP TEXT
+Name for the account to create.  [required]
+.TP
+\fB\-\-partition\fP [aws|aws\-cn|aws\-us\-gov]
+The location of the EC2 account. ["aws", "aws-cn", "aws-us-gov"]  [required]
+.TP
+\fB\-\-region\fP TEXT
+The target region for image upload and testing.  [required]
+.TP
+\fB\-\-subnet\fP TEXT
+An optional subnet id for image upload and testing.
+.TP
+\fB\-\-access\-key\-id\fP TEXT
+AWS access key.  [required]
+.TP
+\fB\-\-secret\-access\-key\fP TEXT
+AWS secret access key.  [required]

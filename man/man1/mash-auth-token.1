@@ -1,0 +1,27 @@
+.TH "MASH AUTH TOKEN" "1" "2025-05-19" "4.3.0" "mash auth token Manual"
+.SH NAME
+mash\-auth\-token \- Submit token requests.
+.SH SYNOPSIS
+.B mash auth token
+[OPTIONS] COMMAND [ARGS]...
+.SH DESCRIPTION
+.PP
+    Submit token requests.
+    
+.SH COMMANDS
+.PP
+\fBdelete\fP
+  If no jti is provided delete all tokens.
+  See \fBmash auth token-delete(1)\fP for full documentation on the \fBdelete\fP command.
+.PP
+\fBinfo\fP
+  Return information for token matching jti.
+  See \fBmash auth token-info(1)\fP for full documentation on the \fBinfo\fP command.
+.PP
+\fBlist\fP
+  Return a list of JWT tokens for user.
+  See \fBmash auth token-list(1)\fP for full documentation on the \fBlist\fP command.
+.PP
+\fBrefresh\fP
+  Handle token refresh.
+  See \fBmash auth token-refresh(1)\fP for full documentation on the \fBrefresh\fP command.

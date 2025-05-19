@@ -1,0 +1,26 @@
+.TH "MASH ACCOUNT GCE UPDATE" "1" "2025-05-19" "4.3.0" "mash account gce update Manual"
+.SH NAME
+mash\-account\-gce\-update \- Update a GCE account in the user name...
+.SH SYNOPSIS
+.B mash account gce update
+[OPTIONS]
+.SH DESCRIPTION
+.PP
+    Update a GCE account in the user name space on the MASH server.
+    
+.SH OPTIONS
+.TP
+\fB\-\-name\fP TEXT
+Name for the account to update.  [required]
+.TP
+\fB\-\-bucket\fP TEXT
+The storage bucket where images will be uploaded.
+.TP
+\fB\-\-zone\fP TEXT
+The zone where the test instances will be launched.
+.TP
+\fB\-\-testing\-account\fP TEXT
+The name of the testing account that will be used for launching test instances.
+.TP
+\fB\-\-credentials\fP PATH
+The JSON service account credentials file.

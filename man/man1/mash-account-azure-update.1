@@ -1,0 +1,29 @@
+.TH "MASH ACCOUNT AZURE UPDATE" "1" "2025-05-19" "4.3.0" "mash account azure update Manual"
+.SH NAME
+mash\-account\-azure\-update \- Update an Azure account in the user name...
+.SH SYNOPSIS
+.B mash account azure update
+[OPTIONS]
+.SH DESCRIPTION
+.PP
+    Update an Azure account in the user name space on the MASH server.
+    
+.SH OPTIONS
+.TP
+\fB\-\-name\fP TEXT
+Name for the account to create.  [required]
+.TP
+\fB\-\-region\fP TEXT
+The region where the test instance will be launched.
+.TP
+\fB\-\-source\-container\fP TEXT
+The name of the container that images will be uploaded to and tested.
+.TP
+\fB\-\-source\-resource\-group\fP TEXT
+The name of the resource group where the source storage account exists.
+.TP
+\fB\-\-source\-storage\-account\fP TEXT
+The name of the ARM based storage account where the source container exists.
+.TP
+\fB\-\-credentials\fP PATH
+The JSON service account credentials file.
