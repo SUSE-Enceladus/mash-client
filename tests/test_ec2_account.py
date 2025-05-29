@@ -21,7 +21,11 @@ def test_account_add_ec2(mock_requests, mock_time):
             'id': '1',
             'name': 'us-east-5',
             'helper_image': 'ami-12345'
-        }
+        },
+        'test_regions': [{
+            'region': 'us-east-6',
+            'subnet': 'subnet-123456'
+        }]
     }
     mock_requests.post.return_value = response
     mock_time.time.return_value = 1568150470
@@ -31,7 +35,8 @@ def test_account_add_ec2(mock_requests, mock_time):
         main,
         [
             '-C', 'tests/data/', 'account', 'ec2', 'add',
-            '--additional-regions', '--name', 'acnt1', '--partition', 'aws',
+            '--additional-regions', '--test-regions', '--name', 'acnt1',
+            '--partition', 'aws',
             '--region', 'us-east-1', '--subnet',
             'subnet-123456789', '--access-key-id', '123456',
             '--secret-access-key', '654321'
@@ -39,6 +44,10 @@ def test_account_add_ec2(mock_requests, mock_time):
         input='y\n'
               'us-east-5\n'
               'ami-12345\n'
+              'n\n'
+              'y\n'
+              'us-east-6\n'
+              'subnet-123456\n'
               'n'
     )
     assert result.exit_code == 0
@@ -83,7 +92,13 @@ def test_ec2_account_info(mock_requests, mock_time):
             'id': '1',
             'name': 'us-east-5',
             'helper_image': 'ami-12345'
-        }
+        },
+        'test_regions': [
+            {
+                'region': 'us-east-6',
+                'subnet': 'subnet-123456'
+            }
+        ]
     }
     mock_requests.get.return_value = response
     mock_time.time.return_value = 1568150470
@@ -147,7 +162,11 @@ def test_account_update_ec2(mock_requests, mock_time):
             'id': '1',
             'name': 'us-east-5',
             'helper_image': 'ami-12345'
-        }
+        },
+        'test_regions': [{
+            'region': 'us-east-6',
+            'subnet': 'subnet-123456'
+        }]
     }
     mock_requests.post.return_value = response
     mock_time.time.return_value = 1568150470
@@ -157,7 +176,7 @@ def test_account_update_ec2(mock_requests, mock_time):
         main,
         [
             '-C', 'tests/data/', 'account', 'ec2', 'update',
-            '--additional-regions', '--name', 'acnt1',
+            '--additional-regions', '--test-regions', '--name', 'acnt1',
             '--region', 'us-east-1', '--subnet',
             'subnet-123456789', '--access-key-id', '123456',
             '--secret-access-key', '654321'
@@ -165,6 +184,10 @@ def test_account_update_ec2(mock_requests, mock_time):
         input='y\n'
               'us-east-5\n'
               'ami-12345\n'
+              'n\n'
+              'y\n'
+              'us-east-6\n'
+              'subnet-123456\n'
               'n'
     )
     assert result.exit_code == 0
