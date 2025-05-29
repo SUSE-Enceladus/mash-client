@@ -35,7 +35,7 @@ def test_account_add_ec2(mock_requests, mock_time):
         main,
         [
             '-C', 'tests/data/', 'account', 'ec2', 'add',
-            '--additional-regions','--test-regions', '--name', 'acnt1',
+            '--additional-regions', '--test-regions', '--name', 'acnt1',
             '--partition', 'aws',
             '--region', 'us-east-1', '--subnet',
             'subnet-123456789', '--access-key-id', '123456',
