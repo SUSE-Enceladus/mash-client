@@ -45,7 +45,7 @@ def test_account_add_ec2(mock_requests, mock_time):
               'us-east-5\n'
               'ami-12345\n'
               'n\n'
-              'y'
+              'y\n'
               'us-east-6\n'
               'subnet-123456\n'
               'n'
