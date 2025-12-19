@@ -64,7 +64,8 @@ def ec2():
     '--partition',
     type=click.Choice(EC2_PARTITIONS),
     required=True,
-    help='The location of the EC2 account. ["aws", "aws-cn", "aws-us-gov"]'
+    help='The location of the EC2 account. '
+         '["aws", "aws-cn", "aws-us-gov", "aws-eusc"]'
 )
 @click.option(
     '--region',

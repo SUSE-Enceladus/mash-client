@@ -48,7 +48,7 @@ defaults = {
     'no_color': False,
     'verify': True
 }
-EC2_PARTITIONS = ('aws', 'aws-cn', 'aws-us-gov')
+EC2_PARTITIONS = ('aws', 'aws-cn', 'aws-us-gov', 'aws-eusc')
 
 
 def echo_dict(data, no_color):
