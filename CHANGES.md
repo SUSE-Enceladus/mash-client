@@ -1,3 +1,8 @@
+v4.7.0 (2026-02-26)
+===================
+
+- Includes the required changes to include the test_regions field in ec2 accounts
+
 v4.6.0 (2025-12-19)
 ===================
 
