@@ -346,6 +346,27 @@ def additional_regions_repl():
     return regions
 
 
+def test_regions_repl():
+    regions = []
+
+    while True:
+        if click.confirm('Add a test region?'):
+            name = click.prompt('Enter the region name', type=str)
+            subnet = click.prompt(
+                'Enter the subnet id',
+                type=str
+            )
+
+            regions.append({
+                'region': name,
+                'subnet': subnet
+            })
+        else:
+            break
+
+    return regions
+
+
 def get_free_port(ports):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)

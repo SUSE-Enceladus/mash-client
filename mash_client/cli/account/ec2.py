@@ -31,7 +31,8 @@ from mash_client.cli_utils import (
     abort_if_false,
     echo_dict,
     echo_style,
-    additional_regions_repl
+    additional_regions_repl,
+    test_regions_repl
 )
 
 
@@ -43,6 +44,12 @@ def ec2():
 
 
 @click.command()
+@click.option(
+    '--test-regions',
+    is_flag=True,
+    help='Invoke test region addition process to specify information '
+         'for test regions'
+)
 @click.option(
     '--additional-regions',
     is_flag=True,
@@ -92,7 +99,7 @@ def ec2():
 )
 @click.pass_context
 def add(
-    context, additional_regions, group, name, partition,
+    context, test_regions, additional_regions, group, name, partition,
     region, subnet, access_key_id, secret_access_key
 ):
     """
@@ -113,6 +120,9 @@ def add(
 
         if additional_regions:
             data['additional_regions'] = additional_regions_repl()
+
+        if test_regions:
+            data['test_regions'] = test_regions_repl()
 
         if group:
             data['group'] = group
@@ -207,6 +217,12 @@ def delete(context, name):
 
 @click.command()
 @click.option(
+    '--test-regions',
+    is_flag=True,
+    help='Invoke region addition process to specify information '
+         'for test regions'
+)
+@click.option(
     '--additional-regions',
     is_flag=True,
     help='Invoke region addition process to specify information '
@@ -245,7 +261,7 @@ def delete(context, name):
 )
 @click.pass_context
 def update(
-    context, additional_regions, group, name,
+    context, test_regions, additional_regions, group, name,
     region, subnet, access_key_id, secret_access_key
 ):
     """
@@ -275,6 +291,12 @@ def update(
 
             if regions:
                 data['additional_regions'] = regions
+
+        if test_regions:
+            regions = test_regions_repl()
+
+            if regions:
+                data['test_regions'] = regions
 
         if group:
             data['group'] = group
